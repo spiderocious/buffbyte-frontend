@@ -9,6 +9,7 @@ export default defineConfig({
     alias: {
       '@buffbyte/components': fileURLToPath(new URL('./src/components', import.meta.url)),
       '@buffbyte/pages': fileURLToPath(new URL('./src/pages', import.meta.url)),
+      '@buffbyte/routes': fileURLToPath(new URL('./src/routes', import.meta.url)),
       '@buffbyte/services': fileURLToPath(new URL('./src/services', import.meta.url)),
       '@buffbyte/types': fileURLToPath(new URL('./src/types', import.meta.url)),
       '@buffbyte/utils': fileURLToPath(new URL('./src/utils', import.meta.url)),

@@ -1,4 +1,70 @@
-# React + TypeScript + Vite
+# BuffByte - React + TypeScript + Vite
+
+A modern React application built with TypeScript, Vite, and React Router.
+
+## Features
+
+- ⚡ **Vite** - Fast build tool and development server
+- 🔷 **TypeScript** - Type safety and better developer experience
+- ⚛️ **React 19** - Latest React features
+- 🚀 **React Router v6** - Client-side routing
+- 📁 **Path Aliases** - Clean imports with `@buffbyte/*` namespace
+- 🎨 **ESLint** - Code linting and formatting
+
+## Quick Start
+
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## Project Structure
+
+```
+src/
+├── components/     # Reusable UI components
+├── pages/          # Page components
+├── routes/         # Router configuration
+├── services/       # API services
+├── types/          # TypeScript type definitions
+├── utils/          # Utility functions
+├── config/         # Configuration files
+├── constants/      # Application constants
+└── assets/         # Static assets
+```
+
+## Path Aliases
+
+Use clean imports with the `@buffbyte/*` namespace:
+
+```typescript
+import { HomePage } from '@buffbyte/pages';
+import { Button } from '@buffbyte/components';
+import { API_BASE_URL } from '@buffbyte/constants';
+```
+
+See [ALIASES.md](./ALIASES.md) for complete documentation.
+
+## Routing
+
+The application uses React Router v6 for navigation. Routes are defined in `src/routes/routes.ts`.
+
+Available routes:
+- `/` - Home page
+- `/about` - About page
+
+See [ROUTER.md](./ROUTER.md) for complete routing documentation.
+
+## Development
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 

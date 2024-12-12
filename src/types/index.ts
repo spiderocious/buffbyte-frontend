@@ -1,4 +1,3 @@
 // Export all types from this file
-// Example:
-// export type { User } from './User';
-// export type { ApiResponse } from './ApiResponse';
+export type { RouteConfig, AppRoute } from './routes';
+export type { User, AuthResponse, LoginRequest, SignupRequest } from './auth';
