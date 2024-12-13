@@ -1,7 +1,8 @@
-import { AuthService } from './auth';
+import { apiConfig } from "../config";
+import { AuthService } from "./auth";
 
 export class ApiService {
-  private static baseUrl = process.env.VITE_API_BASE_URL || '/api';
+  private static baseUrl = apiConfig.BASE_URL;
 
   /**
    * Make an authenticated API request
@@ -11,10 +12,10 @@ export class ApiService {
     options: RequestInit = {}
   ): Promise<T> {
     const url = `${this.baseUrl}${endpoint}`;
-    
+
     const config: RequestInit = {
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
         ...AuthService.getAuthHeader(),
         ...options.headers,
       },
@@ -28,15 +29,15 @@ export class ApiService {
         if (response.status === 401) {
           // Token expired or invalid, clear auth and redirect to login
           AuthService.clearAuth();
-          window.location.href = '/login';
-          throw new Error('Authentication required');
+          window.location.href = "/login";
+          throw new Error("Authentication required");
         }
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
       return await response.json();
     } catch (error) {
-      console.error('API request failed:', error);
+      console.error("API request failed:", error);
       throw error;
     }
   }
@@ -45,15 +46,18 @@ export class ApiService {
    * GET request
    */
   static async get<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'GET' });
+    return this.request<T>(endpoint, { method: "GET" });
   }
 
   /**
    * POST request
    */
-  static async post<T>(endpoint: string, data?: Record<string, unknown>): Promise<T> {
+  static async post<T>(
+    endpoint: string,
+    data?: Record<string, unknown>
+  ): Promise<T> {
     return this.request<T>(endpoint, {
-      method: 'POST',
+      method: "POST",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
@@ -61,9 +65,12 @@ export class ApiService {
   /**
    * PUT request
    */
-  static async put<T>(endpoint: string, data?: Record<string, unknown>): Promise<T> {
+  static async put<T>(
+    endpoint: string,
+    data?: Record<string, unknown>
+  ): Promise<T> {
     return this.request<T>(endpoint, {
-      method: 'PUT',
+      method: "PUT",
       body: data ? JSON.stringify(data) : undefined,
     });
   }
@@ -72,6 +79,6 @@ export class ApiService {
    * DELETE request
    */
   static async delete<T>(endpoint: string): Promise<T> {
-    return this.request<T>(endpoint, { method: 'DELETE' });
+    return this.request<T>(endpoint, { method: "DELETE" });
   }
 }

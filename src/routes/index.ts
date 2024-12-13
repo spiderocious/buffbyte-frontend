@@ -1,7 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { createElement } from 'react';
 import { routes } from './routes';
-import { Layout, ProtectedRoute } from '@buffbyte/components';
+import { ProtectedRoute, SimplePageTransition } from '@buffbyte/components';
 
 // Separate regular routes from the catch-all route
 const regularRoutes = routes.filter(route => route.path !== '*');
@@ -22,7 +22,6 @@ const wrapWithAuth = (route: typeof routes[0]) => {
 const routeObjects = [
   {
     path: '/',
-    element: createElement(Layout),
     children: [
       {
         index: true,
@@ -37,9 +36,12 @@ const routeObjects = [
         })),
     ]
   },
+  // Wrap 404 page with simple transition since it's outside layout
   ...(notFoundRoute ? [{
     path: '*',
-    element: createElement(notFoundRoute.component),
+    element: createElement(SimplePageTransition, {
+      children: createElement(notFoundRoute.component)
+    }),
   }] : [])
 ];
 

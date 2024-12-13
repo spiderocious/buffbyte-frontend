@@ -1,5 +1,6 @@
 import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { AuthService } from '@buffbyte/services';
+import { PageTransition } from '@buffbyte/components';
 
 export default function Layout() {
   const navigate = useNavigate();
@@ -24,7 +25,7 @@ export default function Layout() {
           <Link to="/" style={{ marginRight: '1rem' }}>Home</Link>
           <Link to="/about" style={{ marginRight: '1rem' }}>About</Link>
           {isAuthenticated && (
-            <Link to="/dashboard" style={{ marginRight: '1rem' }}>Dashboard</Link>
+            <Link to="/app/dashboard" style={{ marginRight: '1rem' }}>Dashboard</Link>
           )}
         </div>
         
@@ -54,8 +55,10 @@ export default function Layout() {
           )}
         </div>
       </nav>
-      <main style={{ padding: '1rem' }}>
-        <Outlet />
+      <main>
+        <PageTransition>
+          <Outlet />
+        </PageTransition>
       </main>
     </div>
   );

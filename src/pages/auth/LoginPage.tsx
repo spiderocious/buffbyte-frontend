@@ -1,130 +1,223 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthService } from '@buffbyte/services';
-import type { AuthResponse, LoginRequest } from '@buffbyte/types';
+import React, { useState, useEffect } from 'react';
+import { AnimatePresence } from 'framer-motion';
+import AuthLayout from '../../components/form/step/auth';
+import BuffByteLogo from '../../components/ui/logo';
+import StepIndicator from '../../components/ui/step-indicator';
+import FormStep from '../../components/form/step';
+import FormInput from '../../components/form/input';
+import Button from '../../components/ui/button';
 
-export default function LoginPage() {
-  const [formData, setFormData] = useState<LoginRequest>({
+interface FormData {
+  email: string;
+  password: string;
+}
+
+interface FormErrors {
+  email?: string;
+  password?: string;
+}
+
+const LoginPage: React.FC = () => {
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [formData, setFormData] = useState<FormData>({
     email: '',
     password: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+  // Email validation
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  // Password validation
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6;
+  };
 
-      if (!response.ok) {
-        throw new Error('Login failed');
-      }
-
-      const data: AuthResponse = await response.json();
-
-      if (data.success) {
-        // Save auth data to session storage
-        AuthService.saveAuth(data.data.token, data.data.user);
-        
-        // Redirect to home or intended page
-        navigate('/', { replace: true });
-      } else {
-        setError(data.message || 'Login failed');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
+  // Check if current step is valid
+  const isStepValid = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        return  validateEmail(formData.email);
+      case 2:
+        return validatePassword(formData.password);
+      default:
+        return false;
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  // Handle input changes
+  const handleInputChange = (field: keyof FormData, value: string): void => {
+    setFormData(prev => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors(prev => ({ ...prev, [field]: undefined }));
+    }
   };
 
+  // Handle next step
+  const handleNext = (): void => {
+    if (currentStep === 1) {
+      if (!validateEmail(formData.email)) {
+        setErrors({ email: 'Please enter a valid email address' });
+        return;
+      }
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      handleSubmit();
+    }
+  };
+
+  // Handle back step
+  const handleBack = (): void => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (): Promise<void> => {
+    if (!validatePassword(formData.password)) {
+      setErrors({ password: 'Password must be at least 6 characters' });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      // Handle successful login here
+      console.log('Login successful:', formData);
+      alert('Login successful!');
+    } catch (error) {
+      console.error('Login error:', error);
+      setErrors({ password: 'Login failed. Please try again.' });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle enter key
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent): void => {
+      if (e.key === 'Enter' && isStepValid(currentStep)) {
+        handleNext();
+      }
+    };
+
+    document.addEventListener('keypress', handleKeyPress);
+    return () => document.removeEventListener('keypress', handleKeyPress);
+  }, [currentStep, formData]);
+
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '2rem' }}>
-      <h1>Login</h1>
-      
-      {error && (
-        <div style={{ color: 'red', marginBottom: '1rem' }}>
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
+    <AuthLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <BuffByteLogo className="mx-auto" />
+          <StepIndicator
+            currentStep={currentStep} 
+            totalSteps={2} 
+            className="justify-center" 
           />
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-          />
+        {/* Form Steps */}
+        <AnimatePresence mode="wait">
+          {currentStep === 1 && (
+            <FormStep
+              key="step1"
+              title="Welcome back"
+              subtitle="Sign in to your account"
+            >
+              <FormInput
+                label="Email Address"
+                type="email"
+                placeholder="Enter your email address"
+                value={formData.email}
+                onChange={(e) => handleInputChange('email', e.target.value)}
+                error={errors.email}
+                required
+                autoComplete="email"
+              />
+              
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid(1)}
+                fullWidth
+                className="mt-6"
+              >
+                Continue →
+              </Button>
+            </FormStep>
+          )}
+
+          {currentStep === 2 && (
+            <FormStep
+              key="step2"
+              title="Enter your password"
+              subtitle="Welcome back! Please enter your password"
+            >
+              <FormInput
+                label="Password"
+                type="password"
+                placeholder="Enter your password"
+                value={formData.password}
+                onChange={(e) => handleInputChange('password', e.target.value)}
+                error={errors.password}
+                showPasswordToggle
+                required
+                autoComplete="current-password"
+              />
+
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleBack}
+                  className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                  type="button"
+                >
+                  ← Back
+                </button>
+                <a 
+                  href="#" 
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                >
+                  Forgot password?
+                </a>
+              </div>
+              
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid(2)}
+                loading={loading}
+                variant="creator"
+                fullWidth
+                className="mt-6"
+              >
+                {loading ? 'Signing in...' : 'Sign In'}
+              </Button>
+            </FormStep>
+          )}
+        </AnimatePresence>
+
+        {/* Footer */}
+        <div className="text-center pt-6 border-t border-gray-200">
+          <p className="text-gray-600">
+            Don't have an account?{' '}
+            <a 
+              href="#" 
+              className="text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Sign up
+            </a>
+          </p>
         </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: '#007bff',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: isLoading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {isLoading ? 'Signing In...' : 'Sign In'}
-        </button>
-      </form>
-
-      <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-        Don't have an account?{' '}
-        <button
-          onClick={() => navigate('/signup')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#007bff',
-            cursor: 'pointer',
-            textDecoration: 'underline'
-          }}
-        >
-          Sign up
-        </button>
-      </p>
-    </div>
+      </div>
+    </AuthLayout>
   );
-}
+};
+
+export default LoginPage;

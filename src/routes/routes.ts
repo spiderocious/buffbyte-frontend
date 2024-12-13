@@ -1,4 +1,4 @@
-import { HomePage, AboutPage, LoginPage, SignupPage, DashboardPage, NotFoundPage } from '@buffbyte/pages';
+import { HomePage, AboutPage, LoginPage, SignupPage, DashboardPage } from '@buffbyte/pages';
 import type { RouteConfig } from '@buffbyte/types';
 
 export const routes: RouteConfig[] = [
@@ -31,17 +31,17 @@ export const routes: RouteConfig[] = [
     title: 'Sign Up - BuffByte'
   },
   {
-    path: '/dashboard',
+    path: '/app/dashboard',
     component: DashboardPage,
     requiresAuth: true,
     exact: true,
     title: 'Dashboard - BuffByte'
   },
-  {
-    path: '*',
-    component: NotFoundPage,
-    requiresAuth: false,
-    exact: false,
-    title: '404 - Page Not Found'
-  }
+//   {
+//     path: '*',
+//     component: NotFoundPage,
+//     requiresAuth: false,
+//     exact: false,
+//     title: '404 - Page Not Found'
+//   }
 ];

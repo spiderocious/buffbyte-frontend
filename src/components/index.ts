@@ -5,3 +5,5 @@
 export { default as Welcome } from './Welcome';
 export { default as Layout } from './layout/Layout';
 export { default as ProtectedRoute } from './auth/ProtectedRoute';
+export { default as PageTransition } from './transition/page';
+export { default as SimplePageTransition } from './transition/SimplePageTransition';

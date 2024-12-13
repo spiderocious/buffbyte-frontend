@@ -4,4 +4,4 @@ export { default as AboutPage } from './landing/AboutPage';
 export { default as LoginPage } from './auth/LoginPage';
 export { default as SignupPage } from './auth/SignupPage';
 export { default as DashboardPage } from './app/DashboardPage';
-export { default as NotFoundPage } from './misc/NotFoundPage';
+// export { default as NotFoundPage } from './misc/NotFoundPage';
