@@ -6,7 +6,7 @@ interface AuthLayoutProps {
 }
 
 const AuthLayout: React.FC<AuthLayoutProps> = ({ 
-  children,  
+  children, 
 }) => {
   const MobileIcon: React.FC<{ className?: string }> = ({ className }) => (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -15,7 +15,7 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-100 to-white">
+    <div className="min-h-screen blur-bg">
       {/* Desktop Layout */}
       <div className="hidden lg:flex min-h-screen">
         {/* Left side - Form */}

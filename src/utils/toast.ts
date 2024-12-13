@@ -71,7 +71,7 @@ export const showToast = {
     }: {
       loading?: string;
       success?: string | ((data: T) => string);
-      error?: string | ((error: any) => string);
+      error?: string | ((error: unknown) => string);
     }
   ) => {
     return toast.promise(promise, {
@@ -123,7 +123,7 @@ export const showToast = {
   /**
    * Show a custom toast with your own styling
    */
-  custom: (message: string, options?: any) => {
+  custom: (message: string, options?: Record<string, unknown>) => {
     return toast(message, {
       style: {
         background: '#ffffff',
