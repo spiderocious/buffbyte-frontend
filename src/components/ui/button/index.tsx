@@ -123,7 +123,8 @@ const Button: React.FC<ButtonProps> = ({
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.2 }}
+              transition={{ duration: 0.2 }}
+              className='flex items-center justify-center'
           >
             {children}
           </motion.span>

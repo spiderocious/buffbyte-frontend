@@ -1,4 +1,5 @@
 import React from 'react';
+import { HiDevicePhoneMobile } from 'react-icons/hi2';
 
 interface AuthLayoutProps {
   children: React.ReactNode;
@@ -8,11 +9,6 @@ interface AuthLayoutProps {
 const AuthLayout: React.FC<AuthLayoutProps> = ({ 
   children, 
 }) => {
-  const MobileIcon: React.FC<{ className?: string }> = ({ className }) => (
-    <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" />
-    </svg>
-  );
 
   return (
     <div className="min-h-screen blur-bg">
@@ -34,7 +30,8 @@ const AuthLayout: React.FC<AuthLayoutProps> = ({
             <div className="text-center text-white max-w-md">
               <div className="mb-8">
                 <div className="w-16 h-16 bg-white/20 rounded-lg flex items-center justify-center mx-auto mb-4 backdrop-blur-sm">
-                  <MobileIcon className="w-8 h-8 text-white" />
+                  
+                  <HiDevicePhoneMobile className="w-8 h-8 text-white" />
                 </div>
               </div>
               <h2 className="text-2xl font-bold mb-4">

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
 import { AnimatePresence } from 'framer-motion';
-import AuthLayout from '../../components/form/step/auth';
-import BuffByteLogo from '../../components/ui/logo';
-import StepIndicator from '../../components/ui/step-indicator';
-import FormStep from '../../components/form/step';
-import FormInput from '../../components/form/input';
-import Button from '../../components/ui/button';
+import React, { useEffect, useState } from 'react';
+import FormInput from '@buffbyte/components/form/input';
+import FormStep from '@buffbyte/components/form/step';
+import AuthLayout from '@buffbyte/components/form/step/auth';
+import Button from '@buffbyte/components/ui/button';
+import BuffByteLogo from '@buffbyte/components/ui/logo';
+import { BsArrowRight } from 'react-icons/bs';
 
 interface FormData {
   email: string;
@@ -118,11 +118,6 @@ const LoginPage: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-4">
           <BuffByteLogo className="mx-auto" />
-          <StepIndicator
-            currentStep={currentStep} 
-            totalSteps={2} 
-            className="justify-center" 
-          />
         </div>
 
         {/* Form Steps */}
@@ -148,9 +143,9 @@ const LoginPage: React.FC = () => {
                 onClick={handleNext}
                 disabled={!isStepValid(1)}
                 fullWidth
-                className="mt-6"
+                className="mt-6 flex items-center justify-center"
               >
-                Continue →
+                Continue  <BsArrowRight className='ml-2' />
               </Button>
             </FormStep>
           )}

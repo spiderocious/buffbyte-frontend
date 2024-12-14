@@ -7,3 +7,7 @@ export { default as Layout } from './layout/Layout';
 export { default as ProtectedRoute } from './auth/ProtectedRoute';
 export { default as PageTransition } from './transition/page';
 export { default as SimplePageTransition } from './transition/SimplePageTransition';
+
+// Form Components
+export { default as FormInput } from './form/input';
+export { default as AuthLayout } from './form/step/auth';

@@ -1,6 +1,6 @@
-import { useNavigate } from 'react-router-dom';
 import { AuthService } from '@buffbyte/services';
-import { showToast, bufliteToasts } from '@buffbyte/utils';
+import { bufliteToasts, showToast } from '@buffbyte/utils';
+import { useNavigate } from 'react-router-dom';
 
 export default function DashboardPage() {
   const navigate = useNavigate();
