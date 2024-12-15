@@ -6,6 +6,7 @@ import AuthLayout from '@buffbyte/components/form/step/auth';
 import Button from '@buffbyte/components/ui/button';
 import BuffByteLogo from '@buffbyte/components/ui/logo';
 import { BsArrowRight } from 'react-icons/bs';
+import { Link } from 'react-router-dom';
 
 interface FormData {
   email: string;
@@ -202,12 +203,12 @@ const LoginPage: React.FC = () => {
         <div className="text-center pt-6 border-t border-gray-200">
           <p className="text-gray-600">
             Don't have an account?{' '}
-            <a 
-              href="#" 
+            <Link
+              to="/signup"
               className="text-primary-600 hover:text-primary-700 font-medium"
             >
               Sign up
-            </a>
+            </Link>
           </p>
         </div>
       </div>

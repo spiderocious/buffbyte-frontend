@@ -1,158 +1,276 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { AuthService } from '@buffbyte/services';
-import type { AuthResponse, SignupRequest } from '@buffbyte/types';
+import FormInput from "@buffbyte/components/form/input";
+import FormStep from "@buffbyte/components/form/step";
+import AuthLayout from "@buffbyte/components/form/step/auth";
+import Button from "@buffbyte/components/ui/button";
+import BuffByteLogo from "@buffbyte/components/ui/logo";
+import { AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { BsArrowRight } from "react-icons/bs";
+import { PasswordStrengthIndicator } from "../../components/feedback/password-strength";
 
-export default function SignupPage() {
-  const [formData, setFormData] = useState<SignupRequest>({
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: ''
+interface FormData {
+  fullName: string;
+  email: string;
+  password: string;
+}
+
+interface FormErrors {
+  fullName?: string;
+  email?: string;
+  password?: string;
+  terms?: string;
+}
+
+const SignupPage: React.FC = () => {
+  const [currentStep, setCurrentStep] = useState<number>(1);
+  const [formData, setFormData] = useState<FormData>({
+    fullName: "",
+    email: "",
+    password: "",
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const navigate = useNavigate();
+  const [errors, setErrors] = useState<FormErrors>({});
+  const [loading, setLoading] = useState<boolean>(false);
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
+  // Name validation
+  const validateName = (name: string): boolean => {
+    return name.trim().length >= 2;
+  };
 
-    try {
-      // Replace with your actual API endpoint
-      const response = await fetch('/api/auth/signup', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
+  // Email validation
+  const validateEmail = (email: string): boolean => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
 
-      if (!response.ok) {
-        throw new Error('Signup failed');
-      }
+  // Password validation
+  const validatePassword = (password: string): boolean => {
+    return password.length >= 6;
+  };
 
-      const data: AuthResponse = await response.json();
-
-      if (data.success) {
-        // Save auth data to session storage
-        AuthService.saveAuth(data.data.token, data.data.user);
-        
-        // Redirect to home or show success message
-        navigate('/', { replace: true });
-      } else {
-        setError(data.message || 'Signup failed');
-      }
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
-    } finally {
-      setIsLoading(false);
+  // Check if current step is valid
+  const isStepValid = (step: number): boolean => {
+    switch (step) {
+      case 1:
+        return validateName(formData.fullName);
+      case 2:
+        return validateEmail(formData.email);
+      case 3:
+        return validatePassword(formData.password);
+      default:
+        return false;
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
+  // Handle input changes
+  const handleInputChange = (field: keyof FormData, value: string): void => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+    // Clear error when user starts typing
+    if (errors[field]) {
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
+    }
   };
 
+  // Handle next step
+  const handleNext = (): void => {
+    if (currentStep === 1) {
+      if (!validateName(formData.fullName)) {
+        setErrors({
+          fullName: "Please enter your full name (at least 2 characters)",
+        });
+        return;
+      }
+      setCurrentStep(2);
+    } else if (currentStep === 2) {
+      if (!validateEmail(formData.email)) {
+        setErrors({ email: "Please enter a valid email address" });
+        return;
+      }
+      setCurrentStep(3);
+    } else if (currentStep === 3) {
+      handleSubmit();
+    }
+  };
+
+  // Handle back step
+  const handleBack = (): void => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    }
+  };
+
+  // Handle form submission
+  const handleSubmit = async (): Promise<void> => {
+    if (!validatePassword(formData.password)) {
+      setErrors({ password: "Password must be at least 6 characters" });
+      return;
+    }
+
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise((resolve) => setTimeout(resolve, 2000));
+      // Handle successful signup here
+      console.log("Signup successful:", formData);
+      alert("Account created successfully!");
+    } catch (error) {
+      console.error("Signup error:", error);
+      setErrors({ password: "Signup failed. Please try again." });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Handle enter key
+  useEffect(() => {
+    const handleKeyPress = (e: KeyboardEvent): void => {
+      if (e.key === "Enter" && isStepValid(currentStep)) {
+        handleNext();
+      }
+    };
+
+    document.addEventListener("keypress", handleKeyPress);
+    return () => document.removeEventListener("keypress", handleKeyPress);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [currentStep, formData]);
+
   return (
-    <div style={{ maxWidth: '400px', margin: '2rem auto', padding: '2rem' }}>
-      <h1>Sign Up</h1>
-      
-      {error && (
-        <div style={{ color: 'red', marginBottom: '1rem' }}>
-          {error}
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit}>
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="firstName">First Name:</label>
-          <input
-            type="text"
-            id="firstName"
-            name="firstName"
-            value={formData.firstName}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-          />
+    <AuthLayout>
+      <div className="space-y-6">
+        {/* Header */}
+        <div className="text-center space-y-4">
+          <BuffByteLogo className="mx-auto" />
         </div>
 
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="lastName">Last Name:</label>
-          <input
-            type="text"
-            id="lastName"
-            name="lastName"
-            value={formData.lastName}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-          />
+        {/* Form Steps */}
+        <AnimatePresence mode="wait">
+          {currentStep === 1 && (
+            <FormStep
+              key="step1"
+              title="Let's get started"
+              subtitle="What should we call you?"
+            >
+              <FormInput
+                label="Full Name"
+                type="text"
+                placeholder="Enter your full name"
+                value={formData.fullName}
+                onChange={(e) => handleInputChange("fullName", e.target.value)}
+                error={errors.fullName}
+                required
+                autoComplete="name"
+              />
+
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid(1)}
+                fullWidth
+                className="mt-6 flex items-center justify-center"
+              >
+                Continue <BsArrowRight className="ml-2" />
+              </Button>
+            </FormStep>
+          )}
+
+          {currentStep === 2 && (
+            <FormStep
+              key="step2"
+              title="What's your email?"
+              subtitle="We'll use this to create your account"
+            >
+              <FormInput
+                label="Email Address"
+                type="email"
+                placeholder="Enter your email address"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                error={errors.email}
+                required
+                autoComplete="email"
+              />
+
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleBack}
+                  className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                  type="button"
+                >
+                  ← Back
+                </button>
+              </div>
+
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid(2)}
+                fullWidth
+                className="mt-6 flex items-center justify-center"
+              >
+                Continue <BsArrowRight className="ml-2" />
+              </Button>
+            </FormStep>
+          )}
+
+          {currentStep === 3 && (
+            <FormStep
+              key="step3"
+              title="Secure your account"
+              subtitle="Choose a strong password"
+            >
+              <div>
+                <FormInput
+                  label="Password"
+                  type="password"
+                  placeholder="Create a strong password"
+                  value={formData.password}
+                  onChange={(e) =>
+                    handleInputChange("password", e.target.value)
+                  }
+                  error={errors.password}
+                  showPasswordToggle
+                  required
+                  autoComplete="new-password"
+                />
+                <PasswordStrengthIndicator password={formData.password} />
+              </div>
+
+              <div className="flex justify-between items-center">
+                <button
+                  onClick={handleBack}
+                  className="text-sm text-gray-600 hover:text-primary-600 transition-colors"
+                  type="button"
+                >
+                  ← Back
+                </button>
+              </div>
+
+              <Button
+                onClick={handleNext}
+                disabled={!isStepValid(3)}
+                loading={loading}
+                variant="creator"
+                fullWidth
+                className="mt-6"
+              >
+                {loading ? "Creating account..." : "Create Account"}
+              </Button>
+            </FormStep>
+          )}
+        </AnimatePresence>
+
+        {/* Footer */}
+        <div className="text-center pt-6 border-t border-gray-200">
+          <p className="text-gray-600">
+            Already have an account?{" "}
+            <a
+              href="#"
+              className="text-primary-600 hover:text-primary-700 font-medium"
+            >
+              Sign in
+            </a>
+          </p>
         </div>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="email">Email:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-          />
-        </div>
-
-        <div style={{ marginBottom: '1rem' }}>
-          <label htmlFor="password">Password:</label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '0.5rem', marginTop: '0.25rem' }}
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={isLoading}
-          style={{
-            width: '100%',
-            padding: '0.75rem',
-            backgroundColor: '#28a745',
-            color: 'white',
-            border: 'none',
-            borderRadius: '4px',
-            cursor: isLoading ? 'not-allowed' : 'pointer'
-          }}
-        >
-          {isLoading ? 'Creating Account...' : 'Create Account'}
-        </button>
-      </form>
-
-      <p style={{ textAlign: 'center', marginTop: '1rem' }}>
-        Already have an account?{' '}
-        <button
-          onClick={() => navigate('/login')}
-          style={{
-            background: 'none',
-            border: 'none',
-            color: '#007bff',
-            cursor: 'pointer',
-            textDecoration: 'underline'
-          }}
-        >
-          Sign in
-        </button>
-      </p>
-    </div>
+      </div>
+    </AuthLayout>
   );
-}
+};
+
+export default SignupPage;
