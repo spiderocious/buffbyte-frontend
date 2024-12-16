@@ -31,7 +31,7 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
         staggerChildren: 0.1
       }
     }
@@ -44,7 +44,7 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
       opacity: 1,
       transition: {
         duration: 1.2,
-        ease: "easeInOut",
+        ease: "easeInOut" as const,
         repeat: animated ? (repeat === 1 ? 0 : repeat - 1) : 0,
         repeatType: "loop" as const,
         repeatDelay: 0.5
@@ -59,7 +59,7 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
       rotate: 0,
       transition: {
         duration: 0.8,
-        ease: "easeOut",
+        ease: "easeOut" as const,
         delay: 0.3,
         repeat: animated ? (repeat === 1 ? 0 : repeat - 1) : 0,
         repeatType: "loop" as const,
@@ -75,7 +75,7 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
       transition: {
         duration: 2,
         repeat: animated ? Infinity : 0,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   };
@@ -187,9 +187,9 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
               transition={{
                 duration: 2,
                 repeat: animated ? (repeat === 1 ? 0 : repeat - 1) : 0,
-                repeatType: "loop",
+                repeatType: "loop" as const,
                 delay: i * 0.3,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }}
             />
           ))}

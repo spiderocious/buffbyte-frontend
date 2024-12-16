@@ -30,8 +30,8 @@ const SignupPage: React.FC = () => {
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState<boolean>(false);
+  const [passwordValidity, setPasswordValidity] = useState<boolean>(false);
 
-  // Name validation
   const validateName = (name: string): boolean => {
     return name.trim().length >= 2;
   };
@@ -44,7 +44,7 @@ const SignupPage: React.FC = () => {
 
   // Password validation
   const validatePassword = (password: string): boolean => {
-    return password.length >= 6;
+    return password.length >= 8;
   };
 
   // Check if current step is valid
@@ -55,7 +55,7 @@ const SignupPage: React.FC = () => {
       case 2:
         return validateEmail(formData.email);
       case 3:
-        return validatePassword(formData.password);
+        return validatePassword(formData.password) && passwordValidity;
       default:
         return false;
     }
@@ -132,6 +132,7 @@ const SignupPage: React.FC = () => {
     return () => document.removeEventListener("keypress", handleKeyPress);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, formData]);
+  
 
   return (
     <AuthLayout>
@@ -229,7 +230,7 @@ const SignupPage: React.FC = () => {
                   required
                   autoComplete="new-password"
                 />
-                <PasswordStrengthIndicator password={formData.password} />
+                <PasswordStrengthIndicator password={formData.password} onChange={(valid) => setPasswordValidity(valid)} />
               </div>
 
               <div className="flex justify-between items-center">

@@ -1,7 +1,10 @@
 import type { User } from '@buffbyte/types';
+import { apiHelpers } from '@buffbyte/utils';
+import type { AxiosResponse } from 'axios';
+import { CACHE_STORAGE_KEYS } from '../constants/cache';
 
-const AUTH_TOKEN_KEY = 'buffbyte_auth_token';
-const AUTH_USER_KEY = 'buffbyte_auth_user';
+const AUTH_TOKEN_KEY = CACHE_STORAGE_KEYS.AUTH_TOKEN_KEY;
+const AUTH_USER_KEY = CACHE_STORAGE_KEYS.AUTH_USER_KEY;
 
 export class AuthService {
   /**
@@ -67,4 +70,52 @@ export class AuthService {
     const token = this.getToken();
     return token ? { Authorization: `Bearer ${token}` } : {};
   }
+
+
+  /**
+   * Login user with email and password
+   */
+  static async login(email: string, password: string): Promise<{ user: User; token: string }> {
+    try {
+      const response: AxiosResponse<{ user: User; token: string }> = await apiHelpers.post('/auth/login', {
+        email,
+        password,
+      });
+
+      const { user, token } = response.data;
+      
+      // Save auth data to session storage
+      this.saveAuth(token, user);
+      
+      return { user, token };
+    } catch (error) {
+      console.error('Login failed:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Register new user
+   */
+  static async register(userData: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+  }): Promise<{ user: User; token: string }> {
+    try {
+      const response: AxiosResponse<{ user: User; token: string }> = await apiHelpers.post('/auth/register', userData);
+
+      const { user, token } = response.data;
+      
+      // Save auth data to session storage
+      this.saveAuth(token, user);
+      
+      return { user, token };
+    } catch (error) {
+      console.error('Registration failed:', error);
+      throw error;
+    }
+  }
+ 
 }

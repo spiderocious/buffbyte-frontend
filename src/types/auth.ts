@@ -32,3 +32,18 @@ export interface SignupRequest {
   email: string;
   password: string;
 }
+
+
+export interface PasswordRequirement {
+  id: string;
+  label: string;
+  test: (password: string) => boolean;
+  met: boolean;
+}
+
+export interface PasswordStrength {
+  score: number;
+  label: string;
+  color: string;
+  requirements: PasswordRequirement[];
+}

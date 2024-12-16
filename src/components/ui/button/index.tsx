@@ -41,7 +41,7 @@ const Button: React.FC<ButtonProps> = ({
       bg-gradient-to-r from-blue-600 via-cyan-600 to-teal-700 text-white border-2 border-transparent
       hover:from-blue-700 hover:via-cyan-700 hover:to-teal-800
       focus:ring-cyan-500 shadow-md hover:shadow-lg
-      disabled:bg-gray-400 disabled:cursor-not-allowed
+      disabled:bg-gray-400 disabled:cursor-not-allowed disabled:to-transparent disabled:from-transparent disabled:via-transparent
     `,
     secondary: `
       bg-white text-primary-600 border-2 border-primary-600
