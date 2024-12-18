@@ -29,7 +29,7 @@ export class ApiService {
         if (response.status === 401) {
           // Token expired or invalid, clear auth and redirect to login
           AuthService.clearAuth();
-          window.location.href = "/login";
+          window.location.href = "/auth/login";
           throw new Error("Authentication required");
         }
         throw new Error(`HTTP error! status: ${response.status}`);

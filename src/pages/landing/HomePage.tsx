@@ -41,7 +41,7 @@ export default function HomePage() {
             About Page
           </Link>
           <Link 
-            to="/login"
+            to="/auth/login"
             style={{
               padding: '0.5rem 1rem',
               backgroundColor: '#28a745',

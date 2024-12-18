@@ -9,7 +9,7 @@ export default function Layout() {
 
   const handleLogout = () => {
     AuthService.clearAuth();
-    navigate('/login', { replace: true });
+    navigate('/auth/login', { replace: true });
   };
 
   return (
@@ -49,8 +49,8 @@ export default function Layout() {
             </div>
           ) : (
             <div>
-              <Link to="/login" style={{ marginRight: '1rem' }}>Login</Link>
-              <Link to="/signup">Sign Up</Link>
+              <Link to="/auth/login" style={{ marginRight: '1rem' }}>Login</Link>
+              <Link to="/auth/signup">Sign Up</Link>
             </div>
           )}
         </div>

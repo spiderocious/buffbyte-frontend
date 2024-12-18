@@ -47,7 +47,7 @@ export default function PageTransition({ children }: PageTransitionProps) {
   const location = useLocation();
   
   // Use different animations for different route types
-  const isAuthRoute = location.pathname === '/login' || location.pathname === '/signup';
+  const isAuthRoute = location.pathname === '/auth/login' || location.pathname === '/auth/signup';
   const variants = isAuthRoute ? fadeSlideVariants : slideVariants;
 
   return (

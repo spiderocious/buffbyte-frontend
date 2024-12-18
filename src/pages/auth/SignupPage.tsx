@@ -6,7 +6,12 @@ import BuffByteLogo from "@buffbyte/components/ui/logo";
 import { AnimatePresence } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { BsArrowRight } from "react-icons/bs";
-import { PasswordStrengthIndicator } from "../../components/feedback/password-strength";
+import { PasswordStrengthIndicator } from "@buffbyte/components/feedback/password-strength";
+import { AuthService } from "@buffbyte/services";
+import { showToast } from '@buffbyte/utils';
+import { useNavigate } from "react-router-dom";
+import { getApiErrorMessage } from "@buffbyte/utils/api/axios";
+import { Link } from "react-router-dom";
 
 interface FormData {
   fullName: string;
@@ -28,6 +33,7 @@ const SignupPage: React.FC = () => {
     email: "",
     password: "",
   });
+  const navigate = useNavigate();
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState<boolean>(false);
   const [passwordValidity, setPasswordValidity] = useState<boolean>(false);
@@ -91,14 +97,12 @@ const SignupPage: React.FC = () => {
     }
   };
 
-  // Handle back step
   const handleBack = (): void => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
     }
   };
 
-  // Handle form submission
   const handleSubmit = async (): Promise<void> => {
     if (!validatePassword(formData.password)) {
       setErrors({ password: "Password must be at least 6 characters" });
@@ -107,14 +111,11 @@ const SignupPage: React.FC = () => {
 
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-      // Handle successful signup here
-      console.log("Signup successful:", formData);
-      alert("Account created successfully!");
+      await AuthService.register({...formData, name: formData.fullName});
+      showToast.success("Account created successfully!");
+      navigate("/app/dashboard");
     } catch (error) {
-      console.error("Signup error:", error);
-      setErrors({ password: "Signup failed. Please try again." });
+      setErrors({ password: getApiErrorMessage(error) });
     } finally {
       setLoading(false);
     }
@@ -261,12 +262,12 @@ const SignupPage: React.FC = () => {
         <div className="text-center pt-6 border-t border-gray-200">
           <p className="text-gray-600">
             Already have an account?{" "}
-            <a
-              href="#"
+            <Link
+              to="/auth/login"
               className="text-primary-600 hover:text-primary-700 font-medium"
             >
               Sign in
-            </a>
+            </Link>
           </p>
         </div>
       </div>

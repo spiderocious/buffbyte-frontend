@@ -17,17 +17,17 @@ export const routes: RouteConfig[] = [
     title: 'About - BuffByte'
   },
   {
-    path: '/login',
+    path: '/auth/login',
     component: LoginPage,
     requiresAuth: false,
-    exact: true,
+    exact: false,
     title: 'Login - BuffByte'
-  },
+    },
   {
-    path: '/signup',
+    path: '/auth/signup',
     component: SignupPage,
     requiresAuth: false,
-    exact: true,
+    exact: false,
     title: 'Sign Up - BuffByte'
   },
   {

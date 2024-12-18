@@ -1,12 +1,15 @@
-import { AnimatePresence } from 'framer-motion';
-import React, { useEffect, useState } from 'react';
-import FormInput from '@buffbyte/components/form/input';
-import FormStep from '@buffbyte/components/form/step';
-import AuthLayout from '@buffbyte/components/form/step/auth';
-import Button from '@buffbyte/components/ui/button';
-import BuffByteLogo from '@buffbyte/components/ui/logo';
-import { BsArrowRight } from 'react-icons/bs';
-import { Link } from 'react-router-dom';
+import { AnimatePresence } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import FormInput from "@buffbyte/components/form/input";
+import FormStep from "@buffbyte/components/form/step";
+import AuthLayout from "@buffbyte/components/form/step/auth";
+import Button from "@buffbyte/components/ui/button";
+import BuffByteLogo from "@buffbyte/components/ui/logo";
+import { BsArrowRight } from "react-icons/bs";
+import { Link, useNavigate } from "react-router-dom";
+import { getApiErrorMessage } from "../../utils/api/axios";
+import { AuthService } from "../../services/auth";
+import { showToast } from "../../utils";
 
 interface FormData {
   email: string;
@@ -19,10 +22,11 @@ interface FormErrors {
 }
 
 const LoginPage: React.FC = () => {
+  const navigate = useNavigate();
   const [currentStep, setCurrentStep] = useState<number>(1);
   const [formData, setFormData] = useState<FormData>({
-    email: '',
-    password: ''
+    email: "",
+    password: "",
   });
   const [errors, setErrors] = useState<FormErrors>({});
   const [loading, setLoading] = useState<boolean>(false);
@@ -42,7 +46,7 @@ const LoginPage: React.FC = () => {
   const isStepValid = (step: number): boolean => {
     switch (step) {
       case 1:
-        return  validateEmail(formData.email);
+        return validateEmail(formData.email);
       case 2:
         return validatePassword(formData.password);
       default:
@@ -52,10 +56,10 @@ const LoginPage: React.FC = () => {
 
   // Handle input changes
   const handleInputChange = (field: keyof FormData, value: string): void => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
     // Clear error when user starts typing
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: undefined }));
+      setErrors((prev) => ({ ...prev, [field]: undefined }));
     }
   };
 
@@ -63,7 +67,7 @@ const LoginPage: React.FC = () => {
   const handleNext = (): void => {
     if (currentStep === 1) {
       if (!validateEmail(formData.email)) {
-        setErrors({ email: 'Please enter a valid email address' });
+        setErrors({ email: "Please enter a valid email address" });
         return;
       }
       setCurrentStep(2);
@@ -82,20 +86,17 @@ const LoginPage: React.FC = () => {
   // Handle form submission
   const handleSubmit = async (): Promise<void> => {
     if (!validatePassword(formData.password)) {
-      setErrors({ password: 'Password must be at least 6 characters' });
+      setErrors({ password: "Password must be at least 6 characters" });
       return;
     }
 
     setLoading(true);
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 2000));
-      // Handle successful login here
-      console.log('Login successful:', formData);
-      alert('Login successful!');
+      await AuthService.login(formData.email, formData.password);
+      showToast.success("Login successful!");
+      navigate("/app/dashboard");
     } catch (error) {
-      console.error('Login error:', error);
-      setErrors({ password: 'Login failed. Please try again.' });
+      setErrors({ password: getApiErrorMessage(error) });
     } finally {
       setLoading(false);
     }
@@ -104,13 +105,13 @@ const LoginPage: React.FC = () => {
   // Handle enter key
   useEffect(() => {
     const handleKeyPress = (e: KeyboardEvent): void => {
-      if (e.key === 'Enter' && isStepValid(currentStep)) {
+      if (e.key === "Enter" && isStepValid(currentStep)) {
         handleNext();
       }
     };
 
-    document.addEventListener('keypress', handleKeyPress);
-    return () => document.removeEventListener('keypress', handleKeyPress);
+    document.addEventListener("keypress", handleKeyPress);
+    return () => document.removeEventListener("keypress", handleKeyPress);
   }, [currentStep, formData]);
 
   return (
@@ -134,19 +135,19 @@ const LoginPage: React.FC = () => {
                 type="email"
                 placeholder="Enter your email address"
                 value={formData.email}
-                onChange={(e) => handleInputChange('email', e.target.value)}
+                onChange={(e) => handleInputChange("email", e.target.value)}
                 error={errors.email}
                 required
                 autoComplete="email"
               />
-              
+
               <Button
                 onClick={handleNext}
                 disabled={!isStepValid(1)}
                 fullWidth
                 className="mt-6 flex items-center justify-center"
               >
-                Continue  <BsArrowRight className='ml-2' />
+                Continue <BsArrowRight className="ml-2" />
               </Button>
             </FormStep>
           )}
@@ -162,7 +163,7 @@ const LoginPage: React.FC = () => {
                 type="password"
                 placeholder="Enter your password"
                 value={formData.password}
-                onChange={(e) => handleInputChange('password', e.target.value)}
+                onChange={(e) => handleInputChange("password", e.target.value)}
                 error={errors.password}
                 showPasswordToggle
                 required
@@ -177,14 +178,14 @@ const LoginPage: React.FC = () => {
                 >
                   ← Back
                 </button>
-                <a 
-                  href="#" 
-                  className="text-sm text-primary-600 hover:text-primary-700 font-medium"
+                <a
+                  href="#"
+                  className="text-sm text-primary-600 hover:text-primary-700 font-medium hidden"
                 >
                   Forgot password?
                 </a>
               </div>
-              
+
               <Button
                 onClick={handleNext}
                 disabled={!isStepValid(2)}
@@ -193,7 +194,7 @@ const LoginPage: React.FC = () => {
                 fullWidth
                 className="mt-6"
               >
-                {loading ? 'Signing in...' : 'Sign In'}
+                {loading ? "Signing in..." : "Sign In"}
               </Button>
             </FormStep>
           )}
@@ -202,9 +203,9 @@ const LoginPage: React.FC = () => {
         {/* Footer */}
         <div className="text-center pt-6 border-t border-gray-200">
           <p className="text-gray-600">
-            Don't have an account?{' '}
+            Don't have an account?{" "}
             <Link
-              to="/signup"
+              to="/auth/signup"
               className="text-primary-600 hover:text-primary-700 font-medium"
             >
               Sign up

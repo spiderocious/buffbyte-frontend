@@ -142,10 +142,10 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
 
         {/* Inner byte representation (binary pattern) */}
         <motion.g variants={byteVariants} initial="initial" animate="animate">
-          <circle cx="45" cy="40" r="2" fill={color} />
+          {/* <circle cx="45" cy="40" r="2" fill={color} />
           <circle cx="55" cy="40" r="2" fill={color} />
           <circle cx="45" cy="50" r="2" fill={color} />
-          <circle cx="55" cy="50" r="2" fill={color} />
+          <circle cx="55" cy="50" r="2" fill={color} /> */}
         </motion.g>
 
         {/* Data sparkles */}
@@ -169,30 +169,6 @@ const BuffByteLogo: React.FC<BuffByteLogoProps> = ({
             fill={color}
             opacity="0.5"
           />
-        </motion.g>
-
-        {/* Flowing data particles */}
-        <motion.g>
-          {[0, 1, 2].map((i) => (
-            <motion.circle
-              key={i}
-              cx="15"
-              cy={35 + i * 15}
-              r="1.5"
-              fill={color}
-              animate={animated ? {
-                cx: [15, 85, 15],
-                opacity: [0, 1, 0]
-              } : {}}
-              transition={{
-                duration: 2,
-                repeat: animated ? (repeat === 1 ? 0 : repeat - 1) : 0,
-                repeatType: "loop" as const,
-                delay: i * 0.3,
-                ease: "easeInOut" as const
-              }}
-            />
-          ))}
         </motion.g>
 
         {/* Gradient definitions */}

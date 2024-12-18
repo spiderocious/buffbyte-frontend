@@ -8,7 +8,7 @@ interface ProtectedRouteProps {
 
 export default function ProtectedRoute({ 
   children, 
-  redirectTo = '/login' 
+  redirectTo = '/auth/login' 
 }: ProtectedRouteProps) {
   const isAuthenticated = AuthService.isAuthenticated();
 

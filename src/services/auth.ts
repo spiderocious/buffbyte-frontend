@@ -2,6 +2,7 @@ import type { User } from '@buffbyte/types';
 import { apiHelpers } from '@buffbyte/utils';
 import type { AxiosResponse } from 'axios';
 import { CACHE_STORAGE_KEYS } from '../constants/cache';
+import type { AuthAPIResponse } from '../types/api';
 
 const AUTH_TOKEN_KEY = CACHE_STORAGE_KEYS.AUTH_TOKEN_KEY;
 const AUTH_USER_KEY = CACHE_STORAGE_KEYS.AUTH_USER_KEY;
@@ -11,37 +12,23 @@ export class AuthService {
    * Save authentication data to session storage
    */
   static saveAuth(token: string, user: User): void {
-    try {
-      sessionStorage.setItem(AUTH_TOKEN_KEY, token);
-      sessionStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
-    } catch (error) {
-      console.error('Failed to save auth data:', error);
-    }
+    sessionStorage.setItem(AUTH_TOKEN_KEY, token);
+    sessionStorage.setItem(AUTH_USER_KEY, JSON.stringify(user));
   }
 
   /**
    * Get authentication token from session storage
    */
   static getToken(): string | null {
-    try {
-      return sessionStorage.getItem(AUTH_TOKEN_KEY);
-    } catch (error) {
-      console.error('Failed to get auth token:', error);
-      return null;
-    }
+    return sessionStorage.getItem(AUTH_TOKEN_KEY);
   }
 
   /**
    * Get user data from session storage
    */
   static getUser(): User | null {
-    try {
-      const userStr = sessionStorage.getItem(AUTH_USER_KEY);
-      return userStr ? JSON.parse(userStr) : null;
-    } catch (error) {
-      console.error('Failed to get user data:', error);
-      return null;
-    }
+    const userStr = sessionStorage.getItem(AUTH_USER_KEY);
+    return userStr ? JSON.parse(userStr) : null;
   }
 
   /**
@@ -55,12 +42,8 @@ export class AuthService {
    * Clear authentication data
    */
   static clearAuth(): void {
-    try {
-      sessionStorage.removeItem(AUTH_TOKEN_KEY);
-      sessionStorage.removeItem(AUTH_USER_KEY);
-    } catch (error) {
-      console.error('Failed to clear auth data:', error);
-    }
+    sessionStorage.removeItem(AUTH_TOKEN_KEY);
+    sessionStorage.removeItem(AUTH_USER_KEY);
   }
 
   /**
@@ -76,46 +59,33 @@ export class AuthService {
    * Login user with email and password
    */
   static async login(email: string, password: string): Promise<{ user: User; token: string }> {
-    try {
-      const response: AxiosResponse<{ user: User; token: string }> = await apiHelpers.post('/auth/login', {
-        email,
-        password,
-      });
+    const response: AxiosResponse<AuthAPIResponse> = await apiHelpers.post('/auth/login', {
+      email,
+      password,
+    });
 
-      const { user, token } = response.data;
-      
-      // Save auth data to session storage
-      this.saveAuth(token, user);
-      
-      return { user, token };
-    } catch (error) {
-      console.error('Login failed:', error);
-      throw error;
-    }
+    const { user, token } = response.data.data;
+    
+    // Save auth data to session storage
+    this.saveAuth(token, user);
+    
+    return { user, token };
   }
 
   /**
    * Register new user
    */
   static async register(userData: {
-    firstName: string;
-    lastName: string;
+    name: string;
     email: string;
     password: string;
   }): Promise<{ user: User; token: string }> {
-    try {
-      const response: AxiosResponse<{ user: User; token: string }> = await apiHelpers.post('/auth/register', userData);
-
-      const { user, token } = response.data;
-      
-      // Save auth data to session storage
-      this.saveAuth(token, user);
-      
-      return { user, token };
-    } catch (error) {
-      console.error('Registration failed:', error);
-      throw error;
-    }
+    const response: AxiosResponse<AuthAPIResponse> = await apiHelpers.post('/auth/register', userData);
+  
+    const { user, token } = response.data.data;
+    // Save auth data to session storage
+    this.saveAuth(token, user);
+    return { user, token };
   }
  
 }
