@@ -1,11 +1,23 @@
-import React from 'react';
-import { motion } from 'framer-motion';
-import PlatformBadge from '@buffbyte/components/ui/platform-badge';
-import TrendVelocityIndicator from '@buffbyte/components/ui/trend-velocity';
-import EngagementProgressRing from '@buffbyte/components/ui/engagement-ring';
+import { motion } from "framer-motion";
+import React from "react";
+import {
+    FiClock,
+    FiMinus,
+    FiTarget,
+    FiTrendingDown,
+    FiTrendingUp,
+    FiUsers
+} from "react-icons/fi";
+import PlatformBadge from "../../platform-badge";
 
-type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin' | 'youtube' | 'facebook';
-type TrendVelocity = 'rising' | 'stable' | 'declining';
+type Platform =
+  | "twitter"
+  | "instagram"
+  | "tiktok"
+  | "linkedin"
+  | "youtube"
+  | "facebook";
+type TrendVelocity = "rising" | "stable" | "declining";
 
 interface TrendingTopic {
   topic: string;
@@ -19,265 +31,342 @@ interface TrendingTopic {
 
 interface TopicCardProps {
   topic: TrendingTopic;
-  size?: 'small' | 'medium' | 'large';
-  onClick?: () => void;
+  size?: "small" | "medium" | "large";
   className?: string;
   index?: number;
 }
 
 const TopicCard: React.FC<TopicCardProps> = ({
   topic,
-  size = 'medium',
-  onClick,
-  className = '',
-  index = 0
+  size = "medium",
+  className = "",
+  index = 0,
 }) => {
-  // Size configuration
-  const sizeConfig = {
-    small: {
-      container: 'p-4',
-      title: 'text-lg font-semibold',
-      spacing: 'space-y-3',
-      ringSize: 'sm' as const,
-      badgeSize: 'sm' as const,
-      indicatorSize: 'sm' as const
-    },
-    medium: {
-      container: 'p-5',
-      title: 'text-xl font-bold',
-      spacing: 'space-y-4',
-      ringSize: 'md' as const,
-      badgeSize: 'md' as const,
-      indicatorSize: 'md' as const
-    },
-    large: {
-      container: 'p-6',
-      title: 'text-2xl font-bold',
-      spacing: 'space-y-5',
-      ringSize: 'lg' as const,
-      badgeSize: 'lg' as const,
-      indicatorSize: 'lg' as const
+  // Get velocity styling with more sophisticated colors
+  const getVelocityInfo = (velocity: TrendVelocity) => {
+    switch (velocity) {
+      case "rising":
+        return {
+          icon: FiTrendingUp,
+          gradient: "from-emerald-400 via-teal-500 to-cyan-600",
+          borderGlow: "shadow-[0_0_20px_rgba(16,185,129,0.3)]",
+          accentColor: "emerald-500",
+          textColor: "text-emerald-700",
+          bgColor: "bg-emerald-50",
+          ringColor: "ring-emerald-200"
+        };
+      case "declining":
+        return {
+          icon: FiTrendingDown,
+          gradient: "from-red-400 via-rose-500 to-pink-600",
+          borderGlow: "shadow-[0_0_20px_rgba(239,68,68,0.3)]",
+          accentColor: "red-500",
+          textColor: "text-red-700",
+          bgColor: "bg-red-50",
+          ringColor: "ring-red-200"
+        };
+      default:
+        return {
+          icon: FiMinus,
+          gradient: "from-slate-400 via-slate-500 to-slate-600",
+          borderGlow: "shadow-[0_0_20px_rgba(100,116,139,0.2)]",
+          accentColor: "slate-500",
+          textColor: "text-slate-700",
+          bgColor: "bg-slate-50",
+          ringColor: "ring-slate-200"
+        };
     }
   };
 
-  const config = sizeConfig[size];
+  const velocityInfo = getVelocityInfo(topic.trend_velocity);
+  const VelocityIcon = velocityInfo.icon;
+
+  // Enhanced engagement styling
+  const getEngagementStyling = (score: number) => {
+    if (score >= 0.8) {
+      return {
+        ringGradient: "from-emerald-400 to-teal-500",
+        pulseColor: "bg-emerald-400",
+        intensity: "high"
+      };
+    }
+    if (score >= 0.6) {
+      return {
+        ringGradient: "from-blue-400 to-indigo-500",
+        pulseColor: "bg-blue-400",
+        intensity: "medium"
+      };
+    }
+    return {
+      ringGradient: "from-slate-300 to-slate-400",
+      pulseColor: "bg-slate-400",
+      intensity: "low"
+    };
+  };
+
+  const engagementStyle = getEngagementStyling(topic.engagement_score);
 
   // Animation variants
-  const cardVariants = {
-    initial: { 
-      opacity: 0, 
-      y: 20,
-      scale: 0.95
+  const containerVariants = {
+    initial: {
+      opacity: 0,
+      y: 40,
+      scale: 0.95,
     },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.4,
+        duration: 0.7,
         delay: index * 0.1,
-        ease: "easeOut" as const
-      }
+        ease: [0.16, 1, 0.3, 1],
+        staggerChildren: 0.1,
+      },
     },
     hover: {
-      y: -5,
-      scale: 1.02,
+      y: -12,
+      scale: 1.03,
       transition: {
-        duration: 0.2,
-        ease: "easeOut" as const
-      }
+        duration: 0.4,
+        ease: [0.16, 1, 0.3, 1],
+      },
     },
-    tap: {
-      scale: 0.98,
-      transition: { duration: 0.1 }
-    }
-  };
-
-  const contentVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: 1,
-      transition: {
-        delay: 0.2 + (index * 0.1),
-        staggerChildren: 0.1
-      }
-    }
   };
 
   const itemVariants = {
-    initial: { opacity: 0, x: -10 },
-    animate: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.3 }
-    }
-  };
-
-  // Get background gradient based on engagement score
-  const getBackgroundGradient = (score: number) => {
-    if (score >= 0.8) return 'from-success-50 to-success-100';
-    if (score >= 0.6) return 'from-primary-50 to-primary-100';
-    if (score >= 0.4) return 'from-warning-50 to-warning-100';
-    return 'from-gray-50 to-gray-100';
-  };
-
-  // Get border color based on engagement score
-  const getBorderColor = (score: number) => {
-    if (score >= 0.8) return 'border-success-200 hover:border-success-300';
-    if (score >= 0.6) return 'border-primary-200 hover:border-primary-300';
-    if (score >= 0.4) return 'border-warning-200 hover:border-warning-300';
-    return 'border-gray-200 hover:border-gray-300';
+    initial: { opacity: 0, y: 15 },
+    animate: {
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
   };
 
   return (
     <motion.div
-      variants={cardVariants}
+      variants={containerVariants}
       initial="initial"
       animate="animate"
       whileHover="hover"
-      whileTap={onClick ? "tap" : undefined}
-      onClick={onClick}
-      className={`
-        relative bg-gradient-to-br ${getBackgroundGradient(topic.engagement_score)}
-        border-2 ${getBorderColor(topic.engagement_score)}
-        rounded-xl shadow-sm hover:shadow-md transition-all duration-200
-        ${config.container}
-        ${onClick ? 'cursor-pointer' : ''}
-        ${className}
-      `}
+      className={`group relative ${className}`}
     >
-      {/* Background pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0 bg-gradient-to-br from-transparent via-white to-transparent transform rotate-45" />
-      </div>
+      {/* Main Card */}
+      <div className={`
+        relative bg-white rounded-3xl overflow-hidden
+        border border-slate-200/50
+        ${velocityInfo.borderGlow}
+        shadow-[0_8px_30px_rgba(0,0,0,0.06)]
+        group-hover:shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+        transition-all duration-500 h-full
+      `}>
+        
+        {/* Gradient Header Strip */}
+        <div className={`h-1.5 bg-gradient-to-r ${velocityInfo.gradient}`} />
+        
+        {/* Content Container */}
+        <div className="p-8">
+          
+          {/* Header Section */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className="flex items-start justify-between mb-4">
+              {/* Topic Index */}
+              <div className={`
+                flex items-center justify-center w-8 h-8 rounded-xl
+                bg-gradient-to-br ${velocityInfo.gradient} text-white
+                font-black text-sm shadow-lg
+              `}>
+                {index + 1}
+              </div>
+              
+              {/* Velocity Badge */}
+              <div className={`
+                flex items-center space-x-2 px-4 py-2 rounded-full
+                ${velocityInfo.bgColor} ${velocityInfo.ringColor} ring-1
+                ${velocityInfo.textColor}
+              `}>
+                <VelocityIcon className="w-4 h-4" />
+                <span className="text-sm font-bold capitalize">{topic.trend_velocity}</span>
+              </div>
+            </div>
 
-      <motion.div
-        variants={contentVariants}
-        initial="initial"
-        animate="animate"
-        className={`relative z-10 ${config.spacing}`}
-      >
-        {/* Header with title and trend indicator */}
-        <motion.div 
-          variants={itemVariants}
-          className="flex items-start justify-between"
-        >
-          <div className="flex-1">
-            <h3 className={`${config.title} text-gray-900 leading-tight`}>
+            {/* Topic Title */}
+            <h3 className="text-2xl font-black text-slate-900 leading-tight mb-2">
               {topic.topic}
             </h3>
-            <p className="text-sm text-gray-600 mt-1">
-              Predicted to last {topic.duration_prediction}
-            </p>
-          </div>
-          <TrendVelocityIndicator 
-            velocity={topic.trend_velocity}
-            size={config.indicatorSize}
-            animated
-          />
-        </motion.div>
+            
+            {/* Duration Subtitle */}
+            <div className="flex items-center space-x-2 text-slate-500">
+              <FiClock className="w-4 h-4" />
+              <span className="text-sm font-medium">
+                Trending for {topic.duration_prediction}
+              </span>
+            </div>
+          </motion.div>
 
-        {/* Engagement score */}
-        <motion.div 
-          variants={itemVariants}
-          className="flex items-center justify-center"
-        >
-          <EngagementProgressRing
-            score={topic.engagement_score}
-            size={config.ringSize}
-            showPercentage
-            showLabel
-            label="Engagement"
-            animated
-          />
-        </motion.div>
-
-        {/* Platforms */}
-        <motion.div 
-          variants={itemVariants}
-          className="space-y-2"
-        >
-          <h4 className="text-sm font-medium text-gray-700">Active on:</h4>
-          <div className="flex flex-wrap gap-2">
-            {topic.platforms.map((platform, idx) => (
-              <motion.div
-                key={platform}
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 0.3 + (idx * 0.1) }}
-              >
-                <PlatformBadge
-                  platform={platform}
-                  size={config.badgeSize}
-                  variant="subtle"
-                  animated
+          {/* Engagement Section - Central Focus */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className="flex items-center justify-center">
+              {/* Circular Progress Ring */}
+              <div className="relative">
+                {/* Background Ring */}
+                <div className="w-32 h-32 rounded-full bg-slate-100" />
+                
+                {/* Progress Ring */}
+                <svg className="absolute inset-0 w-32 h-32 transform -rotate-90">
+                  <circle
+                    cx="64"
+                    cy="64"
+                    r="56"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="8"
+                    className="text-slate-200"
+                  />
+                  <motion.circle
+                    cx="64"
+                    cy="64"
+                    r="56"
+                    fill="none"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    className={`text-gradient-to-r ${engagementStyle.ringGradient}`}
+                    style={{
+                      strokeDasharray: `${2 * Math.PI * 56}`,
+                    }}
+                    initial={{ strokeDashoffset: 2 * Math.PI * 56 }}
+                    animate={{ 
+                      strokeDashoffset: 2 * Math.PI * 56 * (1 - topic.engagement_score),
+                      stroke: topic.engagement_score >= 0.8 ? '#10b981' : 
+                              topic.engagement_score >= 0.6 ? '#3b82f6' : '#64748b'
+                    }}
+                    transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                  />
+                </svg>
+                
+                {/* Center Content */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <div className="text-3xl font-black text-slate-900">
+                    {Math.round(topic.engagement_score * 100)}%
+                  </div>
+                  <div className="text-xs font-medium text-slate-500 uppercase tracking-wider">
+                    Engagement
+                  </div>
+                </div>
+                
+                {/* Pulse Ring */}
+                <motion.div
+                  className={`absolute inset-0 w-32 h-32 rounded-full ${engagementStyle.pulseColor} opacity-20`}
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    opacity: [0.2, 0.1, 0.2],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                  }}
                 />
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Demographics and Content Types */}
-        <motion.div 
-          variants={itemVariants}
-          className="grid grid-cols-1 gap-3"
-        >
-          {/* Demographics */}
-          <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-              Demographics
-            </h4>
-            <div className="flex flex-wrap gap-1">
-              {topic.demographics.map((demo, idx) => (
-                <motion.span
-                  key={demo}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.4 + (idx * 0.05) }}
-                  className="inline-block px-2 py-1 bg-white/60 text-xs font-medium text-gray-700 rounded-md"
-                >
-                  {demo}
-                </motion.span>
-              ))}
+              </div>
             </div>
-          </div>
+          </motion.div>
 
-          {/* Content Types */}
-          <div>
-            <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-1">
-              Content Types
-            </h4>
-            <div className="flex flex-wrap gap-1">
-              {topic.content_types.map((type, idx) => (
-                <motion.span
-                  key={type}
-                  initial={{ opacity: 0, y: 5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.5 + (idx * 0.05) }}
-                  className="inline-block px-2 py-1 bg-white/60 text-xs font-medium text-gray-700 rounded-md capitalize"
-                >
-                  {type}
-                </motion.span>
-              ))}
+          {/* Platforms Section */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className="text-center mb-4">
+              <h4 className="text-sm font-bold text-slate-700 mb-3">Active Platforms</h4>
+              <div className="flex justify-center items-center flex-wrap gap-3">
+                {topic.platforms.map((platform, idx) => (
+                  <motion.div
+                    key={platform}
+                    initial={{ opacity: 0, scale: 0.8, rotate: -90 }}
+                    animate={{ opacity: 1, scale: 1, rotate: 0 }}
+                    transition={{ 
+                      delay: 0.8 + (idx * 0.1),
+                      type: "spring",
+                      stiffness: 200,
+                      damping: 15
+                    }}
+                  >
+                    <PlatformBadge
+                      platform={platform}
+                      size="lg"
+                      variant="subtle"
+                      animated
+                    />
+                  </motion.div>
+                ))}
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
 
-        {/* Click indicator */}
-        {onClick && (
-          <motion.div
-            className="absolute top-3 right-3 w-2 h-2 bg-primary-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"
-            whileHover={{ scale: 1.2 }}
-          />
-        )}
-      </motion.div>
+          {/* Bottom Info Grid */}
+          <motion.div variants={itemVariants} className="space-y-4">
+            {/* Demographics */}
+            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-100">
+              <div className="flex items-center space-x-2 mb-3">
+                <FiUsers className="w-4 h-4 text-slate-600" />
+                <h5 className="text-sm font-bold text-slate-700">Target Demographics</h5>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {topic.demographics.map((demo, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-white rounded-lg text-sm font-medium text-slate-700 shadow-sm"
+                  >
+                    {demo}
+                  </span>
+                ))}
+              </div>
+            </div>
 
-      {/* Hover glow effect */}
-      <motion.div
-        className="absolute inset-0 rounded-xl bg-gradient-to-r from-primary-500/0 via-primary-500/5 to-primary-500/0 opacity-0"
-        whileHover={{ opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      />
+            {/* Content Types */}
+            <div className="bg-slate-50/80 rounded-2xl p-4 border border-slate-100">
+              <div className="flex items-center space-x-2 mb-3">
+                <FiTarget className="w-4 h-4 text-slate-600" />
+                <h5 className="text-sm font-bold text-slate-700">Content Types</h5>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                {topic.content_types.map((type, idx) => (
+                  <span
+                    key={idx}
+                    className="px-3 py-1 bg-white rounded-lg text-sm font-medium text-slate-700 shadow-sm capitalize"
+                  >
+                    {type}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </motion.div>
+        </div>
+
+        {/* Subtle Glow Effect on Hover */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+          style={{
+            background: `linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)`
+          }}
+        />
+        
+        {/* Moving Highlight */}
+        <motion.div
+          className="absolute inset-0 rounded-3xl"
+          style={{
+            background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)`,
+            transform: 'translateX(-100%)',
+          }}
+          animate={{
+            transform: ['translateX(-100%)', 'translateX(100%)'],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatDelay: 3,
+            ease: "easeInOut",
+          }}
+          className="opacity-0 group-hover:opacity-100"
+        />
+      </div>
     </motion.div>
   );
 };

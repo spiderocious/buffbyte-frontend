@@ -92,7 +92,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
         staggerChildren: 0.1
       }
     }
@@ -103,7 +103,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -112,7 +112,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -132,7 +132,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
     animate: { 
       opacity: 1, 
       scale: 1,
-      transition: { duration: 0.5, ease: "easeOut" }
+      transition: { duration: 0.5, ease: "easeOut" as const }
     }
   };
 
@@ -141,7 +141,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -151,7 +151,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   };
@@ -195,7 +195,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
               transition={{
                 duration: 3,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }}
               className="text-2xl"
             >
@@ -298,7 +298,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
                 transition={{
                   duration: 2,
                   repeat: Infinity,
-                  ease: "easeInOut"
+                  ease: "easeInOut" as const
                 }}
                 className="w-2 h-2 bg-green-400 rounded-full"
               />
@@ -322,7 +322,7 @@ const CreatorOpportunitiesSection: React.FC<CreatorOpportunitiesSectionProps> = 
                 transition={{
                   duration: 3 + i,
                   repeat: Infinity,
-                  ease: "easeInOut",
+                  ease: "easeInOut" as const,
                   delay: i * 0.5
                 }}
                 style={{

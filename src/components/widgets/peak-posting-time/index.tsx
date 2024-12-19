@@ -96,7 +96,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
         staggerChildren: 0.1
       }
     }
@@ -107,7 +107,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -116,7 +116,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -136,7 +136,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
     animate: { 
       opacity: 1, 
       scale: 1,
-      transition: { duration: 0.6, ease: "easeOut" }
+      transition: { duration: 0.6, ease: "easeOut" as const }
     }
   };
 
@@ -145,7 +145,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
     animate: { 
       scale: 1, 
       opacity: 1,
-      transition: { duration: 0.3, ease: "easeOut" }
+      transition: { duration: 0.3, ease: "easeOut" as const }
     },
     hover: {
       scale: 1.3,
@@ -158,7 +158,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -168,7 +168,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   };
@@ -218,7 +218,7 @@ const PeakPostingTimesSection: React.FC<PeakPostingTimesSectionProps> = ({
               transition={{
                 duration: 3,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }}
               className="text-2xl"
             >

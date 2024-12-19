@@ -1,18 +1,26 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { 
+  FiEdit3, 
+  FiMonitor,
+  FiArrowRight,
+  FiBarChart
+} from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 
 interface QuickAction {
   id: string;
   title: string;
   description: string;
-  icon: string;
+  icon: React.ComponentType<{ className?: string }>;
   gradient: string;
   href?: string;
   onClick?: () => void;
   badge?: string;
   stats?: {
     label: string;
-    value: string;
+    value: number;
+    suffix: string;
   };
 }
 
@@ -25,56 +33,46 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
   actions,
   className = ''
 }) => {
-  // Default actions if none provided
+  // Default actions if none provided (removed trend scanner)
   const defaultActions: QuickAction[] = [
     {
       id: 'analyze-content',
       title: 'Analyze Content',
       description: 'Get instant engagement predictions and optimization tips',
-      icon: '🧠',
-      gradient: 'from-blue-500 via-purple-500 to-pink-500',
+      icon: FiBarChart,
+      gradient: 'from-blue-500 to-indigo-600',
       href: '/content-analysis',
       badge: 'Popular',
       stats: {
         label: 'Avg boost',
-        value: '+34%'
+        value: 34,
+        suffix: '%'
       }
     },
     {
       id: 'optimize-script',
       title: 'Optimize Script',
       description: 'Perfect your video scripts for maximum impact',
-      icon: '📝',
-      gradient: 'from-green-500 via-teal-500 to-blue-500',
+      icon: FiEdit3,
+      gradient: 'from-emerald-500 to-teal-600',
       href: '/script-analysis',
       stats: {
         label: 'Success rate',
-        value: '87%'
+        value: 87,
+        suffix: '%'
       }
     },
     {
       id: 'teleprompter',
       title: 'Teleprompter',
       description: 'Practice your scripts with our smart teleprompter',
-      icon: '📺',
-      gradient: 'from-orange-500 via-red-500 to-pink-500',
+      icon: FiMonitor,
+      gradient: 'from-orange-500 to-red-600',
       href: '/teleprompter',
       stats: {
-        label: 'Used by',
-        value: '2.1k+'
-      }
-    },
-    {
-      id: 'trending-analysis',
-      title: 'Trend Scanner',
-      description: 'Discover viral trends before they peak',
-      icon: '🔥',
-      gradient: 'from-purple-500 via-pink-500 to-red-500',
-      href: '/trends',
-      badge: 'New',
-      stats: {
-        label: 'Accuracy',
-        value: '94%'
+        label: 'Prompts',
+        value: 2100,
+        suffix: '+'
       }
     }
   ];
@@ -83,101 +81,48 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
 
   // Animation variants
   const sectionVariants = {
-    initial: { opacity: 0, y: 30 },
+    initial: { opacity: 0, y: 20 },
     animate: { 
       opacity: 1, 
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut",
+        duration: 0.7,
+        ease: [0.16, 1, 0.3, 1],
         staggerChildren: 0.1
       }
     }
   };
 
   const headerVariants = {
-    initial: { opacity: 0, y: 20 },
+    initial: { opacity: 0, y: 15 },
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
     }
   };
 
   const actionVariants = {
     initial: { 
       opacity: 0, 
-      y: 30,
-      scale: 0.9
+      y: 20,
+      scale: 0.95
     },
     animate: { 
       opacity: 1, 
       y: 0,
       scale: 1,
       transition: {
-        duration: 0.5,
-        ease: "easeOut"
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1]
       }
     },
     hover: {
-      y: -8,
+      y: -4,
       scale: 1.02,
       transition: {
-        duration: 0.2,
-        ease: "easeOut"
-      }
-    },
-    tap: {
-      scale: 0.98,
-      transition: { duration: 0.1 }
-    }
-  };
-
-  const iconVariants = {
-    initial: { scale: 1, rotate: 0 },
-    hover: { 
-      scale: 1.1,
-      rotate: 5,
-      transition: { duration: 0.2 }
-    },
-    tap: {
-      scale: 0.95,
-      rotate: -5,
-      transition: { duration: 0.1 }
-    }
-  };
-
-  const badgeVariants = {
-    initial: { scale: 0, opacity: 0 },
-    animate: { 
-      scale: 1, 
-      opacity: 1,
-      transition: { 
-        delay: 0.3,
-        type: "spring",
-        stiffness: 200
-      }
-    }
-  };
-
-  const shimmerVariants = {
-    animate: {
-      backgroundPosition: ['200% 0', '-200% 0'],
-      transition: {
-        duration: 3,
-        repeat: Infinity,
-        ease: "linear"
-      }
-    }
-  };
-
-  const floatingVariants = {
-    animate: {
-      y: [-2, 2, -2],
-      transition: {
-        duration: 4,
-        repeat: Infinity,
-        ease: "easeInOut"
+        duration: 0.3,
+        ease: [0.16, 1, 0.3, 1]
       }
     }
   };
@@ -190,178 +135,175 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
     }
   };
 
+  // Counter animation component
+  const AnimatedCounter: React.FC<{ value: number; suffix: string; duration?: number }> = ({ 
+    value, 
+    suffix, 
+    duration = 2 
+  }) => {
+    const [count, setCount] = useState(0);
+
+    useEffect(() => {
+      let startTime: number;
+      let animationFrame: number;
+
+      const animate = (timestamp: number) => {
+        if (!startTime) startTime = timestamp;
+        const progress = Math.min((timestamp - startTime) / (duration * 1000), 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        setCount(Math.floor(easeOutQuart * value));
+
+        if (progress < 1) {
+          animationFrame = requestAnimationFrame(animate);
+        }
+      };
+
+      animationFrame = requestAnimationFrame(animate);
+      return () => cancelAnimationFrame(animationFrame);
+    }, [value, duration]);
+
+    return <span>{count}{suffix}</span>;
+  };
+
   return (
     <motion.div
       variants={sectionVariants}
       initial="initial"
       animate="animate"
-      className={`space-y-6 ${className}`}
+      className={`space-y-8 ${className}`}
     >
       {/* Header */}
-      <motion.div variants={headerVariants} className="text-center space-y-2">
-        <div className="flex items-center justify-center space-x-3">
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-            🚀 Quick Actions
-          </h2>
-          <motion.div
-            animate={{
-              rotate: [0, 10, -10, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            className="text-2xl"
-          >
-            ⚡
-          </motion.div>
+      <motion.div variants={headerVariants} className="text-left space-y-3">
+        <div className="flex items-center justify-start space-x-3">
+          <div className="flex items-center space-x-2">
+            <HiSparkles className="w-7 h-7 text-blue-500" />
+            <h2 className="text-3xl font-bold text-slate-900">
+              Quick Actions
+            </h2>
+          </div>
+          <div className="flex items-center space-x-1 bg-blue-50 px-3 py-1 rounded-full">
+            <div className="w-2 h-2 bg-blue-500 rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-blue-700">Ready</span>
+          </div>
         </div>
-        <p className="text-gray-600 max-w-2xl mx-auto">
-          What would you like to optimize today? Choose from our most popular tools 
-          to boost your content performance instantly.
+        <p className="text-slate-600 max-w-2xl">
+          Choose from our most powerful tools to boost your content performance instantly
         </p>
       </motion.div>
 
-      {/* Actions Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {actionItems.map((action, index) => (
-          <motion.div
-            key={action.id}
-            variants={actionVariants}
-            custom={index}
-            whileHover="hover"
-            whileTap="tap"
-            onClick={() => handleActionClick(action)}
-            className="group relative cursor-pointer"
-          >
-            {/* Main Card */}
-            <div className="relative bg-white rounded-2xl shadow-lg border border-gray-200 overflow-hidden">
-              {/* Background Gradient */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-5 group-hover:opacity-10 transition-opacity duration-300`} />
-              
-              {/* Shimmer Effect */}
-              <motion.div
-                variants={shimmerVariants}
-                animate="animate"
-                className="absolute inset-0 opacity-0 group-hover:opacity-20 transition-opacity duration-500"
-                style={{
-                  background: `linear-gradient(110deg, transparent 25%, rgba(255,255,255,0.5) 50%, transparent 75%)`,
-                  backgroundSize: '200% 100%'
-                }}
-              />
+      {/* Actions Grid - Full width on mobile, row on desktop */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {actionItems.map((action, index) => {
+          const IconComponent = action.icon;
+          
+          return (
+            <motion.div
+              key={action.id}
+              variants={actionVariants}
+              whileHover="hover"
+              onClick={() => handleActionClick(action)}
+              className="group relative cursor-pointer"
+            >
+              {/* Main Card - Reduced height */}
+              <div className="relative bg-white rounded-2xl border border-slate-200/60 overflow-hidden shadow-sm hover:shadow-lg transition-all duration-500 h-32 lg:h-28">
+                
+                {/* Gradient Header Strip */}
+                <div className={`h-1 bg-gradient-to-r ${action.gradient}`} />
+                
+                {/* Content Container - Compact layout */}
+                <div className="p-5 h-full">
+                  <div className="flex items-center justify-between h-full">
+                    
+                    {/* Left Side - Icon and Text */}
+                    <div className="flex items-center space-x-4 flex-1">
+                      {/* Icon */}
+                      <div className={`
+                        flex items-center justify-center w-12 h-12 rounded-xl
+                        bg-gradient-to-br ${action.gradient} text-white
+                        shadow-lg group-hover:scale-110 transition-transform duration-300
+                      `}>
+                        <IconComponent className="w-6 h-6" />
+                      </div>
+                      
+                      {/* Text Content */}
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center space-x-2 mb-1">
+                          <h3 className="text-lg font-bold text-slate-900 truncate">
+                            {action.title}
+                          </h3>
+                          {action.badge && (
+                            <span className={`
+                              px-2 py-0.5 rounded-full text-xs font-bold shrink-0
+                              ${action.badge === 'Popular' 
+                                ? 'bg-orange-100 text-orange-600' 
+                                : 'bg-emerald-100 text-emerald-600'
+                              }
+                            `}>
+                              {action.badge}
+                            </span>
+                          )}
+                        </div>
+                        <p className="text-sm text-slate-600">
+                          {action.description}
+                        </p>
+                      </div>
+                    </div>
 
-              {/* Content */}
-              <div className="relative z-10 p-6 space-y-4">
-                {/* Header with Icon and Badge */}
-                <div className="flex items-start justify-between">
-                  <motion.div
-                    variants={iconVariants}
-                    className="text-5xl mb-2"
-                  >
-                    {action.icon}
-                  </motion.div>
-                  
-                  {action.badge && (
-                    <motion.div
-                      variants={badgeVariants}
-                      className={`
-                        px-3 py-1 rounded-full text-xs font-bold
-                        ${action.badge === 'New' 
-                          ? 'bg-success-100 text-success-600' 
-                          : action.badge === 'Popular'
-                          ? 'bg-warning-100 text-warning-600'
-                          : 'bg-primary-100 text-primary-600'
-                        }
-                      `}
-                    >
-                      {action.badge}
-                    </motion.div>
-                  )}
-                </div>
-
-                {/* Title and Description */}
-                <div className="space-y-2">
-                  <h3 className="text-xl font-bold text-gray-900 group-hover:text-gray-800 transition-colors">
-                    {action.title}
-                  </h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    {action.description}
-                  </p>
-                </div>
-
-                {/* Stats */}
-                {action.stats && (
-                  <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                    <span className="text-sm text-gray-500">
-                      {action.stats.label}
-                    </span>
-                    <span className="text-lg font-bold text-primary-600">
-                      {action.stats.value}
-                    </span>
+                    {/* Right Side - Stats and Arrow */}
+                    <div className="flex items-end justify-end  gap-2 shrink-0 flex-col">
+                      {/* Stats */}
+                      {action.stats && (
+                        <div className="text-right">
+                          <div className="text-2xl font-black text-slate-900">
+                            <AnimatedCounter 
+                              value={action.stats.value} 
+                              suffix={action.stats.suffix}
+                              duration={1.5}
+                            />
+                          </div>
+                          <div className="text-xs font-medium text-slate-500">
+                            {action.stats.label}
+                          </div>
+                        </div>
+                      )}
+                      
+                      {/* Arrow */}
+                      <div className="w-8 h-8 bg-slate-100 group-hover:bg-blue-100 rounded-lg flex items-center justify-center transition-all duration-200 group-hover:translate-x-1">
+                        <FiArrowRight className="w-4 h-4 text-slate-600 group-hover:text-blue-600" />
+                      </div>
+                    </div>
                   </div>
-                )}
-
-                {/* Action Arrow */}
-                <div className="flex justify-end pt-2">
-                  <motion.div
-                    className="w-8 h-8 bg-gray-100 group-hover:bg-primary-100 rounded-full flex items-center justify-center transition-colors duration-200"
-                    whileHover={{ x: 3 }}
-                  >
-                    <svg className="w-4 h-4 text-gray-600 group-hover:text-primary-600 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                    </svg>
-                  </motion.div>
                 </div>
+
+                {/* Subtle Glow Effect on Hover */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl bg-gradient-to-br from-white/10 via-transparent to-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                />
+                
+                {/* Moving Highlight */}
+                <motion.div
+                  className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100"
+                  style={{
+                    background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.2) 50%, transparent 100%)`,
+                    transform: 'translateX(-100%)',
+                  }}
+                  animate={{
+                    transform: ['translateX(-100%)', 'translateX(100%)'],
+                  }}
+                  transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    repeatDelay: 2,
+                    ease: "easeInOut",
+                  }}
+                />
               </div>
-
-              {/* Hover Glow Effect */}
-              <motion.div
-                className={`absolute inset-0 bg-gradient-to-br ${action.gradient} opacity-0 group-hover:opacity-20 transition-opacity duration-300 blur-xl`}
-                style={{ transform: 'scale(1.1)' }}
-              />
-            </div>
-
-            {/* Floating Decorations */}
-            <motion.div
-              variants={floatingVariants}
-              animate="animate"
-              className={`absolute -top-2 -right-2 w-4 h-4 bg-gradient-to-br ${action.gradient} rounded-full opacity-60 group-hover:opacity-80 transition-opacity`}
-              style={{ animationDelay: `${index * 0.5}s` }}
-            />
-            <motion.div
-              variants={floatingVariants}
-              animate="animate"
-              className={`absolute -bottom-3 -left-2 w-3 h-3 bg-gradient-to-br ${action.gradient} rounded-full opacity-40 group-hover:opacity-60 transition-opacity`}
-              style={{ animationDelay: `${index * 0.7}s` }}
-            />
-          </motion.div>
-        ))}
+            </motion.div>
+          );
+        })}
       </div>
-
-      {/* Bottom CTA */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.8 }}
-        className="text-center pt-6"
-      >
-        <p className="text-gray-600 mb-4">
-          Need help getting started? Check out our guides and tutorials.
-        </p>
-        <motion.button
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-          className="inline-flex items-center space-x-2 px-6 py-3 bg-gradient-to-r from-primary-600 to-primary-700 text-white rounded-lg font-semibold shadow-md hover:shadow-lg transition-all duration-200"
-        >
-          <span>📚</span>
-          <span>View Documentation</span>
-          <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-          </svg>
-        </motion.button>
-      </motion.div>
     </motion.div>
   );
 };

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import TopicCard from "@buffbyte/components/ui/cards/topic";
+import { HiFire, HiSparkles } from "react-icons/hi2";
 
 type Platform =
   | "twitter"
@@ -36,8 +37,8 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
   onTopicClick,
   className = "",
 }) => {
-  const [viewMode, setViewMode] = useState<"grid" | "featured">("featured");
-  const [sortBy, setSortBy] = useState<"engagement" | "velocity" | "duration">(
+  const [viewMode] = useState<"grid" | "featured">("grid");
+  const [sortBy] = useState<"engagement" | "velocity" | "duration">(
     "engagement"
   );
 
@@ -98,15 +99,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
 
   const headerVariants = {
     initial: { opacity: 0, x: -20 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      transition: { duration: 0.4, ease: "easeOut" as const },
-    },
-  };
-
-  const controlsVariants = {
-    initial: { opacity: 0, x: 20 },
     animate: {
       opacity: 1,
       x: 0,
@@ -198,81 +190,23 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-4 lg:space-y-0">
         <motion.div variants={headerVariants} className="space-y-2">
           <div className="flex items-center space-x-3">
-            <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-              🔥 Trending Now
-            </h2>
-            <motion.div
-              animate={{
-                scale: [1, 1.2, 1],
-                rotate: [0, 10, 0],
-              }}
-              transition={{
-                duration: 2,
-                repeat: Infinity,
-                ease: "easeInOut",
-              }}
-              className="text-2xl"
-            >
-              📈
-            </motion.div>
+            <div className="flex items-center space-x-2">
+              <HiFire className="w-7 h-7 text-orange-500" />
+              <h2 className="text-2xl lg:text-3xl font-bold text-slate-900">
+                Trending Now
+              </h2>
+            </div>
+            <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
+              <HiSparkles className="w-4 h-4 text-emerald-500" />
+              <span className="text-sm font-medium text-emerald-700">Live</span>
+            </div>
           </div>
-          <p className="text-gray-600">
-            Hot topics and trending content in{" "}
-            <span className="font-semibold text-primary-600">
+          <p className="text-slate-600">
+            Discover what's capturing attention in{" "}
+            <span className="font-semibold text-blue-600">
               {getCountryName(selectedCountry)}
             </span>
           </p>
-        </motion.div>
-
-        {/* Controls */}
-        <motion.div
-          variants={controlsVariants}
-          className="flex flex-wrap items-center gap-3"
-        >
-          {/* View Mode Toggle */}
-          <div className="flex bg-gray-100 rounded-lg p-1">
-            <button
-              onClick={() => setViewMode("featured")}
-              className={`
-                px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
-                ${
-                  viewMode === "featured"
-                    ? "bg-white text-primary-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }
-              `}
-            >
-              Featured
-            </button>
-            <button
-              onClick={() => setViewMode("grid")}
-              className={`
-                px-3 py-2 text-sm font-medium rounded-md transition-all duration-200
-                ${
-                  viewMode === "grid"
-                    ? "bg-white text-primary-600 shadow-sm"
-                    : "text-gray-600 hover:text-gray-900"
-                }
-              `}
-            >
-              Grid View
-            </button>
-          </div>
-
-          {/* Sort Dropdown */}
-          <select
-            value={sortBy}
-            onChange={(e) => setSortBy(e.target.value as typeof sortBy)}
-            className="
-              px-3 py-2 text-sm font-medium bg-white border border-gray-200 rounded-lg
-              focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
-              transition-all duration-200
-            "
-          >
-            <option value="engagement">Sort by Engagement</option>
-            <option value="velocity">Sort by Velocity</option>
-            <option value="duration">Sort by Duration</option>
-          </select>
         </motion.div>
       </div>
 
@@ -300,7 +234,7 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
                       transition={{
                         duration: 3,
                         repeat: Infinity,
-                        ease: "easeInOut",
+                        ease: "easeInOut" as const,
                       }}
                       className="bg-gradient-to-r from-yellow-400 to-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold shadow-md"
                     >
@@ -365,55 +299,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
           )}
         </motion.div>
       </AnimatePresence>
-
-      {/* Stats Summary */}
-      {topics.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-gradient-to-r from-primary-50 to-success-50 rounded-lg p-4 border border-primary-100"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center space-x-6">
-              <div className="text-center">
-                <div className="text-2xl font-bold text-primary-600">
-                  {topics.length}
-                </div>
-                <div className="text-sm text-gray-600">Total Topics</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-success-600">
-                  {topics.filter((t) => t.trend_velocity === "rising").length}
-                </div>
-                <div className="text-sm text-gray-600">Rising ↗️</div>
-              </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold text-warning-600">
-                  {Math.round(
-                    (topics.reduce((acc, t) => acc + t.engagement_score, 0) /
-                      topics.length) *
-                      100
-                  )}
-                  %
-                </div>
-                <div className="text-sm text-gray-600">Avg Engagement</div>
-              </div>
-            </div>
-
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              className="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium text-sm hover:bg-primary-700 transition-colors"
-              onClick={() => {
-                // Handle view all trends
-              }}
-            >
-              View All Trends →
-            </motion.button>
-          </div>
-        </motion.div>
-      )}
     </motion.div>
   );
 };

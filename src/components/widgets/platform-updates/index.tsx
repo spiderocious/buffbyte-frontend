@@ -76,9 +76,9 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
         newDisplayed.push(sortedUpdates[index]);
       }
       
-      setDisplayedUpdates(newDisplayed);
+      //setDisplayedUpdates(newDisplayed);
     } else {
-      setDisplayedUpdates(sortedUpdates);
+     // setDisplayedUpdates(sortedUpdates);
     }
   }, [currentIndex, sortedUpdates, viewMode]);
 
@@ -89,7 +89,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
   const handleDismiss = (update: PlatformUpdate) => {
     onUpdateDismiss?.(update);
     // Remove from local state
-    setDisplayedUpdates(prev => prev.filter(u => u !== update));
+    //setDisplayedUpdates(prev => prev.filter(u => u !== update));
   };
 
   // Animation variants
@@ -100,7 +100,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
       y: 0,
       transition: {
         duration: 0.6,
-        ease: "easeOut",
+        ease: "easeOut" as const,
         staggerChildren: 0.1
       }
     }
@@ -111,7 +111,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -120,7 +120,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
     animate: { 
       opacity: 1, 
       x: 0,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -129,7 +129,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
     animate: { 
       opacity: 1, 
       scale: 1,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: "easeOut" as const }
     }
   };
 
@@ -143,7 +143,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
       opacity: 1,
       transition: {
         duration: 0.3,
-        ease: "easeOut"
+        ease: "easeOut" as const
       }
     },
     exit: {
@@ -151,7 +151,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
       opacity: 0,
       transition: {
         duration: 0.3,
-        ease: "easeIn"
+        ease: "easeIn" as const
       }
     }
   };
@@ -173,7 +173,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
       transition: {
         duration: 2,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: "easeInOut" as const
       }
     }
   };
@@ -215,7 +215,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
               transition={{
                 duration: 2,
                 repeat: Infinity,
-                ease: "easeInOut"
+                ease: "easeInOut" as const
               }}
               className="text-2xl"
             >
@@ -325,7 +325,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
                     transition={{
                       duration: 1.5,
                       repeat: Infinity,
-                      ease: "easeInOut"
+                      ease: "easeInOut" as const
                     }}
                     className="w-3 h-3 bg-white rounded-full"
                   />
@@ -342,7 +342,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
             {/* Ticker Content */}
             <div className="relative h-32 bg-gray-900 overflow-hidden">
               <AnimatePresence mode="wait">
-                {displayedUpdates.map((update, index) => (
+                {displayedUpdates.map((update) => (
                   <motion.div
                     key={`${update.platform}-${update.update_type}-${currentIndex}`}
                     variants={slideVariants}
@@ -404,7 +404,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
                   transition={{
                     duration: 4,
                     repeat: Infinity,
-                    ease: "linear"
+                    ease: "linear" as const
                   }}
                 >
                   <div className="h-0.5 bg-primary-500 rounded-full origin-left" />
@@ -430,7 +430,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
                     transition={{
                       duration: 1,
                       repeat: 3,
-                      ease: "easeInOut"
+                      ease: "easeInOut" as const
                     }}
                     className="font-mono text-primary-400"
                   >
@@ -565,7 +565,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
         <div className="inline-flex items-center space-x-2 text-sm text-gray-500">
           <motion.div
             animate={{ rotate: 360 }}
-            transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+            transition={{ duration: 2, repeat: Infinity, ease: "linear" as const }}
           >
             🔄
           </motion.div>

@@ -189,7 +189,7 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = "" }) => {
         initial="initial"
         animate="animate"
         className="
-          lg:hidden fixed bottom-0 left-0 right-0 z-50
+          lg:hidden fixed bottom-0 left-0 right-0 z-[100]
           bg-white/95 backdrop-blur-md border-t border-gray-200/50
           px-4 py-2 safe-area-pb
         "

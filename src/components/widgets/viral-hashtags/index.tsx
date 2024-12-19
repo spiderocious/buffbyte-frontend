@@ -1,9 +1,17 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import PlatformTabs from '@buffbyte/components/ui/platform-tabs';
-import HashtagItem from '@buffbyte/components/ui/hashtag-item';
+import React, { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  FiHash,
+  FiTrendingUp,
+  FiUsers,
+  FiActivity,
+  FiCopy,
+  FiDownload,
+} from "react-icons/fi";
+import { HiSparkles } from "react-icons/hi2";
+import PlatformTabs from "@buffbyte/components/ui/platform-tabs";
 
-type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin';
+type Platform = "twitter" | "instagram" | "tiktok" | "linkedin";
 
 // Platform-specific hashtag data structures
 interface TwitterHashtag {
@@ -45,7 +53,6 @@ interface ViralHashtagsSectionProps {
   hashtags: HashtagData;
   selectedCountry: string;
   loading?: boolean;
-  onHashtagClick?: (hashtag: unknown, platform: Platform) => void;
   className?: string;
 }
 
@@ -53,158 +60,185 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
   hashtags,
   selectedCountry,
   loading = false,
-  onHashtagClick,
-  className = ''
+  className = "",
 }) => {
-  const [activeTab, setActiveTab] = useState<Platform>('twitter');
-  const [searchQuery, setSearchQuery] = useState('');
+  const [activeTab, setActiveTab] = useState<Platform>("twitter");
 
   // Create platform tabs with counts
   const platformTabs = [
     {
-      platform: 'twitter' as Platform,
-      label: 'Twitter',
+      platform: "twitter" as Platform,
+      label: "Twitter",
       count: hashtags.twitter?.length || 0,
-      enabled: (hashtags.twitter?.length || 0) > 0
+      enabled: (hashtags.twitter?.length || 0) > 0,
     },
     {
-      platform: 'instagram' as Platform,
-      label: 'Instagram',
+      platform: "instagram" as Platform,
+      label: "Instagram",
       count: hashtags.instagram?.length || 0,
-      enabled: (hashtags.instagram?.length || 0) > 0
+      enabled: (hashtags.instagram?.length || 0) > 0,
     },
     {
-      platform: 'tiktok' as Platform,
-      label: 'TikTok',
+      platform: "tiktok" as Platform,
+      label: "TikTok",
       count: hashtags.tiktok?.length || 0,
-      enabled: (hashtags.tiktok?.length || 0) > 0
+      enabled: (hashtags.tiktok?.length || 0) > 0,
     },
     {
-      platform: 'linkedin' as Platform,
-      label: 'LinkedIn',
+      platform: "linkedin" as Platform,
+      label: "LinkedIn",
       count: hashtags.linkedin?.length || 0,
-      enabled: (hashtags.linkedin?.length || 0) > 0
-    }
+      enabled: (hashtags.linkedin?.length || 0) > 0,
+    },
   ];
 
   // Get current platform hashtags
   const currentHashtags = hashtags[activeTab] || [];
-
-  // Filter hashtags based on search
-  const filteredHashtags = currentHashtags.filter(hashtag =>
-    hashtag.tag.toLowerCase().includes(searchQuery.toLowerCase())
-  );
-
+  console.log("Current Hashtags:", currentHashtags, hashtags);
   // Get country display name
   const getCountryName = (code: string): string => {
     const countryNames: Record<string, string> = {
-      'us': 'United States',
-      'uk': 'United Kingdom',
-      'nigeria': 'Nigeria',
-      'ca': 'Canada',
-      'au': 'Australia'
+      us: "United States",
+      uk: "United Kingdom",
+      nigeria: "Nigeria",
+      ca: "Canada",
+      au: "Australia",
     };
     return countryNames[code] || code.toUpperCase();
   };
 
-  // Get platform insights
-  const getPlatformInsights = (platform: Platform) => {
-    const insights = {
+  // Get platform styling
+  const getPlatformStyling = (platform: Platform) => {
+    const styles = {
       twitter: {
-        icon: '🐦',
-        title: 'Twitter Trending',
-        subtitle: 'Real-time conversations and viral topics',
-        color: 'from-blue-500 to-cyan-500'
+        gradient: "from-blue-500 to-cyan-500",
+        bgColor: "bg-blue-50",
+        textColor: "text-blue-700",
+        accentColor: "blue-500",
       },
       instagram: {
-        icon: '📷',
-        title: 'Instagram Viral',
-        subtitle: 'Visual content and engagement leaders',
-        color: 'from-purple-500 to-pink-500'
+        gradient: "from-purple-500 to-pink-500",
+        bgColor: "bg-purple-50",
+        textColor: "text-purple-700",
+        accentColor: "purple-500",
       },
       tiktok: {
-        icon: '🎵',
-        title: 'TikTok Trending',
-        subtitle: 'Short-form video phenomena',
-        color: 'from-gray-800 to-gray-600'
+        gradient: "from-slate-800 to-slate-600",
+        bgColor: "bg-slate-50",
+        textColor: "text-slate-700",
+        accentColor: "slate-600",
       },
       linkedin: {
-        icon: '💼',
-        title: 'LinkedIn Professional',
-        subtitle: 'Industry discussions and networking',
-        color: 'from-blue-700 to-blue-500'
-      }
+        gradient: "from-blue-700 to-blue-500",
+        bgColor: "bg-blue-50",
+        textColor: "text-blue-700",
+        accentColor: "blue-600",
+      },
     };
-    return insights[platform];
+    return styles[platform];
   };
 
-  const currentInsight = getPlatformInsights(activeTab);
+  const platformStyle = getPlatformStyling(activeTab);
+
+  // Format numbers
+  const formatNumber = (num: number): string => {
+    if (num >= 1000000) return `${(num / 1000000).toFixed(1)}M`;
+    if (num >= 1000) return `${(num / 1000).toFixed(1)}K`;
+    return num.toString();
+  };
+
+  // Get hashtag metrics based on platform
+  const getHashtagMetrics = (hashtag: any, platform: Platform) => {
+    switch (platform) {
+      case "twitter":
+        return {
+          primary: { label: "Volume", value: formatNumber(hashtag.volume) },
+          secondary: {
+            label: "Engagement",
+            value: `${Math.round(hashtag.engagement_rate * 100)}%`,
+          },
+          tags: hashtag.related_topics?.slice(0, 3) || [],
+        };
+      case "instagram":
+        return {
+          primary: { label: "Posts", value: formatNumber(hashtag.posts_count) },
+          secondary: {
+            label: "Engagement",
+            value: `${Math.round(hashtag.engagement_rate * 100)}%`,
+          },
+          tags: [hashtag.content_type] || [],
+        };
+      case "tiktok":
+        return {
+          primary: { label: "Views", value: formatNumber(hashtag.views) },
+          secondary: {
+            label: "Trend Score",
+            value: `${Math.round(hashtag.trend_score * 100)}`,
+          },
+          tags: hashtag.music_associated ? ["Music"] : ["Original"],
+        };
+      case "linkedin":
+        return {
+          primary: {
+            label: "Relevance",
+            value: `${Math.round(hashtag.professional_relevance * 100)}%`,
+          },
+          secondary: { label: "Industry", value: hashtag.industry },
+          tags: [hashtag.engagement_type] || [],
+        };
+      default:
+        return {
+          primary: { label: "", value: "" },
+          secondary: { label: "", value: "" },
+          tags: [],
+        };
+    }
+  };
 
   // Animation variants
   const sectionVariants = {
-    initial: { opacity: 0, y: 30 },
-    animate: { 
-      opacity: 1, 
+    initial: { opacity: 0, y: 20 },
+    animate: {
+      opacity: 1,
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut" as const,
-        staggerChildren: 0.1
-      }
-    }
+        duration: 0.7,
+        ease: [0.16, 1, 0.3, 1],
+        staggerChildren: 0.1,
+      },
+    },
   };
 
-  const headerVariants = {
-    initial: { opacity: 0, x: -20 },
-    animate: { 
-      opacity: 1, 
-      x: 0,
-      transition: { duration: 0.4, ease: "easeOut" as const }
-    }
-  };
-
-  const contentVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: 1,
-      transition: {
-        duration: 0.4,
-        staggerChildren: 0.05
-      }
-    }
-  };
-
-  const terminalVariants = {
-    initial: { opacity: 0, scale: 0.95 },
-    animate: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.4, ease: "easeOut" as const }
-    }
-  };
-
-  const skeletonVariants = {
+  const itemVariants = {
+    initial: { opacity: 0, y: 15 },
     animate: {
-      opacity: [0.5, 1, 0.5],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut" as const
-      }
-    }
+      opacity: 1,
+      y: 0,
+      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  const hashtagVariants = {
+    initial: { opacity: 0, x: -20, scale: 0.95 },
+    animate: {
+      opacity: 1,
+      x: 0,
+      scale: 1,
+      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+    },
+  };
+
+  // Copy all hashtags
+  const copyAllHashtags = () => {
+    const hashtagsText = currentHashtags.map((h) => h.tag).join(" ");
+    navigator.clipboard.writeText(hashtagsText);
   };
 
   // Loading skeleton
   const renderSkeleton = () => (
     <div className="space-y-4">
-      {[...Array(6)].map((_, i) => (
-        <motion.div
-          key={i}
-          variants={skeletonVariants}
-          animate="animate"
-          className="h-24 bg-gray-200 rounded-lg animate-pulse"
-          style={{ animationDelay: `${i * 0.1}s` }}
-        />
+      {[...Array(3)].map((_, i) => (
+        <div key={i} className="h-24 bg-slate-100 rounded-2xl animate-pulse" />
       ))}
     </div>
   );
@@ -214,140 +248,54 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
       variants={sectionVariants}
       initial="initial"
       animate="animate"
-      className={`space-y-6 ${className}`}
+      className={`space-y-8 ${className}`}
     >
       {/* Header */}
-      <motion.div variants={headerVariants} className="space-y-2">
-        <div className="flex items-center space-x-3">
-          <h2 className="text-2xl lg:text-3xl font-bold text-gray-900">
-            # Viral Hashtags
-          </h2>
-          <motion.div
-            animate={{
-              rotate: [0, 15, -15, 0],
-              scale: [1, 1.1, 1]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut" as const
-            }}
-            className="text-2xl"
-          >
-            ⚡
-          </motion.div>
+      <motion.div variants={itemVariants} className="text-center space-y-3">
+        <div className="flex items-center justify-center space-x-3">
+          <div className="flex items-center space-x-2">
+            <FiHash className="w-7 h-7 text-blue-500" />
+            <h2 className="text-3xl font-bold text-slate-900">
+              Viral Hashtags
+            </h2>
+          </div>
+          <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
+            <HiSparkles className="w-4 h-4 text-emerald-500" />
+            <span className="text-sm font-medium text-emerald-700">
+              Trending
+            </span>
+          </div>
         </div>
-        <p className="text-gray-600">
-          Discover trending hashtags and maximize your reach in{' '}
-          <span className="font-semibold text-primary-600">
+        <p className="text-slate-600 max-w-2xl mx-auto">
+          Discover the most engaging hashtags to maximize your reach in{" "}
+          <span className="font-semibold text-blue-600">
             {getCountryName(selectedCountry)}
           </span>
         </p>
       </motion.div>
 
-      {/* Command Center Style Container */}
+      {/* Main Container */}
       <motion.div
-        variants={terminalVariants}
-        className="bg-gradient-to-br from-gray-900 via-gray-800 to-gray-900 rounded-xl shadow-xl overflow-hidden border border-gray-700"
+        variants={itemVariants}
+        className="bg-white rounded-3xl border border-slate-200/60 shadow-sm overflow-hidden"
       >
-        {/* Terminal Header */}
-        <div className="bg-gray-800 px-6 py-4 border-b border-gray-700">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex space-x-2">
-                <div className="w-3 h-3 bg-error-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-warning-500 rounded-full"></div>
-                <div className="w-3 h-3 bg-success-500 rounded-full"></div>
-              </div>
-              <div className="flex items-center space-x-3">
-                <span className={`text-2xl bg-gradient-to-r ${currentInsight.color} bg-clip-text text-transparent`}>
-                  {currentInsight.icon}
-                </span>
-                <div>
-                  <h3 className="text-white font-semibold">
-                    {currentInsight.title}
-                  </h3>
-                  <p className="text-gray-400 text-sm">
-                    {currentInsight.subtitle}
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            {/* Live indicator */}
-            <div className="flex items-center space-x-2">
-              <motion.div
-                animate={{
-                  scale: [1, 1.2, 1],
-                  opacity: [0.5, 1, 0.5]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-                className="w-2 h-2 bg-success-500 rounded-full"
-              />
-              <span className="text-success-400 text-sm font-mono">
-                LIVE
-              </span>
-            </div>
-          </div>
-        </div>
+        {/* Header Strip */}
+        <div className={`h-1.5 bg-gradient-to-r ${platformStyle.gradient}`} />
 
         {/* Platform Tabs */}
-        <div className="px-6 py-4 bg-gray-850 border-b border-gray-700">
+        <div className="p-6 pb-4 border-b border-slate-100">
           <PlatformTabs
             tabs={platformTabs}
             activeTab={activeTab}
             onTabChange={(platform) => setActiveTab(platform as Platform)}
             variant="pills"
-            size="md"
+            size="lg"
             showCounts
           />
         </div>
 
-        {/* Search and Stats */}
-        <div className="px-6 py-4 bg-gray-850 border-b border-gray-700">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
-            {/* Search */}
-            <div className="relative flex-1 max-w-md">
-              <input
-                type="text"
-                placeholder={`Search ${activeTab} hashtags...`}
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="
-                  w-full px-4 py-2 bg-gray-700 border border-gray-600 rounded-lg
-                  text-white placeholder-gray-400 font-mono text-sm
-                  focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500
-                  transition-all duration-200
-                "
-              />
-              <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
-                <svg className="w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </div>
-            </div>
-
-            {/* Stats */}
-            <div className="flex items-center space-x-6 text-sm font-mono">
-              <div className="text-gray-300">
-                <span className="text-primary-400">{filteredHashtags.length}</span> hashtags
-              </div>
-              <div className="text-gray-300">
-                Platform: <span className="text-warning-400 capitalize">{activeTab}</span>
-              </div>
-              <div className="text-gray-300">
-                Status: <span className="text-success-400">ACTIVE</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Content Area */}
-        <div className="p-6 bg-gray-900 min-h-96">
+        {/* Content */}
+        <div className="p-6">
           <AnimatePresence mode="wait">
             {loading ? (
               <motion.div
@@ -358,119 +306,140 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
               >
                 {renderSkeleton()}
               </motion.div>
-            ) : filteredHashtags.length > 0 ? (
+            ) : currentHashtags.length > 0 ? (
               <motion.div
-                key={`${activeTab}-${searchQuery}`}
-                variants={contentVariants}
-                initial="initial"
-                animate="animate"
-                exit={{ opacity: 0, y: 20 }}
-                className="space-y-3"
+                key={activeTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="space-y-4"
               >
-                {filteredHashtags.map((hashtag, index) => (
-                  <HashtagItem
-                    key={`${hashtag.tag}-${index}`}
-                    hashtag={hashtag}
-                    platform={activeTab}
-                    rank={index + 1}
-                    onClick={() => onHashtagClick?.(hashtag, activeTab)}
-                  />
-                ))}
+                {currentHashtags.map((hashtag, index) => {
+                  const metrics = getHashtagMetrics(hashtag, activeTab);
+
+                  return (
+                    <motion.div
+                      key={`${hashtag.tag}-${index}`}
+                      className="group bg-slate-50/50 rounded-2xl p-6 border border-slate-100 hover:border-slate-200 transition-all duration-300 hover:shadow-sm"
+                    >
+                      <div className="flex items-center justify-between">
+                        {/* Left Side - Hashtag and Rank */}
+                        <div className="flex items-center space-x-4">
+                          {/* Rank Badge */}
+                          <div
+                            className={`
+                            flex items-center justify-center w-10 h-10 rounded-xl
+                            bg-gradient-to-br ${platformStyle.gradient} text-white
+                            font-bold text-sm shadow-lg
+                          `}
+                          >
+                            {index + 1}
+                          </div>
+
+                          {/* Hashtag Info */}
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-900 mb-1">
+                              {hashtag.tag}
+                            </h3>
+                            {metrics.tags.length > 0 && (
+                              <div className="flex flex-wrap gap-2">
+                                {metrics.tags.map((tag, idx) => (
+                                  <span
+                                    key={idx}
+                                    className="px-2 py-1 bg-white rounded-md text-xs font-medium text-slate-600 border border-slate-200"
+                                  >
+                                    {tag}
+                                  </span>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Right Side - Metrics */}
+                        <div className="flex items-center space-x-8">
+                          {/* Primary Metric */}
+                          <div className="text-right">
+                            <div className="text-2xl font-black text-slate-900">
+                              {metrics.primary.value}
+                            </div>
+                            <div className="text-sm font-medium text-slate-500">
+                              {metrics.primary.label}
+                            </div>
+                          </div>
+
+                          {/* Secondary Metric */}
+                          <div className="text-right">
+                            <div className="text-xl font-bold text-slate-700">
+                              {metrics.secondary.value}
+                            </div>
+                            <div className="text-sm font-medium text-slate-500">
+                              {metrics.secondary.label}
+                            </div>
+                          </div>
+
+                          {/* Trending Indicator */}
+                          <div
+                            className={`
+                            flex items-center justify-center w-10 h-10 rounded-xl
+                            ${platformStyle.bgColor} ${platformStyle.textColor}
+                          `}
+                          >
+                            <FiTrendingUp className="w-5 h-5" />
+                          </div>
+                        </div>
+                      </div>
+                    </motion.div>
+                  );
+                })}
               </motion.div>
             ) : (
               <motion.div
                 key="empty"
-                initial={{ opacity: 0, scale: 0.9 }}
+                initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.9 }}
-                className="text-center py-12 space-y-4"
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="text-center py-16 space-y-4"
               >
-                <div className="text-6xl opacity-30">🔍</div>
-                <h3 className="text-xl font-semibold text-gray-300">
-                  {searchQuery ? 'No hashtags found' : 'No hashtags available'}
+                <div className="w-16 h-16 bg-slate-100 rounded-full flex items-center justify-center mx-auto">
+                  <FiHash className="w-8 h-8 text-slate-400" />
+                </div>
+                <h3 className="text-xl font-semibold text-slate-700">
+                  No hashtags available
                 </h3>
-                <p className="text-gray-500">
-                  {searchQuery 
-                    ? `Try adjusting your search term for ${activeTab}` 
-                    : `No trending hashtags found for ${activeTab} in this region`
-                  }
+                <p className="text-slate-500 max-w-md mx-auto">
+                  We're currently analyzing trending hashtags for {activeTab}.
+                  Check back soon for fresh insights.
                 </p>
-                {searchQuery && (
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={() => setSearchQuery('')}
-                    className="px-4 py-2 bg-primary-600 text-white rounded-lg font-medium text-sm hover:bg-primary-700 transition-colors"
-                  >
-                    Clear Search
-                  </motion.button>
-                )}
               </motion.div>
             )}
           </AnimatePresence>
         </div>
 
-        {/* Terminal Footer */}
-        <div className="px-6 py-3 bg-gray-800 border-t border-gray-700">
-          <div className="flex items-center justify-between text-xs font-mono text-gray-400">
-            <div className="flex items-center space-x-4">
-              <span>└─ buffbyte-hashtag-analyzer</span>
-              <span className="text-success-400">●</span>
-              <span>Connected</span>
-            </div>
-            <div className="flex items-center space-x-2">
-              <span>Last updated:</span>
-              <span className="text-primary-400">
-                {new Date().toLocaleTimeString()}
-              </span>
-            </div>
-          </div>
-        </div>
-      </motion.div>
+        {/* Actions Footer */}
+        {currentHashtags.length > 0 && (
+          <div className="px-6 py-4 bg-slate-50/50 border-t border-slate-100">
+            <div className="flex items-center justify-between">
+              <div className="text-sm text-slate-600">
+                Showing {currentHashtags.length} trending hashtags for{" "}
+                <span className="font-medium capitalize">{activeTab}</span>
+              </div>
 
-      {/* Quick Actions */}
-      {filteredHashtags.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
-          className="bg-gradient-to-r from-primary-50 to-success-50 rounded-lg p-4 border border-primary-100"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-4">
-            <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-gray-700">
-                Quick Actions:
-              </span>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-3 py-1.5 bg-white text-primary-600 rounded-md font-medium text-sm border border-primary-200 hover:border-primary-300 transition-colors"
-                onClick={() => {
-                  // Copy all hashtags
-                  const hashtagsText = filteredHashtags.map(h => h.tag).join(' ');
-                  navigator.clipboard.writeText(hashtagsText);
-                }}
-              >
-                📋 Copy All
-              </motion.button>
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                className="px-3 py-1.5 bg-white text-success-600 rounded-md font-medium text-sm border border-success-200 hover:border-success-300 transition-colors"
-                onClick={() => {
-                  // Export as CSV
-                }}
-              >
-                📊 Export CSV
-              </motion.button>
-            </div>
-            
-            <div className="text-sm text-gray-600">
-              Showing top {filteredHashtags.length} hashtags for {activeTab}
+              <div className="flex items-center space-x-3">
+                <motion.button
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={copyAllHashtags}
+                  className="flex items-center space-x-2 px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm font-medium text-slate-700 hover:border-slate-300 transition-all duration-200"
+                >
+                  <FiCopy className="w-4 h-4" />
+                  <span>Copy All</span>
+                </motion.button>
+              </div>
             </div>
           </div>
-        </motion.div>
-      )}
+        )}
+      </motion.div>
     </motion.div>
   );
 };

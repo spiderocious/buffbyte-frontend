@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { FiTrendingUp, FiMapPin, FiChevronDown, FiGlobe } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
 import CountrySelector from '@buffbyte/components/ui/country-selector';
 import BuffByteLogo from '@buffbyte/components/ui/logo';
 
@@ -10,18 +12,10 @@ interface User {
   avatar?: string;
 }
 
-interface QuickStats {
-  totalAnalyses: number;
-  avgEngagement: number;
-  topPlatform: string;
-  streakDays: number;
-}
-
 interface WelcomeHeroProps {
   user: User;
   selectedCountry: string;
   onCountryChange: (country: string) => void;
-  quickStats?: QuickStats;
   loading?: boolean;
   className?: string;
 }
@@ -30,101 +24,46 @@ const WelcomeHero: React.FC<WelcomeHeroProps> = ({
   user,
   selectedCountry,
   onCountryChange,
-  quickStats,
   loading = false,
   className = ''
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
-  const [displayedName, setDisplayedName] = useState('');
-  const [nameIndex, setNameIndex] = useState(0);
+  const [mounted, setMounted] = useState(false);
 
-  // Update time every minute for greeting
   useEffect(() => {
+    setMounted(true);
     const timer = setInterval(() => {
       setCurrentTime(new Date());
     }, 60000);
     return () => clearInterval(timer);
   }, []);
 
-  // Typewriter effect for name
-  useEffect(() => {
-    if (nameIndex < user.firstName.length) {
-      const timer = setTimeout(() => {
-        setDisplayedName(user.firstName.slice(0, nameIndex + 1));
-        setNameIndex(nameIndex + 1);
-      }, 100);
-      return () => clearTimeout(timer);
-    }
-  }, [nameIndex, user.firstName]);
-
-  // Get time-based greeting
   const getGreeting = () => {
     const hour = currentTime.getHours();
-    if (hour < 12) return { text: 'Good morning', emoji: '🌅' };
-    if (hour < 17) return { text: 'Good afternoon', emoji: '☀️' };
-    return { text: 'Good evening', emoji: '🌙' };
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
   };
 
-  const greeting = getGreeting();
-
-  // Format quick stats
-  const formatNumber = (num: number): string => {
-    if (num >= 1000) return `${(num / 1000).toFixed(1)}k`;
-    return num.toString();
-  };
-
-  // Animation variants
   const containerVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { 
       opacity: 1, 
       y: 0,
       transition: {
-        duration: 0.6,
-        ease: "easeOut" as const,
+        duration: 0.5,
+        ease: [0.25, 0.1, 0.25, 1],
         staggerChildren: 0.1
       }
     }
   };
 
   const itemVariants = {
-    initial: { opacity: 0, y: 15 },
+    initial: { opacity: 0, y: 12 },
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" as const }
-    }
-  };
-
-  const statVariants = {
-    initial: { opacity: 0, scale: 0.8 },
-    animate: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { duration: 0.4, ease: "easeOut" as const }
-    }
-  };
-
-  const floatingVariants = {
-    animate: {
-      y: [-3, 3, -3],
-      rotate: [-2, 2, -2],
-      transition: {
-        duration: 6,
-        repeat: Infinity,
-        ease: "easeInOut" as const
-      }
-    }
-  };
-
-  const pulseVariants = {
-    animate: {
-      scale: [1, 1.05, 1],
-      transition: {
-        duration: 2,
-        repeat: Infinity,
-        ease: "easeInOut" as const
-      }
+      transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
     }
   };
 
@@ -132,202 +71,111 @@ const WelcomeHero: React.FC<WelcomeHeroProps> = ({
     <motion.div
       variants={containerVariants}
       initial="initial"
-      animate="animate"
-      className={`
-        relative bg-gradient-to-br from-white via-primary-50/30 to-white
-        border border-primary-100 rounded-2xl shadow-sm overflow-hidden
-        ${className}
-      `}
+      animate={mounted ? "animate" : "initial"}
+      className={`relative overflow-hidden ${className}`}
     >
-      {/* Background decoration */}
-      <div className="absolute inset-0 opacity-30">
-        <motion.div
-          variants={floatingVariants}
-          animate="animate"
-          className="absolute top-8 right-8 text-6xl opacity-20"
-        >
-          {greeting.emoji}
-        </motion.div>
-        <motion.div
-          variants={floatingVariants}
-          animate="animate"
-          className="absolute bottom-8 left-8 text-4xl opacity-10"
-        >
-          📊
-        </motion.div>
-      </div>
-
-      <div className="relative z-10 p-8">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
+      {/* Main Container */}
+      <div className="bg-white border overflow-hidden border-slate-200/60 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] backdrop-blur-sm">
+        {/* Header Section */}
+        <div className="relative px-8 pt-8 pb-6">
+          {/* Background Elements */}
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/40 via-transparent to-emerald-50/30 rounded-3xl" />
+          <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-blue-100/20 to-transparent rounded-full blur-3xl" />
+          <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-emerald-100/20 to-transparent rounded-full blur-2xl" />
           
-          {/* Left: Welcome Message */}
-          <motion.div variants={itemVariants} className="lg:col-span-2 space-y-4">
-            <div className="space-y-2">
-              <motion.div 
-                className="flex items-center space-x-2"
-                variants={itemVariants}
-              >
-                <span className="text-2xl">{greeting.emoji}</span>
-                <span className="text-lg text-gray-600 font-medium">
-                  {greeting.text}
-                </span>
-              </motion.div>
-              
-              <div className="flex items-center space-x-3">
-                <h1 className="text-3xl lg:text-4xl font-bold text-gray-900">
-                  Welcome back,{' '}
-                  <motion.span 
-                    className="text-primary-600"
-                    variants={pulseVariants}
-                    animate="animate"
-                  >
-                    {displayedName}
-                    <motion.span
-                      animate={{ opacity: [1, 0, 1] }}
-                      transition={{ duration: 1, repeat: Infinity }}
-                      className="text-primary-400"
-                    >
-                      |
-                    </motion.span>
-                  </motion.span>
-                </h1>
-                <motion.div
-                  initial={{ scale: 0, rotate: -180 }}
-                  animate={{ scale: 1, rotate: 0 }}
-                  transition={{ delay: 1, duration: 0.5, ease: "easeOut" as const }}
-                >
-                  👋
-                </motion.div>
-              </div>
-            </div>
-
-            <motion.p 
+          {/* Content */}
+          <div className="relative z-10">
+            {/* Top Bar with Logo and Country Selector */}
+            <motion.div 
               variants={itemVariants}
-              className="text-lg text-gray-600 leading-relaxed"
+              className="flex items-center justify-between mb-8"
             >
-              Ready to optimize your content and maximize engagement? 
-              Let's see what's trending in your selected region.
-            </motion.p>
-
-            {/* Quick Stats */}
-            {quickStats && !loading && (
-              <motion.div 
-                variants={itemVariants}
-                className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4"
-              >
-                <motion.div 
-                  variants={statVariants}
-                  className="bg-white/60 backdrop-blur-sm rounded-lg p-3 text-center border border-primary-100"
-                >
-                  <div className="text-2xl font-bold text-primary-600">
-                    {formatNumber(quickStats.totalAnalyses)}
-                  </div>
-                  <div className="text-xs text-gray-600 font-medium">
-                    Total Analyses
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  variants={statVariants}
-                  className="bg-white/60 backdrop-blur-sm rounded-lg p-3 text-center border border-success-100"
-                >
-                  <div className="text-2xl font-bold text-success-600">
-                    {Math.round(quickStats.avgEngagement * 100)}%
-                  </div>
-                  <div className="text-xs text-gray-600 font-medium">
-                    Avg Engagement
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  variants={statVariants}
-                  className="bg-white/60 backdrop-blur-sm rounded-lg p-3 text-center border border-warning-100"
-                >
-                  <div className="text-2xl font-bold text-warning-600 capitalize">
-                    {quickStats.topPlatform}
-                  </div>
-                  <div className="text-xs text-gray-600 font-medium">
-                    Top Platform
-                  </div>
-                </motion.div>
-
-                <motion.div 
-                  variants={statVariants}
-                  className="bg-white/60 backdrop-blur-sm rounded-lg p-3 text-center border border-error-100"
-                >
-                  <div className="text-2xl font-bold text-error-600">
-                    {quickStats.streakDays}
-                  </div>
-                  <div className="text-xs text-gray-600 font-medium">
-                    Day Streak 🔥
-                  </div>
-                </motion.div>
-              </motion.div>
-            )}
-
-            {/* Loading skeleton for stats */}
-            {loading && (
-              <motion.div 
-                variants={itemVariants}
-                className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4"
-              >
-                {[...Array(4)].map((_, i) => (
-                  <div 
-                    key={i}
-                    className="bg-white/60 backdrop-blur-sm rounded-lg p-3 text-center border border-gray-200 animate-pulse"
-                  >
-                    <div className="h-8 bg-gray-300 rounded mb-2"></div>
-                    <div className="h-3 bg-gray-300 rounded"></div>
-                  </div>
-                ))}
-              </motion.div>
-            )}
-          </motion.div>
-
-          {/* Right: Country Selector */}
-          <motion.div variants={itemVariants} className="flex justify-center lg:justify-end">
-            <div className="text-center space-y-4">
-              <motion.div
-                initial={{ scale: 0, rotate: 180 }}
-                animate={{ scale: 1, rotate: 0 }}
-                transition={{ delay: 0.8, duration: 0.6, ease: "easeOut" as const }}
-              >
-                <BuffByteLogo size="lg" animated />
-              </motion.div>
-              
-              <div className="space-y-2">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Trending Insights
-                </h3>
-                <p className="text-sm text-gray-600">
-                  Select your target market
-                </p>
-                <CountrySelector
-                  selectedCountry={selectedCountry}
-                  onCountryChange={onCountryChange}
-                  className="w-full"
-                />
+              <div className="flex items-center space-x-2">
+                <BuffByteLogo size="sm" />
+                <div className="hidden sm:block w-px h-6 bg-slate-200" />
+                <div className="hidden sm:flex items-center space-x-2 text-slate-600">
+                  <HiSparkles className="w-4 h-4 text-blue-500" />
+                  <span className="text-sm font-medium">Content Intelligence</span>
+                </div>
               </div>
+              
+              {/* Country Selector - Positioned in top right */}
+              <div className="relative">
+                  <CountrySelector
+                    selectedCountry={selectedCountry}
+                    onCountryChange={onCountryChange}
+                    className="border-none bg-transparent text-sm font-medium"
+                  />
+              </div>
+            </motion.div>
+
+            {/* Main Welcome Content */}
+            <div className="max-w-2xl">
+              <motion.div variants={itemVariants} className="space-y-4">
+                {/* Greeting */}
+                <div className="flex items-center space-x-3">
+                  <div className="flex items-center space-x-2 text-slate-600">
+                    <div className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
+                    <span className="text-sm font-medium">{getGreeting()}</span>
+                  </div>
+                </div>
+
+                {/* Main Heading */}
+                <div className="space-y-2">
+                  <h1 className="text-3xl lg:text-5xl font-bold text-slate-900 leading-tight">
+                    Welcome back,{' '}
+                    <span className="bg-gradient-to-r from-blue-600 to-emerald-600 bg-clip-text text-transparent">
+                      {user.firstName}
+                    </span>
+                  </h1>
+                  
+                  {/* Subtitle */}
+                  <p className="text-base md:text-lg text-slate-600 leading-relaxed font-light">
+                    Ready to create content that resonates with your audience? 
+                    Take a peek at what's trending in <b>{selectedCountry?.toUpperCase()}</b>.
+                  </p>
+                </div>
+
+                {/* CTA Section */}
+                <motion.div 
+                  variants={itemVariants}
+                  className="flex flex-col sm:flex-row items-start sm:items-center space-y-3 sm:space-y-0 sm:space-x-4 pt-4"
+                >
+                  
+                  <div className="flex items-center space-x-2 text-slate-500 text-sm">
+                    <FiMapPin className="w-4 h-4" />
+                    <span>Showing trends for <b className='text-blue-500'>{selectedCountry}</b> today</span>
+                  </div>
+                </motion.div>
+              </motion.div>
             </div>
-          </motion.div>
+          </div>
         </div>
+
+        {/* Bottom Accent */}
+        <div className="h-1 bg-gradient-to-r from-blue-500 via-emerald-500 to-blue-500" />
       </div>
 
-      {/* Subtle gradient overlay */}
-      <div className="absolute inset-0 bg-gradient-to-r from-primary-500/5 via-transparent to-success-500/5 pointer-events-none" />
-      
-      {/* Animated border */}
-      <motion.div
-        className="absolute inset-0 rounded-2xl border-2 border-primary-200 opacity-50"
-        animate={{
-          borderColor: ['rgba(2, 132, 199, 0.2)', 'rgba(34, 197, 94, 0.2)', 'rgba(2, 132, 199, 0.2)']
-        }}
-        transition={{
-          duration: 4,
-          repeat: Infinity,
-          ease: "easeInOut" as const
-        }}
-      />
+      {/* Mobile-Optimized Country Selector Overlay */}
+      {/* <div className="sm:hidden fixed bottom-4 left-4 right-4 z-50">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="bg-white/95 backdrop-blur-md border border-slate-200 rounded-2xl p-4 shadow-xl"
+        >
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-2">
+              <FiGlobe className="w-5 h-5 text-slate-600" />
+              <span className="font-medium text-slate-700">Market</span>
+            </div>
+            <CountrySelector
+              selectedCountry={selectedCountry}
+              onCountryChange={onCountryChange}
+              className="bg-slate-50 border-slate-200 rounded-lg"
+            />
+          </div>
+        </motion.div>
+      </div> */}
     </motion.div>
   );
 };
