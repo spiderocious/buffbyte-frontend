@@ -1,11 +1,12 @@
 import { AuthService } from "@buffbyte/services";
 import { useNavigate } from "react-router-dom";
 import AppHeader from "../../components/layout/header/app";
+import { dashboardMock } from "../../constants/mocks";
 
 export default function DashboardPage() {
   const navigate = useNavigate();
   const user = AuthService.getUser();
-
+  const dashboardData = dashboardMock; // Mock data for the dashboard
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-6xl mx-auto">

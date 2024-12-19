@@ -112,6 +112,7 @@ const LoginPage: React.FC = () => {
 
     document.addEventListener("keypress", handleKeyPress);
     return () => document.removeEventListener("keypress", handleKeyPress);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentStep, formData]);
 
   return (
