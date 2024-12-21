@@ -97,25 +97,6 @@ const ContentTextArea: React.FC<ContentTextAreaProps> = ({
           }}
         />
 
-        {/* Focus Ring Animation */}
-        {isFocused && !disabled && (
-          <motion.div
-            initial={{ opacity: 0, scale: 0.98 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.98 }}
-            className="absolute inset-0 rounded-2xl border-2 border-blue-500 pointer-events-none"
-          />
-        )}
-
-        {/* Empty State Hint */}
-        {!value && !isFocused && (
-          <div className="absolute top-4 left-4 pointer-events-none">
-            <div className="flex items-center space-x-2 text-slate-400">
-              <div className="w-2 h-2 bg-blue-400 rounded-full animate-pulse" />
-              <span className="text-sm font-medium">Ready for your content</span>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Word Count and Stats */}

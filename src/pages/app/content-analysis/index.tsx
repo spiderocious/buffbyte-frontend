@@ -144,7 +144,7 @@ const ContentAnalysisPage: React.FC = () => {
       <AppHeader />
 
       {/* Main Content Container */}
-      <div className="pt-2 lg:mt-32 pb-6 lg:pb-12">
+      <div className="pt-2 lg:pt-32 pb-6 lg:pb-12">
         <div className="max-w-[1400px] mx-auto px-3 lg:px-8">
           
           {/* Page Header */}

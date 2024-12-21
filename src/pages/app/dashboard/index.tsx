@@ -76,7 +76,7 @@ const DashboardPage: React.FC = () => {
       <AppHeader />
 
       {/* Main Content Container */}
-      <div className="pt-2 lg:mt-32 pb-24 lg:pb-12">
+      <div className="pt-2 lg:pt-24 pb-24 lg:pb-12">
         <div className="max-w-[1400px] mx-auto px-3 lg:px-8">
           {/* Welcome Hero - Full Width */}
           <motion.div variants={sectionVariants} className="mb-12">

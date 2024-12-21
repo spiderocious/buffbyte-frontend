@@ -153,7 +153,7 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
             )}
 
             {/* Main Layout Container */}
-            <div className="flex h-full">
+            <div className="flex h-full md:h-[70vh]">
         
                 {/* Desktop Sidebar */}
                 <div className="hidden lg:block w-[35%] h-full">

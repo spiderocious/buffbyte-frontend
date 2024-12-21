@@ -88,20 +88,12 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
                 New Content Analysis
               </h2>
             </div>
-            <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
+          </div>
+          
+          <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
               <span className="text-sm font-medium text-emerald-700">Ready</span>
             </div>
-          </div>
-          
-          {showTips && (
-            <button
-              onClick={() => setShowTips(false)}
-              className="text-xs text-slate-400 hover:text-slate-600 font-medium"
-            >
-              Hide tips
-            </button>
-          )}
         </div>
       </motion.div>
 
@@ -127,7 +119,7 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
         </motion.div>
 
         {/* Platform Selection */}
-        <motion.div variants={itemVariants}>
+        <motion.div variants={itemVariants} className='hidden'>
           <label className="block text-sm font-semibold text-slate-700 mb-3">
             Target Platform
           </label>
@@ -160,41 +152,6 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
         </motion.div>
       </div>
 
-      {/* Tips Section */}
-      {showTips && !analyzing && (
-        <motion.div variants={itemVariants} className="p-6 pt-0">
-          <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-xl p-4 border border-blue-100/50">
-            <div className="flex items-center space-x-2 mb-3">
-              <FiZap className="w-4 h-4 text-blue-600" />
-              <h3 className="text-sm font-bold text-slate-800">
-                How Analysis Works
-              </h3>
-            </div>
-            
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
-              {tips.map((tip, index) => {
-                const IconComponent = tip.icon;
-                
-                return (
-                  <div key={index} className="flex items-start space-x-3">
-                    <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg shadow-sm shrink-0">
-                      <IconComponent className="w-4 h-4 text-blue-500" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="text-xs font-semibold text-slate-800 mb-1">
-                        {tip.title}
-                      </h4>
-                      <p className="text-xs text-slate-600 leading-relaxed">
-                        {tip.description}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </div>
-        </motion.div>
-      )}
 
       {/* Analyzing State Overlay */}
       {analyzing && (
