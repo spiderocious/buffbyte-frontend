@@ -154,7 +154,7 @@ const ContentAnalysisPage: React.FC = () => {
             transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             className="mb-8"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between flex-col-reverse md:flex-row p-4 md:p-0 gap-[20px]">
               <div>
                 <h1 className="text-3xl font-bold text-slate-900 mb-2">
                   Content Analysis
@@ -165,7 +165,7 @@ const ContentAnalysisPage: React.FC = () => {
               </div>
               
               {/* Breadcrumb navigation */}
-              <nav className="flex items-center space-x-2 text-sm">
+              <nav className="flex w-full md:w-fit items-start space-x-2 text-sm">
                 <button
                   onClick={() => {/* navigate('/dashboard') */}}
                   className="text-slate-500 hover:text-slate-700 transition-colors"
@@ -211,7 +211,7 @@ const ContentAnalysisPage: React.FC = () => {
               className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto mb-4"
             />
             <h3 className="text-lg font-semibold text-slate-900 mb-2">
-              Analyzing Content
+              Analyzing Contenting
             </h3>
             <p className="text-slate-600 text-sm">
               Our AI is processing your content and generating insights...

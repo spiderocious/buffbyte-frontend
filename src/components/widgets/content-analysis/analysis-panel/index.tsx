@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import { motion } from 'framer-motion';
-import { FiZap, FiTarget, FiTrendingUp } from 'react-icons/fi';
-import { HiSparkles } from 'react-icons/hi2';
-import ContentTextArea from '@buffbyte/components/ui/content-textarea';
-import PlatformSelector from '@buffbyte/components/ui/platform-selector';
 import AnalyzeButton from '@buffbyte/components/ui/analyze-button';
+import RichTextEditor from '@buffbyte/components/ui/content-textarea';
+import PlatformSelector from '@buffbyte/components/ui/platform-selector';
+import { motion } from 'framer-motion';
+import React from 'react';
+import { HiSparkles } from 'react-icons/hi2';
 
 type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin' | 'youtube' | 'facebook';
 
@@ -27,7 +26,6 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
   analyzing = false,
   className = ''
 }) => {
-  const [showTips, setShowTips] = useState(true);
 
   const panelVariants = {
     initial: { opacity: 0, x: 20 },
@@ -51,24 +49,6 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
     }
   };
 
-  const tips = [
-    {
-      icon: FiTarget,
-      title: "Target Platform",
-      description: "Choose your primary platform for tailored optimization suggestions"
-    },
-    {
-      icon: FiTrendingUp,
-      title: "Engagement Prediction",
-      description: "Get AI-powered insights on potential reach and engagement"
-    },
-    {
-      icon: FiZap,
-      title: "Instant Optimization",
-      description: "Receive actionable tips to improve your content performance"
-    }
-  ];
-
   const isContentReady = content.trim().length >= 50;
 
   return (
@@ -76,7 +56,7 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
       variants={panelVariants}
       initial="initial"
       animate="animate"
-      className={`bg-white rounded-2xl border border-slate-200/60 shadow-sm h-full flex flex-col ${className}`}
+      className={`bg-white md:rounded-2xl md:border  md:border-slate-200/60 md:shadow-sm h-fit flex flex-col ${className}`}
     >
       {/* Header */}
       <motion.div variants={itemVariants} className="p-6 pb-4 border-b border-slate-100">
@@ -98,23 +78,20 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
       </motion.div>
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col p-6 space-y-6 overflow-hidden">
+      <div className="flex flex-col p-6 space-y-6 overflow-hidden">
         
         {/* Content Input */}
         <motion.div variants={itemVariants} className="flex-1 flex flex-col min-h-0">
           <label className="block text-sm font-semibold text-slate-700 mb-3">
             Your Content
           </label>
-          <ContentTextArea
+          <RichTextEditor
             value={content}
             onChange={onContentChange}
             placeholder="Paste your content here to analyze engagement potential, get optimization tips, and predict performance across platforms..."
-            minRows={8}
-            maxRows={15}
-            maxChars={5000}
+            maxChars={500}
             showWordCount={true}
             disabled={analyzing}
-            className="flex-1"
           />
         </motion.div>
 

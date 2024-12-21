@@ -28,12 +28,10 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
   index = 0,
   className = ''
 }) => {
-  // Generate a score if not provided (for demo purposes)
-  const score = analysis.score || Math.floor(Math.random() * 40) + 60;
-  
-  // Get word count from content if not provided
-  const wordCount = analysis.wordCount || 
-    (analysis.content.trim() === '' ? 0 : analysis.content.trim().split(/\s+/).length);
+
+  const score = analysis?.score ?? 0;
+  const wordCount = analysis?.wordCount ||
+    (analysis?.content.trim() === '' ? 0 : analysis?.content.trim().split(/\s+/).length);
 
   const itemVariants = {
     initial: { opacity: 0, y: 20, scale: 0.95 },
@@ -62,7 +60,7 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
       whileHover="hover"
       onClick={() => onClick(analysis)}
       className={`
-        group relative bg-white rounded-2xl p-4 border cursor-pointer
+        group relative bg-white md:rounded-2xl p-4 border cursor-pointer
         transition-all duration-300 shadow-sm
         ${isSelected
           ? 'border-blue-300 ring-2 ring-blue-500/20 shadow-md'
@@ -112,7 +110,6 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
         </div>
       </div>
 
-      {/* Score Circle - Positioned absolutely */}
       <div className="absolute top-4 right-4">
         <AnalysisScoreCircle
           score={score}
@@ -126,7 +123,6 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
         className="absolute inset-0 rounded-2xl bg-gradient-to-br from-blue-500/5 via-transparent to-emerald-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
       />
 
-      {/* Moving Highlight on Hover */}
       <motion.div
         className="absolute inset-0 rounded-2xl opacity-0 group-hover:opacity-100 pointer-events-none overflow-hidden"
         style={{

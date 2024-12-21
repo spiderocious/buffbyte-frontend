@@ -11,7 +11,7 @@ interface WordCountIndicatorProps {
 const WordCountIndicator: React.FC<WordCountIndicatorProps> = ({
   text,
   maxChars = 2000,
-  maxWords = 500,
+  maxWords = 0,
   showWords = true,
   className = ''
 }) => {
@@ -28,7 +28,8 @@ const WordCountIndicator: React.FC<WordCountIndicatorProps> = ({
   };
 
   const charColor = getCountColor(charCount, maxChars);
-  const wordColor = getCountColor(wordCount, maxWords);
+  const showMaxWords = showWords && maxWords > 0;
+  const wordColor = showMaxWords ? getCountColor(wordCount, maxWords) : '';
 
   return (
     <div className={`flex items-center space-x-4 text-xs ${className}`}>
@@ -37,7 +38,7 @@ const WordCountIndicator: React.FC<WordCountIndicatorProps> = ({
       </div>
       {showWords && (
         <div className={`font-medium ${wordColor}`}>
-          {wordCount.toLocaleString()}/{maxWords.toLocaleString()} words
+          {wordCount.toLocaleString()}{showMaxWords && `/${maxWords.toLocaleString()}`} words
         </div>
       )}
     </div>
