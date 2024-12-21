@@ -1,10 +1,10 @@
 import BuffByteLogo from "@buffbyte/components/ui/logo";
+import { AuthService } from "@buffbyte/services";
 import { motion } from "framer-motion";
 import React from "react";
 import { BiAnalyse } from "react-icons/bi";
 import { BsBoxArrowRight, BsFileText, BsHouse, BsTv } from "react-icons/bs";
-import { useLocation } from "react-router-dom";
-import { AuthService } from "@buffbyte/services";
+import { Link, useLocation } from "react-router-dom";
 
 interface MenuItem {
   id: string;
@@ -102,8 +102,8 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = "" }) => {
         initial="initial"
         animate="animate"
         className={`
-          hidden lg:block top-4 transform -translate-x-1/2 z-50
-          w-full max-w-4xl mx-auto px-4 ${className}
+          hidden lg:block top-4 transform -translate-x-1/2 z-50 fixed
+          w-full max-w-4xl mx-auto px-4 left-[20%] ${className}
         `}
       >
         <div className="bg-white/95 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200/50">
@@ -123,10 +123,10 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = "" }) => {
                 const active = isActive(item.path);
 
                 return (
-                  <motion.a
-                    key={item.id}
-                    href={item.path}
-                    className={`
+                  <Link to={item.path} key={item.id}>
+                    <motion.div
+                      key={item.id}
+                      className={`
                       relative flex items-center space-x-2 px-4 py-2 rounded-lg
                       transition-all duration-200 group
                       ${
@@ -135,31 +135,34 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = "" }) => {
                           : "text-gray-600 hover:text-primary-600 hover:bg-primary-50"
                       }
                     `}
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Icon
-                      className={`w-4 h-4 ${active ? "text-primary-600" : ""}`}
-                    />
-                    <span
-                      className={`text-sm font-medium ${
-                        active ? "text-primary-600" : ""
-                      }`}
+                      whileHover={{ scale: 1.02 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      {item.label}
-                    </span>
-
-                    {/* Active indicator */}
-                    {active && (
-                      <motion.div
-                        variants={activeIndicatorVariants}
-                        initial="initial"
-                        animate="animate"
-                        exit="exit"
-                        className="absolute inset-0 bg-primary-100 rounded-lg -z-10"
+                      <Icon
+                        className={`w-4 h-4 ${
+                          active ? "text-primary-600" : ""
+                        }`}
                       />
-                    )}
-                  </motion.a>
+                      <span
+                        className={`text-sm font-medium ${
+                          active ? "text-primary-600" : ""
+                        }`}
+                      >
+                        {item.label}
+                      </span>
+
+                      {/* Active indicator */}
+                      {active && (
+                        <motion.div
+                          variants={activeIndicatorVariants}
+                          initial="initial"
+                          animate="animate"
+                          exit="exit"
+                          className="absolute inset-0 bg-primary-100 rounded-lg -z-10"
+                        />
+                      )}
+                    </motion.div>
+                  </Link>
                 );
               })}
             </motion.nav>

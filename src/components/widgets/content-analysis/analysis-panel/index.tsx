@@ -1,0 +1,234 @@
+import React, { useState } from 'react';
+import { motion } from 'framer-motion';
+import { FiZap, FiTarget, FiTrendingUp } from 'react-icons/fi';
+import { HiSparkles } from 'react-icons/hi2';
+import ContentTextArea from '@buffbyte/components/ui/content-textarea';
+import PlatformSelector from '@buffbyte/components/ui/platform-selector';
+import AnalyzeButton from '@buffbyte/components/ui/analyze-button';
+
+type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin' | 'youtube' | 'facebook';
+
+interface NewAnalysisPanelProps {
+  content: string;
+  onContentChange: (content: string) => void;
+  selectedPlatform: Platform;
+  onPlatformChange: (platform: Platform) => void;
+  onAnalyze: () => void;
+  analyzing?: boolean;
+  className?: string;
+}
+
+const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
+  content,
+  onContentChange,
+  selectedPlatform,
+  onPlatformChange,
+  onAnalyze,
+  analyzing = false,
+  className = ''
+}) => {
+  const [showTips, setShowTips] = useState(true);
+
+  const panelVariants = {
+    initial: { opacity: 0, x: 20 },
+    animate: { 
+      opacity: 1, 
+      x: 0,
+      transition: {
+        duration: 0.6,
+        ease: [0.16, 1, 0.3, 1],
+        staggerChildren: 0.1
+      }
+    }
+  };
+
+  const itemVariants = {
+    initial: { opacity: 0, y: 15 },
+    animate: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+    }
+  };
+
+  const tips = [
+    {
+      icon: FiTarget,
+      title: "Target Platform",
+      description: "Choose your primary platform for tailored optimization suggestions"
+    },
+    {
+      icon: FiTrendingUp,
+      title: "Engagement Prediction",
+      description: "Get AI-powered insights on potential reach and engagement"
+    },
+    {
+      icon: FiZap,
+      title: "Instant Optimization",
+      description: "Receive actionable tips to improve your content performance"
+    }
+  ];
+
+  const isContentReady = content.trim().length >= 50;
+
+  return (
+    <motion.div
+      variants={panelVariants}
+      initial="initial"
+      animate="animate"
+      className={`bg-white rounded-2xl border border-slate-200/60 shadow-sm h-full flex flex-col ${className}`}
+    >
+      {/* Header */}
+      <motion.div variants={itemVariants} className="p-6 pb-4 border-b border-slate-100">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center space-x-3">
+            <div className="flex items-center space-x-2">
+              <HiSparkles className="w-6 h-6 text-blue-500" />
+              <h2 className="text-xl font-bold text-slate-900">
+                New Content Analysis
+              </h2>
+            </div>
+            <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
+              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+              <span className="text-sm font-medium text-emerald-700">Ready</span>
+            </div>
+          </div>
+          
+          {showTips && (
+            <button
+              onClick={() => setShowTips(false)}
+              className="text-xs text-slate-400 hover:text-slate-600 font-medium"
+            >
+              Hide tips
+            </button>
+          )}
+        </div>
+      </motion.div>
+
+      {/* Main Content Area */}
+      <div className="flex-1 flex flex-col p-6 space-y-6 overflow-hidden">
+        
+        {/* Content Input */}
+        <motion.div variants={itemVariants} className="flex-1 flex flex-col min-h-0">
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            Your Content
+          </label>
+          <ContentTextArea
+            value={content}
+            onChange={onContentChange}
+            placeholder="Paste your content here to analyze engagement potential, get optimization tips, and predict performance across platforms..."
+            minRows={8}
+            maxRows={15}
+            maxChars={5000}
+            showWordCount={true}
+            disabled={analyzing}
+            className="flex-1"
+          />
+        </motion.div>
+
+        {/* Platform Selection */}
+        <motion.div variants={itemVariants}>
+          <label className="block text-sm font-semibold text-slate-700 mb-3">
+            Target Platform
+          </label>
+          <PlatformSelector
+            selectedPlatform={selectedPlatform}
+            onPlatformChange={onPlatformChange}
+            size="md"
+          />
+        </motion.div>
+
+        {/* Analysis Button */}
+        <motion.div variants={itemVariants}>
+          <AnalyzeButton
+            onClick={onAnalyze}
+            disabled={!isContentReady}
+            loading={analyzing}
+            size="lg"
+            className="w-full"
+          />
+          
+          {!isContentReady && content.length > 0 && (
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="text-xs text-orange-600 mt-2 text-center"
+            >
+              Add at least 50 characters for meaningful analysis
+            </motion.p>
+          )}
+        </motion.div>
+      </div>
+
+      {/* Tips Section */}
+      {showTips && !analyzing && (
+        <motion.div variants={itemVariants} className="p-6 pt-0">
+          <div className="bg-gradient-to-r from-blue-50 to-emerald-50 rounded-xl p-4 border border-blue-100/50">
+            <div className="flex items-center space-x-2 mb-3">
+              <FiZap className="w-4 h-4 text-blue-600" />
+              <h3 className="text-sm font-bold text-slate-800">
+                How Analysis Works
+              </h3>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              {tips.map((tip, index) => {
+                const IconComponent = tip.icon;
+                
+                return (
+                  <div key={index} className="flex items-start space-x-3">
+                    <div className="flex items-center justify-center w-8 h-8 bg-white rounded-lg shadow-sm shrink-0">
+                      <IconComponent className="w-4 h-4 text-blue-500" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-xs font-semibold text-slate-800 mb-1">
+                        {tip.title}
+                      </h4>
+                      <p className="text-xs text-slate-600 leading-relaxed">
+                        {tip.description}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Analyzing State Overlay */}
+      {analyzing && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="absolute inset-0 bg-white/80 backdrop-blur-sm rounded-2xl flex items-center justify-center z-10"
+        >
+          <div className="text-center space-y-4">
+            <motion.div
+              animate={{ rotate: 360 }}
+              transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+              className="w-12 h-12 border-4 border-blue-500 border-t-transparent rounded-full mx-auto"
+            />
+            <div>
+              <h3 className="text-lg font-semibold text-slate-900 mb-2">
+                Analyzing Your Content
+              </h3>
+              <p className="text-slate-600 text-sm">
+                Our AI is processing your content and generating insights...
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Background Decoration */}
+      <div className="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-blue-100/10 to-transparent rounded-full blur-2xl" />
+        <div className="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-100/10 to-transparent rounded-full blur-2xl" />
+      </div>
+    </motion.div>
+  );
+};
+
+export default NewAnalysisPanel;

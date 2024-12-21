@@ -1,21 +1,19 @@
-import ContentInsightsSection from "@buffbyte/components/widgets/content-insights";
-import QuickActionsSection from "@buffbyte/components/widgets/quick-actions";
-import TrendingTopicsSection from "@buffbyte/components/widgets/trending-topics";
-import ViralHashtagsSection from "@buffbyte/components/widgets/viral-hashtags";
-import WelcomeHero from "@buffbyte/components/widgets/welcome";
+import ContentInsightsSection from "@buffbyte/components/widgets/dashboard/content-insights";
+import QuickActionsSection from "@buffbyte/components/widgets/dashboard/quick-actions";
+import TrendingTopicsSection from "@buffbyte/components/widgets/dashboard/trending-topics";
+import ViralHashtagsSection from "@buffbyte/components/widgets/dashboard/viral-hashtags";
+import WelcomeHero from "@buffbyte/components/widgets/dashboard/welcome";
 import { AuthService } from "@buffbyte/services";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import AppHeader from "../../components/layout/header/app";
-import { dashboardMock } from "../../constants/mocks";
+import AppHeader from "@buffbyte/components/layout/header/app";
+import { dashboardMock } from "@buffbyte/constants/mocks";
 
 import type {
   Country,
   CountryData,
-  CreatorOpportunity,
   DashboardData,
-  PlatformUpdate,
   TrendingTopic,
   User
 } from "@buffbyte/types/dashboard";
@@ -78,7 +76,7 @@ const DashboardPage: React.FC = () => {
       <AppHeader />
 
       {/* Main Content Container */}
-      <div className="pt-2 lg:pt-12 pb-24 lg:pb-12">
+      <div className="pt-2 lg:mt-32 pb-24 lg:pb-12">
         <div className="max-w-[1400px] mx-auto px-3 lg:px-8">
           {/* Welcome Hero - Full Width */}
           <motion.div variants={sectionVariants} className="mb-12">

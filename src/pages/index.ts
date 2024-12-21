@@ -3,5 +3,6 @@ export { default as HomePage } from './landing/HomePage';
 export { default as AboutPage } from './landing/AboutPage';
 export { default as LoginPage } from './auth/LoginPage';
 export { default as SignupPage } from './auth/SignupPage';
-export { default as DashboardPage } from './app/DashboardPage';
+export { default as DashboardPage } from './app/dashboard';
+export { default as ContentAnalysisPage } from './app/content-analysis'; 
 // export { default as NotFoundPage } from './misc/NotFoundPage';

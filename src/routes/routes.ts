@@ -1,4 +1,4 @@
-import { HomePage, AboutPage, LoginPage, SignupPage, DashboardPage } from '@buffbyte/pages';
+import { HomePage, AboutPage, LoginPage, SignupPage, DashboardPage, ContentAnalysisPage } from '@buffbyte/pages';
 import type { RouteConfig } from '@buffbyte/types';
 
 export const routes: RouteConfig[] = [
@@ -36,6 +36,13 @@ export const routes: RouteConfig[] = [
     requiresAuth: true,
     exact: true,
     title: 'Dashboard - BuffByte'
+  },
+    {
+    path: '/app/content-analysis',
+    component: ContentAnalysisPage,
+    requiresAuth: true,
+    exact: true,
+    title: 'Content Analysis - BuffByte'
   },
 //   {
 //     path: '*',
