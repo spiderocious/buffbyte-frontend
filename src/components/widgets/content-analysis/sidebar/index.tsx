@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { EASING } from '../../../../types';
 import { FiPlus, FiFilter, FiClock } from 'react-icons/fi';
 import SearchInput from '@buffbyte/components/ui/search-input';
 import AnalysisHistoryItem from '@buffbyte/components/ui/analysis-history-item';
@@ -37,7 +38,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
 
   // Filter and sort analyses
   const filteredAnalyses = useMemo(() => {
-    let filtered = analyses.filter(analysis =>
+    const filtered = analyses.filter(analysis =>
       analysis.content.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
@@ -62,7 +63,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
       x: 0,
       transition: {
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1
       }
     }
@@ -73,7 +74,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+      transition: { duration: 0.4, ease: EASING.smooth }
     }
   };
 

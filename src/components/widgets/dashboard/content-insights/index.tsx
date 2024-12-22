@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { EASING } from '../../../../types';
 import {
   FiBarChart,
   FiClock,
   FiTarget,
-  FiTrendingUp,
   FiArrowRight,
   FiDownload,
 } from "react-icons/fi";
@@ -82,36 +82,6 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
     return `${displayHours}:${minutes.toString().padStart(2, "0")} ${period}`;
   };
 
-  // Get score styling
-  const getScoreColor = (score: number) => {
-    if (score >= 0.8)
-      return {
-        color: "emerald",
-        bgClass: "bg-emerald-50",
-        textClass: "text-emerald-700",
-        ringClass: "ring-emerald-200",
-      };
-    if (score >= 0.6)
-      return {
-        color: "blue",
-        bgClass: "bg-blue-50",
-        textClass: "text-blue-700",
-        ringClass: "ring-blue-200",
-      };
-    if (score >= 0.4)
-      return {
-        color: "orange",
-        bgClass: "bg-orange-50",
-        textClass: "text-orange-700",
-        ringClass: "ring-orange-200",
-      };
-    return {
-      color: "red",
-      bgClass: "bg-red-50",
-      textClass: "text-red-700",
-      ringClass: "ring-red-200",
-    };
-  };
 
   // Animation variants
   const sectionVariants = {
@@ -121,7 +91,7 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
       y: 0,
       transition: {
         duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1,
       },
     },
@@ -132,7 +102,7 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.5, ease: EASING.smooth },
     },
   };
 
@@ -141,12 +111,12 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
     animate: {
       opacity: 1,
       scale: 1,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.6, ease: EASING.smooth },
     },
     hover: {
       y: -4,
       scale: 1.02,
-      transition: { duration: 0.3, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.3, ease: EASING.smooth },
     },
   };
 
@@ -336,7 +306,6 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
                 {activeInsight === "formats" && (
                   <div className="space-y-6">
                     {insights.viral_formats?.map((format, index) => {
-                      const scoreStyle = getScoreColor(format.success_rate);
 
                       return (
                         <motion.div
@@ -405,7 +374,6 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
                 {activeInsight === "timing" && (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     {insights.peak_posting_times?.map((time, index) => {
-                      const boostStyle = getScoreColor(time.engagement_boost);
 
                       return (
                         <motion.div
@@ -466,7 +434,7 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
                                 transition={{
                                   duration: 1.5,
                                   delay: index * 0.1,
-                                  ease: [0.16, 1, 0.3, 1],
+                                  ease: EASING.smooth,
                                 }}
                               />
                             </div>
@@ -481,7 +449,6 @@ const ContentInsightsSection: React.FC<ContentInsightsSectionProps> = ({
                 {activeInsight === "gaps" && (
                   <div className="space-y-6">
                     {insights.content_gaps?.map((gap, index) => {
-                      const scoreStyle = getScoreColor(gap.opportunity_score);
 
                       return (
                         <motion.div

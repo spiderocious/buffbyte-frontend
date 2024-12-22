@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiTrendingUp, FiMapPin, FiChevronDown, FiGlobe } from 'react-icons/fi';
+import { EASING } from '../../../../types';
+import { FiMapPin } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
 import CountrySelector from '@buffbyte/components/ui/country-selector';
 import BuffByteLogo from '@buffbyte/components/ui/logo';
@@ -24,7 +25,6 @@ const WelcomeHero: React.FC<WelcomeHeroProps> = ({
   user,
   selectedCountry,
   onCountryChange,
-  loading = false,
   className = ''
 }) => {
   const [currentTime, setCurrentTime] = useState(new Date());
@@ -52,7 +52,7 @@ const WelcomeHero: React.FC<WelcomeHeroProps> = ({
       y: 0,
       transition: {
         duration: 0.5,
-        ease: [0.25, 0.1, 0.25, 1],
+        ease: EASING.welcome,
         staggerChildren: 0.1
       }
     }
@@ -63,7 +63,7 @@ const WelcomeHero: React.FC<WelcomeHeroProps> = ({
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }
+      transition: { duration: 0.4, ease: EASING.welcome }
     }
   };
 

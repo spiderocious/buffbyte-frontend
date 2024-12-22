@@ -30,7 +30,7 @@ const PlatformUpdatesSection: React.FC<PlatformUpdatesSectionProps> = ({
   onUpdateDismiss,
   className = ''
 }) => {
-  const [displayedUpdates, setDisplayedUpdates] = useState<PlatformUpdate[]>([]);
+  const [displayedUpdates] = useState<PlatformUpdate[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isAutoScrolling, setIsAutoScrolling] = useState(true);
   const [viewMode, setViewMode] = useState<'ticker' | 'list'>('ticker');

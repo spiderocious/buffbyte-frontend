@@ -729,7 +729,7 @@ export const videoAnalysisMock = {
   timestamp: '2025-08-02T16:19:19.309Z',
 };
 
-export const dashboardMock: any = {
+export const dashboardMock: Record<string, unknown> = {
   nigeria: {
     trending_topics: [
       {

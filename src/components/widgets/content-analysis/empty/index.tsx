@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { EASING } from '../../../../types';
 import { FiFileText, FiZap, FiTrendingUp } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
 
@@ -25,7 +26,7 @@ const EmptyStateCard: React.FC<EmptyStateCardProps> = ({
       y: 0,
       transition: {
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1
       }
     }
@@ -36,7 +37,7 @@ const EmptyStateCard: React.FC<EmptyStateCardProps> = ({
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
+      transition: { duration: 0.4, ease: EASING.smooth }
     }
   };
 
@@ -47,7 +48,7 @@ const EmptyStateCard: React.FC<EmptyStateCardProps> = ({
       transition: {
         duration: 4,
         repeat: Infinity,
-        ease: "easeInOut"
+        ease: EASING.easeInOut
       }
     }
   };

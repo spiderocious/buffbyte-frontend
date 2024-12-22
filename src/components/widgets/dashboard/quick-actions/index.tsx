@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { EASING } from '../../../../types';
 import { 
   FiEdit3, 
   FiMonitor,
@@ -87,7 +88,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       y: 0,
       transition: {
         duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1
       }
     }
@@ -98,7 +99,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
     animate: { 
       opacity: 1, 
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] }
+      transition: { duration: 0.5, ease: EASING.smooth }
     }
   };
 
@@ -114,7 +115,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       scale: 1,
       transition: {
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1]
+        ease: EASING.smooth
       }
     },
     hover: {
@@ -122,7 +123,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       scale: 1.02,
       transition: {
         duration: 0.3,
-        ease: [0.16, 1, 0.3, 1]
+        ease: EASING.smooth
       }
     }
   };
@@ -195,7 +196,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
 
       {/* Actions Grid - Full width on mobile, row on desktop */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {actionItems.map((action, index) => {
+        {actionItems.map((action) => {
           const IconComponent = action.icon;
           
           return (

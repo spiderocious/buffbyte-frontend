@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { EASING } from '../../../types';
 import ContentPreview from '../content-preview';
 import DateBadge from '../date-badge';
 import AnalysisScoreCircle from '../analysis-score-circle';
@@ -42,13 +43,13 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
       transition: { 
         duration: 0.4, 
         delay: index * 0.05,
-        ease: [0.16, 1, 0.3, 1] 
+        ease: EASING.smooth 
       }
     },
     hover: {
       y: -2,
       scale: 1.02,
-      transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] }
+      transition: { duration: 0.2, ease: EASING.smooth }
     }
   };
 

@@ -1,12 +1,10 @@
 import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { EASING } from '../../../../types';
 import {
   FiHash,
   FiTrendingUp,
-  FiUsers,
-  FiActivity,
   FiCopy,
-  FiDownload,
 } from "react-icons/fi";
 import { HiSparkles } from "react-icons/hi2";
 import PlatformTabs from "@buffbyte/components/ui/platform-tabs";
@@ -148,7 +146,7 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
   };
 
   // Get hashtag metrics based on platform
-  const getHashtagMetrics = (hashtag: any, platform: Platform) => {
+  const getHashtagMetrics = (hashtag: ViralHashtag, platform: Platform) => {
     switch (platform) {
       case "twitter":
         return {
@@ -166,7 +164,7 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
             label: "Engagement",
             value: `${Math.round(hashtag.engagement_rate * 100)}%`,
           },
-          tags: [hashtag.content_type] || [],
+          tags: hashtag.content_type ? [hashtag.content_type] : [],
         };
       case "tiktok":
         return {
@@ -184,7 +182,7 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
             value: `${Math.round(hashtag.professional_relevance * 100)}%`,
           },
           secondary: { label: "Industry", value: hashtag.industry },
-          tags: [hashtag.engagement_type] || [],
+          tags: hashtag.engagement_type ? [hashtag.engagement_type] : [],
         };
       default:
         return {
@@ -203,7 +201,7 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
       y: 0,
       transition: {
         duration: 0.7,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1,
       },
     },
@@ -214,19 +212,10 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.5, ease: EASING.smooth },
     },
   };
 
-  const hashtagVariants = {
-    initial: { opacity: 0, x: -20, scale: 0.95 },
-    animate: {
-      opacity: 1,
-      x: 0,
-      scale: 1,
-      transition: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-    },
-  };
 
   // Copy all hashtags
   const copyAllHashtags = () => {

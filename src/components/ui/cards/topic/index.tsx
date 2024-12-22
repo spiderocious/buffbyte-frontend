@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import React from "react";
+import { EASING } from '../../../../types';
 import {
     FiClock,
     FiMinus,
@@ -38,7 +39,6 @@ interface TopicCardProps {
 
 const TopicCard: React.FC<TopicCardProps> = ({
   topic,
-  size = "medium",
   className = "",
   index = 0,
 }) => {
@@ -120,7 +120,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
       transition: {
         duration: 0.7,
         delay: index * 0.1,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
         staggerChildren: 0.1,
       },
     },
@@ -129,7 +129,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
       scale: 1.03,
       transition: {
         duration: 0.4,
-        ease: [0.16, 1, 0.3, 1],
+        ease: EASING.smooth,
       },
     },
   };
@@ -139,7 +139,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.5, ease: [0.16, 1, 0.3, 1] },
+      transition: { duration: 0.5, ease: EASING.smooth },
     },
   };
 
@@ -240,7 +240,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
                       stroke: topic.engagement_score >= 0.8 ? '#10b981' : 
                               topic.engagement_score >= 0.6 ? '#3b82f6' : '#64748b'
                     }}
-                    transition={{ duration: 1.5, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                    transition={{ duration: 1.5, delay: 0.5, ease: EASING.smooth }}
                   />
                 </svg>
                 
@@ -350,7 +350,7 @@ const TopicCard: React.FC<TopicCardProps> = ({
         
         {/* Moving Highlight */}
         <motion.div
-          className="absolute inset-0 rounded-3xl"
+          className="absolute inset-0 rounded-3xl opacity-0 group-hover:opacity-100"
           style={{
             background: `linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)`,
             transform: 'translateX(-100%)',
@@ -364,7 +364,6 @@ const TopicCard: React.FC<TopicCardProps> = ({
             repeatDelay: 3,
             ease: "easeInOut",
           }}
-          className="opacity-0 group-hover:opacity-100"
         />
       </div>
     </motion.div>

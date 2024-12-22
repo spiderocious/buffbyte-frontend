@@ -6,7 +6,6 @@ import WelcomeHero from "@buffbyte/components/widgets/dashboard/welcome";
 import { AuthService } from "@buffbyte/services";
 import { motion } from "framer-motion";
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import AppHeader from "@buffbyte/components/layout/header/app";
 import { dashboardMock } from "@buffbyte/constants/mocks";
 
@@ -19,7 +18,6 @@ import type {
 } from "@buffbyte/types/dashboard";
 
 const DashboardPage: React.FC = () => {
-  const navigate = useNavigate();
   const user = AuthService.getUser() as User;
 
   // State management

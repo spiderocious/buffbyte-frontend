@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { EASING } from '../../../types';
 
 interface AnalysisScoreCircleProps {
   score: number;
@@ -115,7 +116,7 @@ const AnalysisScoreCircle: React.FC<AnalysisScoreCircleProps> = ({
           }}
           transition={{
             duration: animated ? 1.5 : 0,
-            ease: [0.16, 1, 0.3, 1],
+            ease: EASING.smooth,
             delay: 0.2
           }}
         />

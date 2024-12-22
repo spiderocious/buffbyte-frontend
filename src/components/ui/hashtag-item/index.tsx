@@ -72,7 +72,7 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
   // Platform-specific rendering
   const renderPlatformStats = () => {
     switch (platform) {
-      case 'twitter':
+      case 'twitter': {
         const twitterData = hashtag as TwitterHashtag;
         return (
           <div className="flex items-center justify-between text-sm">
@@ -86,8 +86,9 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
             </div>
           </div>
         );
+      }
 
-      case 'instagram':
+      case 'instagram': {
         const instagramData = hashtag as InstagramHashtag;
         return (
           <div className="flex items-center justify-between text-sm">
@@ -104,8 +105,9 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
             </div>
           </div>
         );
+      }
 
-      case 'tiktok':
+      case 'tiktok': {
         const tiktokData = hashtag as TikTokHashtag;
         return (
           <div className="flex items-center justify-between text-sm">
@@ -124,8 +126,9 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
             </div>
           </div>
         );
+      }
 
-      case 'linkedin':
+      case 'linkedin': {
         const linkedinData = hashtag as LinkedInHashtag;
         return (
           <div className="flex items-center justify-between text-sm">
@@ -142,6 +145,7 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
             </div>
           </div>
         );
+      }
 
       default:
         return null;
@@ -179,17 +183,6 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
     }
   };
 
-  const hashtagVariants = {
-    initial: { opacity: 0 },
-    animate: { 
-      opacity: 1,
-      transition: { delay: 0.2 + ((rank || 0) * 0.1) }
-    },
-    hover: {
-      color: '#0284c7',
-      transition: { duration: 0.2 }
-    }
-  };
 
   const rankVariants = {
     initial: { scale: 0, opacity: 0 },
@@ -242,10 +235,9 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
 
           {/* Hashtag */}
           <motion.div 
-            variants={hashtagVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hover"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { delay: 0.2 + ((rank || 0) * 0.1) } }}
+            whileHover={{ color: '#0284c7', transition: { duration: 0.2 } }}
             className="flex-1 min-w-0"
           >
             <h4 className="text-lg font-semibold text-primary-600 truncate">

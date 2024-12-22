@@ -1,13 +1,21 @@
-import AnalyzeButton from '@buffbyte/components/ui/analyze-button';
-import RichTextEditor from '@buffbyte/components/ui/content-textarea';
-import PlatformSelector from '@buffbyte/components/ui/platform-selector';
-import { motion } from 'framer-motion';
-import React from 'react';
-import { HiSparkles } from 'react-icons/hi2';
+import AnalyzeButton from "@buffbyte/components/ui/analyze-button";
+import RichTextEditor from "@buffbyte/components/ui/content-textarea";
+import PlatformSelector from "@buffbyte/components/ui/platform-selector";
+import { EASING } from "../../../../types";
+import { motion } from "framer-motion";
+import React, { use, useEffect } from "react";
+import { HiSparkles } from "react-icons/hi2";
+import { bus } from "../../../../events";
 
-type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin' | 'youtube' | 'facebook';
+type Platform =
+  | "twitter"
+  | "instagram"
+  | "tiktok"
+  | "linkedin"
+  | "youtube"
+  | "facebook";
 
-interface NewAnalysisPanelProps {
+interface AnalysisPanelProps {
   content: string;
   onContentChange: (content: string) => void;
   selectedPlatform: Platform;
@@ -17,39 +25,47 @@ interface NewAnalysisPanelProps {
   className?: string;
 }
 
-const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
+const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
   content,
   onContentChange,
   selectedPlatform,
   onPlatformChange,
   onAnalyze,
   analyzing = false,
-  className = ''
+  className = "",
 }) => {
-
   const panelVariants = {
     initial: { opacity: 0, x: 20 },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       x: 0,
       transition: {
         duration: 0.6,
-        ease: [0.16, 1, 0.3, 1],
-        staggerChildren: 0.1
-      }
-    }
+        ease: EASING.smooth,
+        staggerChildren: 0.1,
+      },
+    },
   };
 
   const itemVariants = {
     initial: { opacity: 0, y: 15 },
-    animate: { 
-      opacity: 1, 
+    animate: {
+      opacity: 1,
       y: 0,
-      transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] }
-    }
+      transition: { duration: 0.4, ease: EASING.smooth },
+    },
   };
 
   const isContentReady = content.trim().length >= 50;
+  const [isContent, setIsContent] = React.useState<boolean>(true);
+
+  useEffect(() => {
+    bus.on("active:content", (data) => {
+      if (data.contentType) {
+        setIsContent(data.contentType === "content");
+      }
+    });
+  }, []);
 
   return (
     <motion.div
@@ -59,29 +75,34 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
       className={`bg-white md:rounded-2xl md:border  md:border-slate-200/60 md:shadow-sm h-fit flex flex-col ${className}`}
     >
       {/* Header */}
-      <motion.div variants={itemVariants} className="p-6 pb-4 border-b border-slate-100">
+      <motion.div
+        variants={itemVariants}
+        className="p-6 pb-4 border-b border-slate-100"
+      >
         <div className="flex items-center justify-between">
           <div className="flex items-center space-x-3">
             <div className="flex items-center space-x-2">
               <HiSparkles className="w-6 h-6 text-blue-500" />
               <h2 className="text-xl font-bold text-slate-900">
-                New Content Analysis
+                New {isContent ? "Content" : "Script"} Analysis
               </h2>
             </div>
           </div>
-          
+
           <div className="flex items-center space-x-1 bg-emerald-50 px-3 py-1 rounded-full">
-              <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
-              <span className="text-sm font-medium text-emerald-700">Ready</span>
-            </div>
+            <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
+            <span className="text-sm font-medium text-emerald-700">Ready</span>
+          </div>
         </div>
       </motion.div>
 
       {/* Main Content Area */}
       <div className="flex flex-col p-6 space-y-6 overflow-hidden">
-        
         {/* Content Input */}
-        <motion.div variants={itemVariants} className="flex-1 flex flex-col min-h-0">
+        <motion.div
+          variants={itemVariants}
+          className="flex-1 flex flex-col min-h-0"
+        >
           <label className="block text-sm font-semibold text-slate-700 mb-3">
             Your Content
           </label>
@@ -96,7 +117,7 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
         </motion.div>
 
         {/* Platform Selection */}
-        <motion.div variants={itemVariants} className='hidden'>
+        <motion.div variants={itemVariants} className="hidden">
           <label className="block text-sm font-semibold text-slate-700 mb-3">
             Target Platform
           </label>
@@ -116,7 +137,7 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
             size="lg"
             className="w-full"
           />
-          
+
           {!isContentReady && content.length > 0 && (
             <motion.p
               initial={{ opacity: 0 }}
@@ -128,7 +149,6 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
           )}
         </motion.div>
       </div>
-
 
       {/* Analyzing State Overlay */}
       {analyzing && (
@@ -165,4 +185,4 @@ const NewAnalysisPanel: React.FC<NewAnalysisPanelProps> = ({
   );
 };
 
-export default NewAnalysisPanel;
+export default AnalysisPanel;
