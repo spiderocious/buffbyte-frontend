@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { BsChevronDown, BsSearch } from 'react-icons/bs';
+import { BsChevronDown } from 'react-icons/bs';
 
 interface CountryOption {
   code: string;
@@ -34,10 +34,6 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   const selectedCountryData = countries.find(c => c.code === selectedCountry);
   const popularCountries = countries.filter(c => c.popular);
   
-  // Filter countries based on search
-  const filteredCountries = countries.filter(country =>
-    country.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
 
   // Close dropdown when clicking outside
   useEffect(() => {
