@@ -7,7 +7,7 @@ import AnalysisScoreCircle from '../analysis-score-circle';
 
 interface AnalysisItem {
   id: string;
-  content: string;
+  message: string;
   createdAt: string;
   score?: number;
   platform?: string;
@@ -32,7 +32,7 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
 
   const score = analysis?.score ?? 0;
   const wordCount = analysis?.wordCount ||
-    (analysis?.content.trim() === '' ? 0 : analysis?.content.trim().split(/\s+/).length);
+    (analysis?.message.trim() === '' ? 0 : analysis?.message.trim().split(/\s+/).length);
 
   const itemVariants = {
     initial: { opacity: 0, y: 20, scale: 0.95 },
@@ -82,7 +82,7 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
       {/* Content Preview */}
       <div className="space-y-3">
         <ContentPreview
-          content={analysis.content}
+          content={analysis?.message?.slice(0, 50) || ''}
           maxLength={80}
           className="pr-16" // Space for score circle
         />
@@ -111,13 +111,6 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
         </div>
       </div>
 
-      <div className="absolute top-4 right-4">
-        <AnalysisScoreCircle
-          score={score}
-          size="sm"
-          animated={false}
-        />
-      </div>
 
       {/* Hover Glow Effect */}
       <motion.div

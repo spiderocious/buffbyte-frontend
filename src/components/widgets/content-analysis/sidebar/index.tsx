@@ -9,7 +9,7 @@ import LoadingSpinner from '@buffbyte/components/ui/loading-spinner';
 
 interface AnalysisItem {
   id: string;
-  content: string;
+  message: string;
   createdAt: string;
   score?: number;
   platform?: string;
@@ -39,7 +39,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
   // Filter and sort analyses
   const filteredAnalyses = useMemo(() => {
     const filtered = analyses.filter(analysis =>
-      analysis.content.toLowerCase().includes(searchQuery.toLowerCase())
+      analysis?.message.toLowerCase().includes(searchQuery.toLowerCase())
     );
 
     // Sort analyses
@@ -242,7 +242,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
       </div>
 
       {/* Footer - New Analysis Button */}
-      <motion.div variants={itemVariants} className="p-6 pt-4 border-t border-slate-200/60">
+      {filteredAnalyses.length < 0 && <motion.div variants={itemVariants} className="p-6 pt-4 border-t border-slate-200/60">
         <motion.button
           onClick={onNewAnalysis}
           whileHover={{ scale: 1.02, y: -1 }}
@@ -258,7 +258,7 @@ const AnalysisHistorySidebar: React.FC<AnalysisHistorySidebarProps> = ({
           <FiPlus className="w-5 h-5" />
           <span>New Analysis</span>
         </motion.button>
-      </motion.div>
+      </motion.div>}
     </motion.div>
   );
 };

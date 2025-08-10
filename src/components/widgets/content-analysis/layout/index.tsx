@@ -1,9 +1,11 @@
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useEffect, useState } from "react";
 import { FiMenu, FiX } from "react-icons/fi";
+import { bus } from "../../../../events";
 import { EASING } from "../../../../types";
 import AnalysisPanel from "../analysis-panel";
 import AnalysisResultsViewer from "../analysis-result";
+import ScriptAnalysisResultsViewer from "../script-analysis-result";
 import AnalysisHistorySidebar from "../sidebar";
 
 type Platform =
@@ -16,7 +18,7 @@ type Platform =
 
 interface AnalysisItem {
   id: string;
-  content: string;
+  message: string;
   createdAt: string;
   score?: number;
   platform?: string;
@@ -30,6 +32,7 @@ interface ContentAnalysisLayoutProps {
   loading?: boolean;
   analyzing?: boolean;
   className?: string;
+  selectedAnalysis?: AnalysisItem | null; // Added selectedAnalysis prop
 }
 
 const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
@@ -39,15 +42,26 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
   loading = false,
   analyzing = false,
   className = "",
+  selectedAnalysis = null, // Added selectedAnalysis prop
 }) => {
   // State management
   const [content, setContent] = useState("");
   const [selectedPlatform, setSelectedPlatform] = useState<Platform>("twitter");
-  const [selectedAnalysis, setSelectedAnalysis] = useState<AnalysisItem | null>(
-    null
-  );
+  //   const [selectedAnalysis, setSelectedAnalysis] = useState<AnalysisItem | null>(
+  //     null
+  //   );
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
+
+  const [isContent, setIsContent] = React.useState<boolean>(true);
+
+  useEffect(() => {
+    bus.on("active:content", (data) => {
+      if (data.contentType) {
+        setIsContent(data.contentType === "content");
+      }
+    });
+  }, []);
 
   // Responsive detection
   useEffect(() => {
@@ -65,7 +79,7 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
 
   // Handle analysis selection
   const handleAnalysisSelect = (analysis: AnalysisItem) => {
-    setSelectedAnalysis(analysis);
+    //(analysis);
     onAnalysisSelect(analysis);
 
     // Close mobile sidebar after selection
@@ -76,7 +90,7 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
 
   // Handle new analysis
   const handleNewAnalysis = () => {
-    setSelectedAnalysis(null);
+    //setSelectedAnalysis(null);
     onAnalysisSelect(null);
     setContent("");
 
@@ -87,8 +101,9 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
   };
 
   const goBack = () => {
-    setSelectedAnalysis(null);
-    onAnalysisSelect(null);
+    //setSelectedAnalysis(null);
+      onAnalysisSelect(null);
+      window.location.reload(); // Reload to reset state
   };
 
   // Handle analyze button
@@ -133,6 +148,10 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
       transition: { duration: 0.2 },
     },
   };
+
+  const ResultComponent = isContent
+    ? AnalysisResultsViewer
+    : ScriptAnalysisResultsViewer;
 
   return (
     <motion.div
@@ -229,7 +248,7 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
         <div className="flex-1 lg:w-[65%] h-full lg:pl-6">
           <div>
             {selectedAnalysis ? (
-              <AnalysisResultsViewer
+              <ResultComponent
                 analysis={selectedAnalysis}
                 className="h-full"
                 onBack={goBack}
@@ -255,7 +274,6 @@ const ContentAnalysisLayout: React.FC<ContentAnalysisLayoutProps> = ({
               </motion.div>
             )}
           </div>
-
         </div>
       </div>
 

@@ -92,7 +92,6 @@ const ViralHashtagsSection: React.FC<ViralHashtagsSectionProps> = ({
 
   // Get current platform hashtags
   const currentHashtags = hashtags[activeTab] || [];
-  console.log("Current Hashtags:", currentHashtags, hashtags);
   // Get country display name
   const getCountryName = (code: string): string => {
     const countryNames: Record<string, string> = {

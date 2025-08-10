@@ -1,11 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import ContentInsightsSection from "@buffbyte/components/widgets/dashboard/content-insights";
 import QuickActionsSection from "@buffbyte/components/widgets/dashboard/quick-actions";
 import TrendingTopicsSection from "@buffbyte/components/widgets/dashboard/trending-topics";
 import ViralHashtagsSection from "@buffbyte/components/widgets/dashboard/viral-hashtags";
 import WelcomeHero from "@buffbyte/components/widgets/dashboard/welcome";
-import { AuthService } from "@buffbyte/services";
+import { ApiService, AuthService } from "@buffbyte/services";
 import { motion } from "framer-motion";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import AppHeader from "@buffbyte/components/layout/header/app";
 import { dashboardMock } from "@buffbyte/constants/mocks";
 
@@ -23,7 +24,7 @@ const DashboardPage: React.FC = () => {
   // State management
   const [selectedCountry, setSelectedCountry] = useState<Country>("nigeria");
   const [loading, setLoading] = useState<boolean>(false);
-  const [dashboardData] = useState<DashboardData>(dashboardMock);
+  const [dashboardData, setDashboardData] = useState<DashboardData | any>(dashboardMock);
   const currentCountryData: CountryData = dashboardData[selectedCountry];
 
   // Handle country change with loading simulation
@@ -59,9 +60,25 @@ const DashboardPage: React.FC = () => {
     animate: {
       opacity: 1,
       y: 0,
-      transition: { duration: 0.4, ease: "easeOut" },
     },
   };
+
+  const loadDashboardData = async () => { 
+    setLoading(true);
+    try {
+      const response = await ApiService.getDashboardData();
+      setDashboardData(response.data);
+    } catch (error) {
+      console.error("Failed to load dashboard data:", error);
+      // Handle error appropriately, e.g., show notification
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    loadDashboardData();
+   } , [])
 
   return (
     <motion.div
@@ -77,7 +94,11 @@ const DashboardPage: React.FC = () => {
       <div className="pt-2 lg:pt-24 pb-24 lg:pb-12">
         <div className="max-w-[1400px] mx-auto px-3 lg:px-8">
           {/* Welcome Hero - Full Width */}
-          <motion.div variants={sectionVariants} className="mb-12">
+          <motion.div 
+            variants={sectionVariants} 
+            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+            className="mb-12"
+          >
             <WelcomeHero
               user={user}
               selectedCountry={selectedCountry}
@@ -89,12 +110,18 @@ const DashboardPage: React.FC = () => {
           {/* Main Dashboard Content */}
           <div className="space-y-12">
             {/* Right: Quick Actions */}
-            <motion.div variants={sectionVariants}>
+            <motion.div 
+              variants={sectionVariants}
+              transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+            >
               <QuickActionsSection />
             </motion.div>
 
             {/* Row 1: Trending Topics (Full Width) */}
-            <motion.div variants={sectionVariants}>
+            <motion.div 
+              variants={sectionVariants}
+              transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+            >
               <TrendingTopicsSection
                 topics={currentCountryData?.trending_topics || []}
                 selectedCountry={selectedCountry}
@@ -106,7 +133,10 @@ const DashboardPage: React.FC = () => {
             {/* Row 2: Two Column Layout */}
             <div className="grid grid-cols-1 gap-8">
               {/* Left: Viral Hashtags */}
-              <motion.div variants={sectionVariants}>
+              <motion.div 
+                variants={sectionVariants}
+                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+              >
                 <ViralHashtagsSection
                   hashtags={
                     currentCountryData?.hashtags || {
@@ -125,7 +155,11 @@ const DashboardPage: React.FC = () => {
             {/* Row 3: Three Column Layout */}
             <div className="grid grid-cols-1 gap-8">
               {/* Left: Content Insights */}
-              <motion.div variants={sectionVariants} className="lg:col-span-2">
+              <motion.div 
+                variants={sectionVariants} 
+                transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
+                className="lg:col-span-2"
+              >
                 <ContentInsightsSection
                   insights={
                     currentCountryData?.content_insights || {
@@ -145,6 +179,7 @@ const DashboardPage: React.FC = () => {
           {/* Dashboard Summary Footer */}
           <motion.div
             variants={sectionVariants}
+            transition={{ duration: 0.4, ease: [0.04, 0.62, 0.23, 0.98] }}
             className="mt-12 bg-gradient-to-r from-primary-50 via-white to-success-50 rounded-2xl p-8 border border-primary-100 shadow-sm"
           >
             <div className="text-center space-y-6">

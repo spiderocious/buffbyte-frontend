@@ -8,6 +8,7 @@ import {
 } from "@buffbyte/pages";
 import type { RouteConfig } from "@buffbyte/types";
 import ScriptAnalysisPage from "../pages/app/script-analysis";
+import TeleprompterPage from "../pages/app/teleprompter";
 
 export const routes: RouteConfig[] = [
   {
@@ -59,6 +60,13 @@ export const routes: RouteConfig[] = [
     exact: true,
     title: "Script Analysis - BuffByte",
   },
+  {
+    path: "/app/teleprompter",
+    component: TeleprompterPage,
+    requiresAuth: true,
+    exact: true,
+    title: "Teleprompter - BuffByte",
+  }
   //   {
   //     path: '*',
   //     component: NotFoundPage,
