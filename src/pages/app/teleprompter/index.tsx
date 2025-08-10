@@ -69,7 +69,7 @@ const TeleprompterPage: React.FC = () => {
   
   const containerRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const animationRef = useRef<number | null>(null);
   const countdownRef = useRef<NodeJS.Timeout | null>(null);
 
   // Calculate scroll speed based on WPM
@@ -107,21 +107,21 @@ const TeleprompterPage: React.FC = () => {
         });
         
         if (isPlaying) {
-          intervalRef.current = requestAnimationFrame(animate);
+          animationRef.current = requestAnimationFrame(animate);
         }
       };
       
-      intervalRef.current = requestAnimationFrame(animate);
+      animationRef.current = requestAnimationFrame(animate);
     } else {
-      if (intervalRef.current) {
-        cancelAnimationFrame(intervalRef.current);
-        intervalRef.current = null;
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+        animationRef.current = null;
       }
     }
 
     return () => {
-      if (intervalRef.current) {
-        cancelAnimationFrame(intervalRef.current);
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
       }
     };
   }, [isPlaying, getScrollSpeed]);
@@ -246,7 +246,7 @@ const TeleprompterPage: React.FC = () => {
     setShowControls(true);
     setScrollPosition(0);
     setCountdown(0);
-    if (intervalRef.current) clearInterval(intervalRef.current);
+    if (animationRef.current) cancelAnimationFrame(animationRef.current);
     if (countdownRef.current) clearInterval(countdownRef.current);
   };
 

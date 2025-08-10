@@ -1,6 +1,7 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import CopyButton from '@buffbyte/components/ui/copy';
+import { EASING } from '../../../types';
 
 // Platform-specific hashtag data structures
 interface TwitterHashtag {
@@ -166,7 +167,7 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
       transition: {
         duration: 0.3,
         delay: (rank || 0) * 0.1,
-        ease: "easeOut"
+        ease: EASING.smooth
       }
     },
     hover: {
@@ -174,7 +175,7 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
       scale: 1.02,
       transition: {
         duration: 0.2,
-        ease: "easeOut"
+        ease: EASING.smooth
       }
     },
     tap: {
@@ -191,7 +192,7 @@ const HashtagItem: React.FC<HashtagItemProps> = ({
       opacity: 1,
       transition: { 
         delay: 0.1 + ((rank || 0) * 0.1),
-        type: "spring",
+        type: "spring" as const,
         stiffness: 200
       }
     }

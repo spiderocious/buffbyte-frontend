@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { BsCopy, BsCheck } from 'react-icons/bs';
+import { EASING } from '../../../types';
 
 interface CopyButtonProps {
   textToCopy: string;
@@ -129,7 +130,7 @@ const CopyButton: React.FC<CopyButtonProps> = ({
     animate: { 
       scale: [0, 1.2, 1], 
       opacity: 1,
-      transition: { duration: 0.4, ease: "easeOut" }
+      transition: { duration: 0.4, ease: EASING.smooth }
     },
     exit: { 
       scale: 0, 

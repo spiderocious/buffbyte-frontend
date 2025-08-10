@@ -3,7 +3,7 @@ import RichTextEditor from "@buffbyte/components/ui/content-textarea";
 import PlatformSelector from "@buffbyte/components/ui/platform-selector";
 import { EASING } from "../../../../types";
 import { motion } from "framer-motion";
-import React, { use, useEffect } from "react";
+import React, { useEffect } from "react";
 import { HiSparkles } from "react-icons/hi2";
 import { bus } from "../../../../events";
 

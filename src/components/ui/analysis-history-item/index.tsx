@@ -3,7 +3,6 @@ import { motion } from 'framer-motion';
 import { EASING } from '../../../types';
 import ContentPreview from '../content-preview';
 import DateBadge from '../date-badge';
-import AnalysisScoreCircle from '../analysis-score-circle';
 
 interface AnalysisItem {
   id: string;
@@ -30,7 +29,6 @@ const AnalysisHistoryItem: React.FC<AnalysisHistoryItemProps> = ({
   className = ''
 }) => {
 
-  const score = analysis?.score ?? 0;
   const wordCount = analysis?.wordCount ||
     (analysis?.message.trim() === '' ? 0 : analysis?.message.trim().split(/\s+/).length);
 

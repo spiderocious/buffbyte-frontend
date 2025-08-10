@@ -26,7 +26,6 @@ interface TrendingTopicsSectionProps {
   topics: TrendingTopic[];
   selectedCountry: string;
   loading?: boolean;
-  onTopicClick?: (topic: TrendingTopic) => void;
   className?: string;
 }
 
@@ -34,7 +33,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
   topics,
   selectedCountry,
   loading = false,
-  onTopicClick,
   className = "",
 }) => {
   const [viewMode] = useState<"grid" | "featured">("grid");
@@ -244,7 +242,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
                   <TopicCard
                     topic={featuredTopic}
                     size="large"
-                    onClick={() => onTopicClick?.(featuredTopic)}
                     className="border-2 border-primary-200 shadow-lg"
                   />
                 </motion.div>
@@ -259,7 +256,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
                       topic={topic}
                       size="medium"
                       index={index + 1}
-                      onClick={() => onTopicClick?.(topic)}
                     />
                   ))}
                 </div>
@@ -274,7 +270,6 @@ const TrendingTopicsSection: React.FC<TrendingTopicsSectionProps> = ({
                   topic={topic}
                   size="medium"
                   index={index}
-                  onClick={() => onTopicClick?.(topic)}
                 />
               ))}
             </div>

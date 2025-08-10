@@ -66,7 +66,7 @@ const ContentAnalysisPage: React.FC = () => {
 
   // Handle new content analysis
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const handleAnalyze = async (content: string, platform: Platform) => {
+  const handleAnalyze = async (content: string, _platform: Platform) => {
     setAnalyzing(true);
 
     try {

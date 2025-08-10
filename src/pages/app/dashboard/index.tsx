@@ -14,7 +14,6 @@ import type {
   Country,
   CountryData,
   DashboardData,
-  TrendingTopic,
   User
 } from "@buffbyte/types/dashboard";
 
@@ -38,11 +37,6 @@ const DashboardPage: React.FC = () => {
     setLoading(false);
   };
 
-  // Handle various click events
-  const handleTopicClick = (topic: TrendingTopic) => {
-    console.log("Topic clicked:", topic);
-    // Navigate to detailed topic analysis or show modal
-  };
   // Animation variants for the page
   const pageVariants = {
     initial: { opacity: 0 },
@@ -126,7 +120,6 @@ const DashboardPage: React.FC = () => {
                 topics={currentCountryData?.trending_topics || []}
                 selectedCountry={selectedCountry}
                 loading={loading}
-                onTopicClick={handleTopicClick}
               />
             </motion.div>
 
