@@ -2,7 +2,7 @@ export type Platform = 'twitter' | 'instagram' | 'tiktok' | 'linkedin' | 'youtub
 export type TrendVelocity = 'rising' | 'stable' | 'declining';
 export type UpdateType = 'algorithm' | 'feature' | 'policy' | 'monetization' | 'analytics';
 export type Impact = 'positive' | 'negative' | 'neutral';
-export type Country = 'nigeria' | 'uk' | 'us' | 'ca' | 'au';
+export type Country = 'ng' | 'uk' | 'us' | 'ca' | 'au';
 
 // Trending Topics
 export interface TrendingTopic {

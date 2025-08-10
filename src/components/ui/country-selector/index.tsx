@@ -28,14 +28,7 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
   const countries: CountryOption[] = [
     { code: 'us', name: 'United States', flag: '🇺🇸', popular: true },
     { code: 'uk', name: 'United Kingdom', flag: '🇬🇧', popular: true },
-    { code: 'nigeria', name: 'Nigeria', flag: '🇳🇬', popular: true },
-    { code: 'ca', name: 'Canada', flag: '🇨🇦', popular: true },
-    { code: 'au', name: 'Australia', flag: '🇦🇺' },
-    { code: 'de', name: 'Germany', flag: '🇩🇪' },
-    { code: 'fr', name: 'France', flag: '🇫🇷' },
-    { code: 'jp', name: 'Japan', flag: '🇯🇵' },
-    { code: 'br', name: 'Brazil', flag: '🇧🇷' },
-    { code: 'in', name: 'India', flag: '🇮🇳' }
+    { code: 'ng', name: 'Nigeria', flag: '🇳🇬', popular: true },
   ];
 
   const selectedCountryData = countries.find(c => c.code === selectedCountry);
@@ -133,28 +126,12 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
             animate="visible"
             exit="exit"
             className="
-              absolute top-full mt-2 left-0 w-80 bg-white rounded-lg shadow-lg
+              absolute top-full mt-2 -left-5 w-fit bg-white rounded-lg shadow-lg
               border border-gray-200 z-50 overflow-hidden
             "
           >
             {/* Search Input */}
-            <div className="p-3 border-b border-gray-100">
-              <div className="relative">
-                <BsSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search countries..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  className="
-                    w-full pl-10 pr-4 py-2 bg-gray-100 rounded-md text-sm
-                    focus:outline-none focus:ring-2 focus:ring-primary-500 focus:bg-white
-                    transition-all duration-200
-                  "
-                />
-              </div>
-            </div>
-
+          
             {/* Popular Section */}
             {!searchQuery && (
               <div className="p-3 border-b border-gray-100">
@@ -193,49 +170,6 @@ const CountrySelector: React.FC<CountrySelectorProps> = ({
                 </div>
               </div>
             )}
-
-            {/* All Countries */}
-            <div className="max-h-60 overflow-y-auto p-3">
-              <h4 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-2">
-                {searchQuery ? 'Search Results' : 'All Countries'}
-              </h4>
-              <div className="space-y-1">
-                {filteredCountries.map((country, index) => (
-                  <motion.button
-                    key={country.code}
-                    variants={itemVariants}
-                    initial="hidden"
-                    animate="visible"
-                    transition={{ delay: index * 0.03 }}
-                    onClick={() => handleCountrySelect(country.code)}
-                    className={`
-                      w-full flex items-center space-x-3 px-3 py-2 rounded-md
-                      transition-all duration-150 text-left
-                      ${selectedCountry === country.code
-                        ? 'bg-primary-100 text-primary-700'
-                        : 'hover:bg-gray-100 text-gray-700'
-                      }
-                    `}
-                  >
-                    <span className="text-xl">{country.flag}</span>
-                    <span className="text-sm font-medium">{country.name}</span>
-                    {selectedCountry === country.code && (
-                      <motion.div
-                        initial={{ scale: 0 }}
-                        animate={{ scale: 1 }}
-                        className="ml-auto w-2 h-2 bg-primary-600 rounded-full"
-                      />
-                    )}
-                  </motion.button>
-                ))}
-              </div>
-              
-              {filteredCountries.length === 0 && (
-                <div className="text-center py-4 text-gray-500 text-sm">
-                  No countries found
-                </div>
-              )}
-            </div>
           </motion.div>
         )}
       </AnimatePresence>
