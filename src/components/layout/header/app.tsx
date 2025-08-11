@@ -203,54 +203,54 @@ const AppHeader: React.FC<AppHeaderProps> = ({ className = "" }) => {
             const active = isActive(item.path);
 
             return (
-              <motion.a
-                key={item.id}
-                href={item.path}
-                variants={itemVariants}
-                className={`
+              <Link key={item.id} to={item.path}>
+                <motion.div
+                  variants={itemVariants}
+                  className={`
                   relative flex flex-col items-center justify-center py-2 px-3
                   rounded-xl transition-all duration-200 min-w-[60px]
                   ${active ? "text-primary-600" : "text-gray-600"}
                 `}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {/* Background for active state */}
-                {active && (
-                  <motion.div
-                    variants={activeIndicatorVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute inset-0 bg-primary-100 rounded-xl"
-                  />
-                )}
-
-                <Icon
-                  className={`w-6 h-6 mb-1 relative z-10 ${
-                    active ? "text-primary-600" : ""
-                  }`}
-                />
-                <span
-                  className={`text-xs font-medium relative z-10 ${
-                    active ? "text-primary-600" : ""
-                  }`}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  {item.label.split(" ")[0]}{" "}
-                  {/* Show only first word on mobile */}
-                </span>
+                  {/* Background for active state */}
+                  {active && (
+                    <motion.div
+                      variants={activeIndicatorVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="absolute inset-0 bg-primary-100 rounded-xl"
+                    />
+                  )}
 
-                {/* Active dot indicator */}
-                {active && (
-                  <motion.div
-                    variants={activeIndicatorVariants}
-                    initial="initial"
-                    animate="animate"
-                    exit="exit"
-                    className="absolute -top-1 w-1 h-1 bg-primary-600 rounded-full"
+                  <Icon
+                    className={`w-6 h-6 mb-1 relative z-10 ${
+                      active ? "text-primary-600" : ""
+                    }`}
                   />
-                )}
-              </motion.a>
+                  <span
+                    className={`text-xs font-medium relative z-10 ${
+                      active ? "text-primary-600" : ""
+                    }`}
+                  >
+                    {item.label.split(" ")[0]}{" "}
+                    {/* Show only first word on mobile */}
+                  </span>
+
+                  {/* Active dot indicator */}
+                  {active && (
+                    <motion.div
+                      variants={activeIndicatorVariants}
+                      initial="initial"
+                      animate="animate"
+                      exit="exit"
+                      className="absolute -top-1 w-1 h-1 bg-primary-600 rounded-full"
+                    />
+                  )}
+                </motion.div>
+              </Link>
             );
           })}
 

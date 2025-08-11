@@ -1,14 +1,16 @@
-import {
-  HomePage,
-  AboutPage,
-  LoginPage,
-  SignupPage,
-  DashboardPage,
-  ContentAnalysisPage,
-} from "@buffbyte/pages";
+import { lazy } from 'react';
 import type { RouteConfig } from "@buffbyte/types";
-import ScriptAnalysisPage from "../pages/app/script-analysis";
-import TeleprompterPage from "../pages/app/teleprompter";
+
+// Lazy load all page components for code splitting
+const HomePage = lazy(() => import("../pages/landing/HomePage"));
+const AboutPage = lazy(() => import("../pages/landing/AboutPage"));
+const LoginPage = lazy(() => import("../pages/auth/LoginPage"));
+const SignupPage = lazy(() => import("../pages/auth/SignupPage"));
+const DashboardPage = lazy(() => import("../pages/app/dashboard"));
+const ContentAnalysisPage = lazy(() => import("../pages/app/content-analysis"));
+const ScriptAnalysisPage = lazy(() => import("../pages/app/script-analysis"));
+const TeleprompterPage = lazy(() => import("../pages/app/teleprompter"));
+const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
 export const routes: RouteConfig[] = [
   {
@@ -66,12 +68,12 @@ export const routes: RouteConfig[] = [
     requiresAuth: true,
     exact: true,
     title: "Teleprompter - BuffByte",
+  },
+  {
+    path: "*",
+    component: NotFoundPage,
+    requiresAuth: false,
+    exact: false,
+    title: "404 - Page Not Found",
   }
-  //   {
-  //     path: '*',
-  //     component: NotFoundPage,
-  //     requiresAuth: false,
-  //     exact: false,
-  //     title: '404 - Page Not Found'
-  //   }
 ];

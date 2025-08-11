@@ -8,6 +8,7 @@ import {
   FiBarChart
 } from 'react-icons/fi';
 import { HiSparkles } from 'react-icons/hi2';
+import { useNavigate } from 'react-router-dom';
 
 interface QuickAction {
   id: string;
@@ -42,7 +43,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       description: 'Get instant engagement predictions and optimization tips',
       icon: FiBarChart,
       gradient: 'from-blue-500 to-indigo-600',
-      href: '/content-analysis',
+      href: '/app/content-analysis',
       badge: 'Popular',
       stats: {
         label: 'Avg boost',
@@ -56,7 +57,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       description: 'Perfect your video scripts for maximum impact',
       icon: FiEdit3,
       gradient: 'from-emerald-500 to-teal-600',
-      href: '/script-analysis',
+      href: '/app/script-analysis',
       stats: {
         label: 'Success rate',
         value: 87,
@@ -77,6 +78,8 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
       }
     }
   ];
+
+  const navigate = useNavigate();
 
   const actionItems = actions || defaultActions;
 
@@ -132,7 +135,7 @@ const QuickActionsSection: React.FC<QuickActionsSectionProps> = ({
     if (action.onClick) {
       action.onClick();
     } else if (action.href) {
-      window.location.href = action.href;
+      navigate(action.href);
     }
   };
 
