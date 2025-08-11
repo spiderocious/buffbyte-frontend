@@ -1,8 +1,8 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { createElement, Suspense } from 'react';
+import React, { createElement, Suspense } from 'react';
 import { routes } from './routes';
 import { ProtectedRoute, ErrorBoundary } from '@buffbyte/components';
-import LoadingSpinner from '../components/LoadingSpinner';
+import RouteLoading from '../components/RouteLoading';
 
 // Separate regular routes from the catch-all route
 const regularRoutes = routes.filter(route => route.path !== '*');
@@ -13,7 +13,7 @@ const wrapComponent = (route: typeof routes[0]) => {
   const LazyComponent = route.component;
   
   let wrappedElement: React.ReactElement = createElement(Suspense, {
-    fallback: createElement(LoadingSpinner),
+    fallback: createElement(RouteLoading, { route: route.path }),
     children: createElement(LazyComponent)
   });
   
