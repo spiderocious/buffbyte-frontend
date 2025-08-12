@@ -38,23 +38,7 @@ const defaultSettings: TeleprompterSettings = {
   countdown: 3
 };
 
-const sampleScript = `Hey everyone! Today I want to share something that completely changed how I approach morning routines.
-
-For the longest time, I was that person hitting snooze five times, rushing through breakfast, and arriving at work already stressed. Sound familiar?
-
-Then I discovered this Japanese concept called "ikigai" - your reason for being. But here's the thing - most people think ikigai is about finding your life purpose. That's actually a Western misinterpretation.
-
-The real ikigai is much simpler. It's about finding small moments of meaning in your daily routine. Like savoring your coffee instead of chugging it. Taking three deep breaths before checking emails.
-
-I started with just one tiny change: setting my alarm 10 minutes earlier and using those 10 minutes to write down three things I'm grateful for. No phone, no distractions, just me and a notebook.
-
-After 30 days, something shifted. I wasn't just more productive - I was calmer, more focused, and honestly? Happier.
-
-The best part? It takes literally 10 minutes. That's less time than you spend scrolling social media while drinking your coffee.
-
-So here's my challenge for you: pick one tiny routine change you can make tomorrow morning. Just one. Try it for a week and let me know how it goes in the comments.
-
-What's your current morning routine like? I'd love to hear about it!`;
+const sampleScript = `This is a placeholder for your script, you can click to edit!`;
 
 const TeleprompterPage: React.FC = () => {
   const [settings, setSettings] = useState<TeleprompterSettings>(defaultSettings);
