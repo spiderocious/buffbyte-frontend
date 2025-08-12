@@ -110,7 +110,7 @@ const AnalysisPanel: React.FC<AnalysisPanelProps> = ({
             value={content}
             onChange={onContentChange}
             placeholder="Paste your content here to analyze engagement potential, get optimization tips, and predict performance across platforms..."
-            maxChars={500}
+            maxChars={5000}
             showWordCount={true}
             disabled={analyzing}
           />
