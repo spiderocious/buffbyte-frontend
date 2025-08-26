@@ -12,6 +12,9 @@ const ScriptAnalysisPage = lazy(() => import("../pages/app/script-analysis"));
 const TeleprompterPage = lazy(() => import("../pages/app/teleprompter"));
 const NotFoundPage = lazy(() => import("../pages/NotFoundPage"));
 
+const PrivacyPolicy = lazy(() => import("../pages/PrivacyPolicy"));
+const TermsOfService = lazy(() => import("../pages/TermsOfService"));
+
 export const routes: RouteConfig[] = [
   {
     path: "/",
@@ -47,6 +50,21 @@ export const routes: RouteConfig[] = [
     requiresAuth: true,
     exact: true,
     title: "Dashboard - BuffByte",
+  },
+
+  {
+    path: "/privacy-policy",
+    component: PrivacyPolicy,
+    requiresAuth: false,
+    exact: true,
+    title: "Privacy Policy - BuffByte",
+  },
+  {
+    path: "/terms-of-service",
+    component: TermsOfService,
+    requiresAuth: false,
+    exact: true,
+    title: "Terms of Service - BuffByte",
   },
   {
     path: "/app/content-analysis",

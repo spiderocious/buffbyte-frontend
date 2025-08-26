@@ -6,3 +6,6 @@ export { default as SignupPage } from './auth/SignupPage';
 export { default as DashboardPage } from './app/dashboard';
 export { default as ContentAnalysisPage } from './app/content-analysis'; 
 export { default as NotFoundPage } from './NotFoundPage';
+
+export { default as PrivacyPolicy } from './PrivacyPolicy';
+export { default as TermsOfService } from './TermsOfService';
