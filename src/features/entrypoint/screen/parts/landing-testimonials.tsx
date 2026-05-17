@@ -10,13 +10,37 @@ const TESTIMONIALS = [
 
 export function LandingTestimonials() {
   return (
-    <section style={{ background: '#0D0D0C', padding: 'clamp(64px, 10vw, 120px) 20px', position: 'relative', overflow: 'hidden' }}>
-      <div style={{ position: 'absolute', inset: 0, backgroundImage: 'url(/landing/bg-texture.png)', backgroundSize: '400px 400px', opacity: 0.3, pointerEvents: 'none' }} />
+    <section
+      style={{
+        background: 'var(--paper-deep)',
+        padding: 'clamp(64px, 10vw, 120px) 20px',
+        position: 'relative',
+        overflow: 'hidden',
+      }}
+    >
+      <div
+        style={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: 'url(/landing/bg-texture.png)',
+          backgroundSize: '400px 400px',
+          opacity: 0.05,
+          pointerEvents: 'none',
+        }}
+      />
 
       <div style={{ maxWidth: 1200, margin: '0 auto', position: 'relative', zIndex: 1 }}>
-        <motion.div initial="hidden" whileInView="visible" viewport={{ once: true }} variants={fadeUp} style={{ textAlign: 'center', marginBottom: 56 }}>
-          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12 }}>Testimonials</p>
-          <h2 style={{ fontSize: 'clamp(26px, 4.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.028em', lineHeight: 1.1 }}>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          variants={fadeUp}
+          style={{ textAlign: 'center', marginBottom: 56 }}
+        >
+          <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12 }}>
+            Testimonials
+          </p>
+          <h2 style={{ fontSize: 'clamp(26px, 4.5vw, 48px)', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.028em', lineHeight: 1.1 }}>
             Creators are already winning
           </h2>
         </motion.div>
@@ -30,31 +54,55 @@ export function LandingTestimonials() {
               viewport={{ once: true, margin: '-40px' }}
               custom={i * 0.12}
               variants={fadeUp}
-              whileHover={{ y: -4, boxShadow: `0 16px 48px ${color}20` }}
+              whileHover={{ y: -4, boxShadow: `0 16px 48px ${color}18` }}
               style={{
-                background: 'rgba(255,255,255,0.03)',
-                border: '1px solid rgba(255,255,255,0.07)',
+                background: 'var(--sheet)',
+                border: '1px solid var(--hair)',
                 borderRadius: 16,
                 padding: 'clamp(24px, 3vw, 32px)',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: 20,
                 transition: 'box-shadow 300ms',
+                boxShadow: 'var(--shade-pop)',
               }}
             >
               <div style={{ display: 'flex', gap: 3 }}>
                 {[...Array(5)].map((_, j) => <Star key={j} size={13} fill="#F59E0B" color="#F59E0B" />)}
               </div>
-              <p style={{ fontSize: 'clamp(13.5px, 1.6vw, 15px)', color: 'rgba(255,255,255,0.7)', lineHeight: 1.72, margin: 0, fontStyle: 'italic' }}>
+              <p
+                style={{
+                  fontSize: 'clamp(13.5px, 1.6vw, 15px)',
+                  color: 'var(--ink-2)',
+                  lineHeight: 1.72,
+                  margin: 0,
+                  fontStyle: 'italic',
+                }}
+              >
                 "{quote}"
               </p>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 'auto' }}>
-                <div style={{ width: 40, height: 40, borderRadius: '50%', background: `${color}30`, border: `2px solid ${color}50`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color, flexShrink: 0 }}>
+                <div
+                  style={{
+                    width: 40,
+                    height: 40,
+                    borderRadius: '50%',
+                    background: `${color}18`,
+                    border: `2px solid ${color}40`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    fontSize: 12,
+                    fontWeight: 700,
+                    color,
+                    flexShrink: 0,
+                  }}
+                >
                   {initials}
                 </div>
                 <div>
-                  <p style={{ fontSize: 13.5, fontWeight: 700, color: '#fff', margin: 0, letterSpacing: '-0.01em' }}>{name}</p>
-                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.38)', margin: 0, marginTop: 2 }}>{role}</p>
+                  <p style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--ink)', margin: 0, letterSpacing: '-0.01em' }}>{name}</p>
+                  <p style={{ fontSize: 12, color: 'var(--ink-4)', margin: 0, marginTop: 2 }}>{role}</p>
                 </div>
               </div>
             </motion.div>

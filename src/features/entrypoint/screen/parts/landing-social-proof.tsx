@@ -26,14 +26,48 @@ export function LandingSocialProof() {
   const doubled = [...CREATORS, ...CREATORS];
 
   return (
-    <section style={{ background: '#0D0D0C', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '28px 0', overflow: 'hidden' }}>
-      <p style={{ textAlign: 'center', fontSize: 11.5, fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 20, padding: '0 20px' }}>
+    <section
+      style={{
+        background: 'var(--sheet)',
+        borderTop: '1px solid var(--hair)',
+        borderBottom: '1px solid var(--hair)',
+        padding: '28px 0',
+        overflow: 'hidden',
+      }}
+    >
+      <p
+        style={{
+          textAlign: 'center',
+          fontSize: 11,
+          fontWeight: 700,
+          color: 'var(--ink-4)',
+          letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          marginBottom: 20,
+          padding: '0 20px',
+        }}
+      >
         Trusted by creators worldwide
       </p>
-      <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)' }}>
+      <div
+        style={{
+          overflow: 'hidden',
+          maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)',
+        }}
+      >
         <div ref={trackRef} style={{ display: 'flex', gap: 56, whiteSpace: 'nowrap', willChange: 'transform' }}>
           {doubled.map((name, i) => (
-            <span key={i} style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '-0.01em', flexShrink: 0 }}>
+            <span
+              key={i}
+              style={{
+                fontSize: 14,
+                fontWeight: 600,
+                color: 'var(--ink-4)',
+                letterSpacing: '-0.01em',
+                flexShrink: 0,
+              }}
+            >
               {name}
             </span>
           ))}

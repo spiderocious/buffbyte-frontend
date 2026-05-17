@@ -4,9 +4,9 @@ import { fadeUp } from './animations';
 
 const STATS = [
   { value: '94%', label: 'Average content score uplift', num: 94, suffix: '%' },
-  { value: '10×',  label: 'Faster than manual review',  num: 10, suffix: '×'  },
+  { value: '10×',  label: 'Faster than manual review',   num: 10, suffix: '×'  },
   { value: '3',    label: 'Powerful tools, one platform', num: 3,  suffix: ''   },
-  { value: '50k+', label: 'Pieces of content analyzed', num: 50, suffix: 'k+' },
+  { value: '50k+', label: 'Pieces of content analyzed',  num: 50, suffix: 'k+' },
 ];
 
 function AnimatedNumber({ num, suffix, inView }: { num: number; suffix: string; inView: boolean }) {
@@ -21,7 +21,6 @@ function AnimatedNumber({ num, suffix, inView }: { num: number; suffix: string; 
 
     function tick(now: number) {
       const progress = Math.min((now - start) / duration, 1);
-      // ease out cubic
       const eased = 1 - Math.pow(1 - progress, 3);
       el.textContent = Math.round(eased * num) + suffix;
       if (progress < 1) {
@@ -45,17 +44,17 @@ export function LandingStats() {
   return (
     <div ref={ref}>
       {inView && (
-        <section style={{ background: '#0A0A09', padding: 'clamp(48px, 8vw, 80px) 20px' }}>
+        <section style={{ background: 'var(--paper)', padding: 'clamp(48px, 8vw, 80px) 20px' }}>
           <div style={{ maxWidth: 1200, margin: '0 auto' }}>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: 'repeat(auto-fit, minmax(160px, 1fr))',
                 gap: 2,
-                background: 'rgba(255,255,255,0.06)',
+                background: 'var(--hair)',
                 borderRadius: 16,
                 overflow: 'hidden',
-                border: '1px solid rgba(255,255,255,0.06)',
+                border: '1px solid var(--hair)',
               }}
             >
               {STATS.map(({ value, label, num, suffix }, i) => (
@@ -66,14 +65,20 @@ export function LandingStats() {
                   viewport={{ once: true, margin: '-60px' }}
                   custom={i * 0.1}
                   variants={fadeUp}
-                  style={{ padding: 'clamp(28px, 4vw, 40px) clamp(20px, 3vw, 32px)', background: '#0A0A09', display: 'flex', flexDirection: 'column', gap: 8 }}
+                  style={{
+                    padding: 'clamp(28px, 4vw, 40px) clamp(20px, 3vw, 32px)',
+                    background: 'var(--sheet)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: 8,
+                  }}
                 >
                   <span
                     style={{
                       fontSize: 'clamp(36px, 5vw, 48px)',
                       fontWeight: 800,
                       letterSpacing: '-0.03em',
-                      background: 'linear-gradient(135deg, #fff 0%, rgba(255,255,255,0.6) 100%)',
+                      background: 'linear-gradient(135deg, var(--accent) 0%, var(--accent-deep) 100%)',
                       WebkitBackgroundClip: 'text',
                       WebkitTextFillColor: 'transparent',
                       backgroundClip: 'text',
@@ -82,7 +87,14 @@ export function LandingStats() {
                   >
                     <AnimatedNumber num={num} suffix={suffix} inView={inView} />
                   </span>
-                  <span style={{ fontSize: 'clamp(12px, 1.5vw, 13.5px)', color: 'rgba(255,255,255,0.4)', fontWeight: 500, lineHeight: 1.4 }}>
+                  <span
+                    style={{
+                      fontSize: 'clamp(12px, 1.5vw, 13.5px)',
+                      color: 'var(--ink-3)',
+                      fontWeight: 500,
+                      lineHeight: 1.4,
+                    }}
+                  >
                     {label}
                   </span>
                 </motion.div>

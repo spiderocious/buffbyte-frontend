@@ -10,10 +10,11 @@ import { LandingTestimonials } from './parts/landing-testimonials';
 import { LandingPricing } from './parts/landing-pricing';
 import { LandingCtaBanner } from './parts/landing-cta-banner';
 import { LandingFooter } from './parts/landing-footer';
+import './style.css';
 
 export function LandingPage() {
   return (
-    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: '#0A0A09' }}>
+    <div style={{ fontFamily: "'Inter', system-ui, sans-serif", background: 'var(--paper)' }}>
       <LandingNav />
       <LandingHero />
       <LandingSocialProof />

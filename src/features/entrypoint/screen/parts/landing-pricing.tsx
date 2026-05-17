@@ -17,7 +17,7 @@ export function LandingPricing() {
     <section
       id="pricing"
       style={{
-        background: "#0A0A09",
+        background: 'var(--sheet)',
         padding: "clamp(64px, 10vw, 120px) 20px",
       }}
     >
@@ -45,7 +45,7 @@ export function LandingPricing() {
             style={{
               fontSize: "clamp(26px, 4.5vw, 48px)",
               fontWeight: 800,
-              color: "#fff",
+              color: 'var(--ink)',
               letterSpacing: "-0.028em",
               lineHeight: 1.1,
               marginBottom: 16,
@@ -56,13 +56,13 @@ export function LandingPricing() {
           <p
             style={{
               fontSize: "clamp(15px, 2vw, 17px)",
-              color: "rgba(255,255,255,0.45)",
+              color: 'var(--ink-3)',
               maxWidth: 400,
               margin: "0 auto",
               lineHeight: 1.6,
             }}
           >
-            Start free. 
+            Start free.
           </p>
         </motion.div>
 
@@ -75,7 +75,6 @@ export function LandingPricing() {
             margin: "0 auto",
           }}
         >
-          {/* Free */}
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -83,12 +82,13 @@ export function LandingPricing() {
             custom={0}
             variants={fadeUp}
             style={{
-              background: "rgba(255,255,255,0.03)",
-              border: "1px solid rgba(255,255,255,0.08)",
+              background: 'var(--paper)',
+              border: '1px solid var(--hair)',
               borderRadius: 20,
               padding: "clamp(28px, 4vw, 36px) clamp(24px, 3vw, 32px)",
               width: 500,
               maxWidth: "100%",
+              boxShadow: 'var(--shade-pop)',
             }}
           >
             <p
@@ -97,7 +97,7 @@ export function LandingPricing() {
                 fontWeight: 700,
                 letterSpacing: "0.12em",
                 textTransform: "uppercase",
-                color: "rgba(255,255,255,0.4)",
+                color: 'var(--ink-4)',
                 marginBottom: 8,
               }}
             >
@@ -115,20 +115,20 @@ export function LandingPricing() {
                 style={{
                   fontSize: "clamp(40px, 5vw, 48px)",
                   fontWeight: 800,
-                  color: "#fff",
+                  color: 'var(--ink)',
                   letterSpacing: "-0.03em",
                 }}
               >
                 $0
               </span>
-              <span style={{ fontSize: 14, color: "rgba(255,255,255,0.4)" }}>
+              <span style={{ fontSize: 14, color: 'var(--ink-4)' }}>
                 /month
               </span>
             </div>
             <p
               style={{
                 fontSize: 13.5,
-                color: "rgba(255,255,255,0.4)",
+                color: 'var(--ink-4)',
                 marginBottom: 28,
               }}
             >
@@ -141,13 +141,13 @@ export function LandingPricing() {
                 textAlign: "center",
                 padding: "12px 20px",
                 borderRadius: 10,
-                background: "rgba(255,255,255,0.07)",
-                border: "1px solid rgba(255,255,255,0.12)",
+                background: 'var(--accent)',
                 color: "#fff",
-                fontWeight: 600,
+                fontWeight: 700,
                 fontSize: 14,
                 textDecoration: "none",
                 marginBottom: 28,
+                boxShadow: `0 4px 16px rgba(83,58,253,0.28)`,
               }}
             >
               Get started free
@@ -167,16 +167,25 @@ export function LandingPricing() {
                   key={b}
                   style={{ display: "flex", alignItems: "flex-start", gap: 10 }}
                 >
-                  <Check
-                    size={14}
-                    color="rgba(255,255,255,0.4)"
-                    strokeWidth={2.5}
-                    style={{ flexShrink: 0, marginTop: 2 }}
-                  />
+                  <span
+                    style={{
+                      width: 18,
+                      height: 18,
+                      borderRadius: '50%',
+                      background: 'var(--accent-tint)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      flexShrink: 0,
+                      marginTop: 1,
+                    }}
+                  >
+                    <Check size={10} color="var(--accent)" strokeWidth={2.5} />
+                  </span>
                   <span
                     style={{
                       fontSize: "clamp(12.5px, 1.4vw, 13.5px)",
-                      color: "rgba(255,255,255,0.5)",
+                      color: 'var(--ink-2)',
                     }}
                   >
                     {b}
@@ -185,7 +194,6 @@ export function LandingPricing() {
               ))}
             </ul>
           </motion.div>
-
         </div>
       </div>
     </section>

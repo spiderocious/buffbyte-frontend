@@ -34,7 +34,6 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
           scrollTrigger: { trigger: el, start: 'top 85%', once: true },
         },
       );
-      // Continuous subtle float
       gsap.to(el, {
         y: -12, duration: 4 + index * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: index * 0.3,
       });
@@ -50,10 +49,9 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
         alignItems: 'center',
         gap: 'clamp(40px, 6vw, 80px)',
         padding: 'clamp(48px, 8vw, 80px) 0',
-        borderBottom: '1px solid rgba(255,255,255,0.05)',
+        borderBottom: '1px solid var(--hair-soft)',
       }}
     >
-      {/* Copy — order swaps on desktop via CSS order */}
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -67,8 +65,8 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
             display: 'inline-flex',
             alignItems: 'center',
             gap: 6,
-            background: `${accent}18`,
-            border: `1px solid ${accent}40`,
+            background: `${accent}14`,
+            border: `1px solid ${accent}30`,
             borderRadius: 9999,
             padding: '5px 12px',
             marginBottom: 20,
@@ -80,7 +78,7 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
           style={{
             fontSize: 'clamp(22px, 3.5vw, 40px)',
             fontWeight: 800,
-            color: '#fff',
+            color: 'var(--ink)',
             letterSpacing: '-0.024em',
             lineHeight: 1.1,
             marginBottom: 16,
@@ -88,7 +86,7 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
         >
           {title}
         </h2>
-        <p style={{ fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'rgba(255,255,255,0.5)', lineHeight: 1.7, marginBottom: 28 }}>
+        <p style={{ fontSize: 'clamp(14px, 1.6vw, 16px)', color: 'var(--ink-3)', lineHeight: 1.7, marginBottom: 28 }}>
           {description}
         </p>
         <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
@@ -99,8 +97,8 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
                   width: 20,
                   height: 20,
                   borderRadius: '50%',
-                  background: `${accent}20`,
-                  border: `1px solid ${accent}40`,
+                  background: `${accent}14`,
+                  border: `1px solid ${accent}30`,
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
@@ -110,26 +108,33 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
               >
                 <Check size={10} color={accent} strokeWidth={2.5} />
               </span>
-              <span style={{ fontSize: 'clamp(13px, 1.5vw, 14.5px)', color: 'rgba(255,255,255,0.65)', lineHeight: 1.55 }}>{b}</span>
+              <span style={{ fontSize: 'clamp(13px, 1.5vw, 14.5px)', color: 'var(--ink-2)', lineHeight: 1.55 }}>{b}</span>
             </li>
           ))}
         </ul>
       </motion.div>
 
-      {/* Image */}
       <div ref={imgRef} style={{ order: reverse ? 1 : 2, position: 'relative', opacity: 0 }}>
         <div
           style={{
             position: 'absolute',
             inset: -40,
-            background: `radial-gradient(ellipse at center, ${accent}28 0%, transparent 70%)`,
+            background: `radial-gradient(ellipse at center, ${accent}14 0%, transparent 70%)`,
             pointerEvents: 'none',
           }}
         />
         <img
           src={imageSrc}
           alt={imageAlt}
-          style={{ width: '100%', height: 'auto', position: 'relative', zIndex: 1, borderRadius: 16, filter: `drop-shadow(0 24px 48px ${accent}40)` }}
+          style={{
+            width: '100%',
+            height: 'auto',
+            position: 'relative',
+            zIndex: 1,
+            borderRadius: 16,
+            filter: `drop-shadow(0 24px 48px ${accent}28)`,
+            border: '1px solid var(--hair)',
+          }}
         />
       </div>
     </div>
@@ -138,7 +143,7 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
 
 export function LandingFeatures() {
   return (
-    <section id="features" style={{ background: '#0A0A09', padding: 'clamp(48px, 8vw, 80px) 20px 0' }}>
+    <section id="features" style={{ background: 'var(--paper)', padding: 'clamp(48px, 8vw, 80px) 20px 0' }}>
       <div style={{ maxWidth: 1200, margin: '0 auto' }}>
         <motion.div
           initial="hidden"
@@ -150,10 +155,10 @@ export function LandingFeatures() {
           <p style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.18em', textTransform: 'uppercase', color: 'var(--accent)', marginBottom: 12 }}>
             Features
           </p>
-          <h2 style={{ fontSize: 'clamp(26px, 4.5vw, 48px)', fontWeight: 800, color: '#fff', letterSpacing: '-0.028em', lineHeight: 1.1, marginBottom: 16 }}>
+          <h2 style={{ fontSize: 'clamp(26px, 4.5vw, 48px)', fontWeight: 800, color: 'var(--ink)', letterSpacing: '-0.028em', lineHeight: 1.1, marginBottom: 16 }}>
             Everything you need to win online
           </h2>
-          <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', color: 'rgba(255,255,255,0.45)', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
+          <p style={{ fontSize: 'clamp(15px, 2vw, 17px)', color: 'var(--ink-3)', maxWidth: 520, margin: '0 auto', lineHeight: 1.6 }}>
             Three interconnected tools that cover the full creator workflow — from idea to delivery.
           </p>
         </motion.div>
