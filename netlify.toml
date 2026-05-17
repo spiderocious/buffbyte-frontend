@@ -1,5 +1,0 @@
-# SPA (Single Page Application) redirect rules
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
