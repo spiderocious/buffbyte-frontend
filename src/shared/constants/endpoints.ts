@@ -1,12 +1,12 @@
 export const EP = {
   AUTH: {
-    LOGIN:    '/v1/auth/login',
-    REGISTER: '/v1/auth/register',
+    LOGIN:    '/auth/login',
+    REGISTER: '/auth/register',
   },
   APP: {
-    DASHBOARD:     '/v1/app/dashboard',
-    CONTENT_CHATS: '/v1/app/content/chats',
-    VIDEO_CHATS:   '/v1/app/video/chats',
-    ANALYZE:       '/v1/app/analyze',
+    DASHBOARD:     '/app/dashboard',
+    CONTENT_CHATS: '/app/content/chats',
+    VIDEO_CHATS:   '/app/video/chats',
+    ANALYZE:       '/app/analyze',
   },
 } as const;
