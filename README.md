@@ -1,73 +1,177 @@
-# React + TypeScript + Vite
+# BuffByte
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI-powered content optimization for creators. Analyze posts, score scripts, and deliver with a built-in teleprompter — all in one place.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## What it does
 
-## React Compiler
+BuffByte gives creators three interconnected tools:
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Content Analysis** — Paste any post, caption, or article. Get scored across 14 AI dimensions: virality potential, sentiment, brand voice, readability, platform fit, and more.
+- **Script Analysis** — Upload a video or podcast script. Get hook strength scoring, pacing analysis, retention prediction, and a one-click handoff to the teleprompter.
+- **AI Teleprompter** — Variable-speed auto-scroll with real-time WPM control, optimized for on-camera delivery.
 
-## Expanding the ESLint configuration
+---
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Tech stack
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+| Layer | Choice |
+|---|---|
+| Framework | React 19 + TypeScript 6 |
+| Build | Vite 8 |
+| Routing | React Router v7 (lazy-loaded screens) |
+| Data fetching | TanStack Query v5 |
+| HTTP | Axios with auth/error interceptors |
+| Animation | Framer Motion v12 + GSAP 3 |
+| Styling | Tailwind CSS v3 + CSS custom properties |
+| Fonts | Inter via `@fontsource/inter` |
+| Deployment | Netlify |
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+---
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Project structure
+
+Follows [Feature-Sliced Design (FSD)](https://feature-sliced.design/). Each feature owns its screens, API hooks, providers, and helpers.
+
+```
+src/
+├── app.routes.tsx          # Route definitions (lazy imports)
+├── app.lazy.ts             # Dynamic imports for code splitting
+├── index.css               # Design tokens + Tailwind base
+│
+├── shared/
+│   ├── constants/          # routes.ts, endpoints.ts
+│   ├── lib/                # api-client.ts, query-client.ts
+│   ├── providers/          # AuthProvider, RootLayout, auth-context
+│   ├── guards/             # AuthGuard, GuestGuard
+│   ├── widgets/            # AppLayout (top-nav, bottom-nav, user-menu)
+│   ├── types/              # Shared API types
+│   └── ui/                 # Design system components
+│
+└── features/
+    ├── entrypoint/         # Landing page (12 animated sections)
+    ├── dashboard/          # Post-login home
+    ├── content-analysis/   # Content scoring flow
+    ├── script-analysis/    # Script scoring flow
+    ├── teleprompter/       # Teleprompter screen
+    └── ui-kit/             # Internal component playground
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Each feature follows the same internal shape:
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
 ```
+feature/
+├── screen/
+│   ├── feature-screen.tsx        # Composer — renders parts
+│   └── parts/                    # One file per section/widget
+├── api/                          # TanStack Query hooks
+├── providers/                    # Context + provider
+└── helpers/                      # Pure utility functions
+```
+
+---
+
+## Path aliases
+
+Configured in [vite.config.ts](vite.config.ts):
+
+| Alias | Resolves to |
+|---|---|
+| `@app` | `src/` |
+| `@features` | `src/features/` |
+| `@shared` | `src/shared/` |
+| `@ui` | `src/shared/ui/` |
+
+---
+
+## Design system
+
+Tokens live in [src/index.css](src/index.css). Core palette:
+
+```css
+--paper:       #FAF7F2   /* warm cream — page background */
+--sheet:       #FFFDF8   /* near-white — card surface */
+--ink:         #1C1B19   /* warm near-black — primary text */
+--ink-3:       #6B6862   /* muted text */
+--hair:        #DDD7CB   /* borders */
+--accent:      #533AFD   /* violet-blue — primary action */
+--accent-tint: #EAE6FF   /* accent backgrounds */
+--shade-pop:   0 8px 24px -8px rgba(28,27,25,0.12), 0 0 0 1px var(--hair)
+```
+
+Card pattern: `background: var(--sheet); border: 1px solid var(--hair); border-radius: var(--r-card); box-shadow: var(--shade-pop)`
+
+---
+
+## Auth
+
+Token stored in `sessionStorage` as `bb_token`. The Axios client (`src/shared/lib/api-client.ts`) attaches it as `Authorization: Bearer <token>` on every request and handles:
+
+- `401 / 403` — clears session, redirects to `/auth/login`
+- `422` — passes through (caller handles field errors)
+- `429` — toast with reset time if provided
+- Network errors — "Check your connection" toast
+
+Route protection:
+- `AuthGuard` — redirects unauthenticated users to login
+- `GuestGuard` — redirects authenticated users away from auth pages
+
+---
+
+## Getting started
+
+```bash
+# Install
+npm install
+
+# Set environment variables
+cp .env.example .env
+# VITE_API_BASE_URL=https://your-api-url
+
+# Dev server
+npm run dev
+
+# Type check
+npx tsc --noEmit
+
+# Lint
+npm run lint
+
+# Production build
+npm run build
+```
+
+---
+
+## Routes
+
+| Path | Screen | Guard |
+|---|---|---|
+| `/` | Landing page | — |
+| `/auth/login` | Login | GuestGuard |
+| `/auth/register` | Register | GuestGuard |
+| `/app/dashboard` | Dashboard | AuthGuard |
+| `/app/content-analysis` | Analysis list | AuthGuard |
+| `/app/content-analysis/new` | New analysis | AuthGuard |
+| `/app/content-analysis/result` | Result view | AuthGuard |
+| `/app/script-analysis` | Script list | AuthGuard |
+| `/app/script-analysis/new` | New script | AuthGuard |
+| `/app/script-analysis/result` | Script result | AuthGuard |
+| `/app/teleprompter` | Teleprompter | AuthGuard |
+
+---
+
+## Landing page images
+
+Stored in `public/landing/`. All images are served as WebP (converted from original PNGs, ~98% smaller). The originals are kept alongside for `<picture>` fallback.
+
+| File | Usage |
+|---|---|
+| `wavy.webp` | Hero section background wave |
+| `hero-product-ui.webp` | Content analysis feature image |
+| `script-analysis-card.webp` | Script analysis feature image |
+| `teleprompter.webp` | Teleprompter feature image |
+| `bg-texture.webp` | Subtle grid texture overlay |
+
+`wavy.webp` and `hero-product-ui.webp` are preloaded via `<link rel="preload">` in `index.html` to eliminate hero LCP delay.
