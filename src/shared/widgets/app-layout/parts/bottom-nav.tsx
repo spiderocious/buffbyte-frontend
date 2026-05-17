@@ -40,7 +40,7 @@ export function BottomNav() {
             display: 'flex',
             alignItems: 'center',
             gap: isActive ? 6 : 0,
-            padding: isActive ? '7px 14px' : '7px 13px',
+            padding: isActive ? '10px 16px' : '10px 15px',
             borderRadius: 9999,
             background: isActive
               ? 'linear-gradient(135deg, #533AFD 0%, #6e5bfd 100%)'
@@ -60,7 +60,7 @@ export function BottomNav() {
               <Icon size={16} strokeWidth={isActive ? 2.2 : 1.8} />
               <span
                 style={{
-                  fontSize: 12,
+                  fontSize: 14,
                   fontWeight: 600,
                   maxWidth: isActive ? 72 : 0,
                   opacity: isActive ? 1 : 0,
