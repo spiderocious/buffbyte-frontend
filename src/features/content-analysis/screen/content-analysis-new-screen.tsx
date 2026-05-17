@@ -1,17 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from '@ui/icons';
 import { ROUTES } from '@shared/constants/routes';
+import type { AnalyzeResult } from '@shared/types/api';
 import { ContentAnalysisProvider } from '../providers/content-analysis-provider';
-import { useContentAnalysis } from '../providers/use-content-analysis';
 import { ContentInput } from './parts/content-input';
 
 function ContentAnalysisNewInner() {
   const navigate = useNavigate();
-  const { selectedAnalysis } = useContentAnalysis();
 
-  if (selectedAnalysis !== null) {
-    void navigate(ROUTES.APP.CONTENT_ANALYSIS, { replace: true });
-    return null;
+  function handleSuccess(result: AnalyzeResult) {
+    void navigate(ROUTES.APP.CONTENT_ANALYSIS_RESULT, { replace: true, state: { result } });
   }
 
   return (
@@ -27,7 +25,7 @@ function ContentAnalysisNewInner() {
         <h1 className="text-[15px] font-semibold tracking-tight m-0">New analysis</h1>
       </header>
       <div className="flex-1">
-        <ContentInput />
+        <ContentInput onSuccess={handleSuccess} />
       </div>
     </div>
   );

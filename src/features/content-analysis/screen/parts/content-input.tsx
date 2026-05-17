@@ -14,7 +14,13 @@ const PLATFORMS = [
   { value: 'linkedin', label: 'LinkedIn', glyph: 'LI' },
 ] as const;
 
-export function ContentInput() {
+import type { AnalyzeResult } from '@shared/types/api';
+
+interface ContentInputProps {
+  readonly onSuccess?: (result: AnalyzeResult) => void;
+}
+
+export function ContentInput({ onSuccess }: ContentInputProps = {}) {
   const { setSelectedAnalysis } = useContentAnalysis();
   const mutation = useAnalyzeContent();
 
@@ -36,6 +42,7 @@ export function ContentInput() {
         setSelectedAnalysis(result);
         setContent('');
         setPlatforms([]);
+        onSuccess?.(result);
       },
       onError: () => { /* toast shown by api-client interceptor */ },
     });

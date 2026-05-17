@@ -52,7 +52,11 @@ function riskColor(risk: string) {
   return 'text-crit';
 }
 
-export function AnalysisResult() {
+interface AnalysisResultProps {
+  readonly onAnalyzeAnother?: () => void;
+}
+
+export function AnalysisResult({ onAnalyzeAnother }: AnalysisResultProps = {}) {
   const { selectedAnalysis, setSelectedAnalysis } = useContentAnalysis();
   const [tab, setTab] = useState<Tab>('overview');
   const [openSections, setOpenSections] = useState<Set<Tab>>(new Set<Tab>(['overview']));
@@ -314,7 +318,12 @@ export function AnalysisResult() {
 
       {/* ── Footer ── */}
       <div className="px-4 md:px-5 py-3 border-t border-hair">
-        <Button variant="secondary" size="sm" onClick={() => setSelectedAnalysis(null)} className="gap-2">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => { setSelectedAnalysis(null); onAnalyzeAnother?.(); }}
+          className="gap-2"
+        >
           <RefreshCw size={13} />
           Analyze another
         </Button>

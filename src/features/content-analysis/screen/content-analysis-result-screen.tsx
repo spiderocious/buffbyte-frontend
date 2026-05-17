@@ -5,28 +5,31 @@ import { ROUTES } from '@shared/constants/routes';
 import { ContentAnalysisProvider } from '../providers/content-analysis-provider';
 import { useContentAnalysis } from '../providers/use-content-analysis';
 import { AnalysisResult } from './parts/analysis-result';
-import type { AnalysisChat } from '@shared/types/api';
+import type { AnalysisChat, AnalyzeResult } from '@shared/types/api';
+
+type ResultState = { chat?: AnalysisChat; result?: AnalyzeResult } | null;
 
 function ContentAnalysisResultInner() {
   const navigate = useNavigate();
   const location = useLocation();
   const { selectedAnalysis, setSelectedAnalysis } = useContentAnalysis();
 
-  const stateChat = (location.state as { chat?: AnalysisChat } | null)?.chat ?? null;
+  const state = location.state as ResultState;
+  const stateData = state?.result ?? state?.chat ?? null;
 
   useEffect(() => {
-    if (stateChat !== null && selectedAnalysis === null) {
-      setSelectedAnalysis(stateChat);
+    if (stateData !== null && selectedAnalysis === null) {
+      setSelectedAnalysis(stateData);
     }
-  }, [stateChat, selectedAnalysis, setSelectedAnalysis]);
+  }, [stateData, selectedAnalysis, setSelectedAnalysis]);
 
   useEffect(() => {
-    if (stateChat === null && selectedAnalysis === null) {
+    if (stateData === null && selectedAnalysis === null) {
       navigate(ROUTES.APP.CONTENT_ANALYSIS, { replace: true });
     }
-  }, [stateChat, selectedAnalysis, navigate]);
+  }, [stateData, selectedAnalysis, navigate]);
 
-  if (stateChat === null && selectedAnalysis === null) return null;
+  if (stateData === null && selectedAnalysis === null) return null;
 
   return (
     <div className="flex flex-col min-h-screen bg-paper">
@@ -41,7 +44,7 @@ function ContentAnalysisResultInner() {
         <h1 className="text-[15px] font-semibold tracking-tight m-0">Analysis result</h1>
       </header>
       <div className="flex-1">
-        <AnalysisResult />
+        <AnalysisResult onAnalyzeAnother={() => navigate(ROUTES.APP.CONTENT_ANALYSIS_NEW)} />
       </div>
     </div>
   );
