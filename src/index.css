@@ -1,0 +1,123 @@
+@import '@fontsource/inter/400.css';
+@import '@fontsource/inter/500.css';
+@import '@fontsource/inter/600.css';
+@import '@fontsource/inter/700.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+   BUFFBYTE — Warm-coach foundation tokens
+   Source of truth: design-system/projects/buffbyte/preview/_foundation.css
+   ============================================================ */
+
+:root {
+  /* ---------- Paper & ink ---------- */
+  --paper:        #FAF7F2;
+  --paper-deep:   #F2EEE6;
+  --paper-edge:   #ECE6DA;
+  --sheet:        #FFFDF8;
+
+  --ink:          #1C1B19;
+  --ink-2:        #3A3835;
+  --ink-3:        #6B6862;
+  --ink-4:        #9A968D;
+  --ink-5:        #C7C2B6;
+
+  --hair:         #DDD7CB;
+  --hair-soft:    #EAE4D6;
+  --rule:         #1C1B19;
+
+  /* ---------- Violet-blue accent ---------- */
+  --accent:       #533AFD;
+  --accent-deep:  #3D27D9;
+  --accent-press: #2B17B4;
+  --accent-tint:  #EAE6FF;
+  --accent-edge:  #C9C0FF;
+  --accent-ink:   #1A0F86;
+
+  /* ---------- Semantic ---------- */
+  --warn:         #C28A2C;
+  --warn-deep:    #8E6112;
+  --warn-bg:      #FBF4E5;
+  --warn-edge:    #E6D2A1;
+
+  --crit:         #A0413A;
+  --crit-deep:    #6F2A24;
+  --crit-bg:      #F8ECEA;
+  --crit-edge:    #DDB8B3;
+
+  --good:         var(--accent);
+  --good-bg:      var(--accent-tint);
+  --good-edge:    var(--accent-edge);
+
+  /* ---------- Type ---------- */
+  --sans: 'Inter', system-ui, -apple-system, sans-serif;
+
+  --track-display:  -0.028em;
+  --track-h:        -0.014em;
+  --track-body:      0;
+  --track-label:     0.008em;
+  --track-overline:  0.20em;
+
+  /* ---------- Geometry ---------- */
+  --r-sharp:  2px;
+  --r-soft:   6px;
+  --r-card:   8px;
+  --r-pill:   9999px;
+
+  --gutter: 32px;
+  --gap:    24px;
+
+  /* ---------- Elevation ---------- */
+  --line-1:      0 0 0 1px var(--hair);
+  --line-2:      0 0 0 1px var(--ink);
+  --shade-1:     0 1px 0 rgba(28,27,25,0.03);
+  --shade-pop:   0 8px 24px -8px rgba(28,27,25,0.12), 0 0 0 1px var(--hair);
+  --shade-modal: 0 24px 48px -16px rgba(28,27,25,0.22), 0 0 0 1px var(--hair);
+  --focus-ring:  0 0 0 3px rgba(83,58,253,0.22);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--sans);
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" 1, "lnum" 1;
+  text-rendering: optimizeLegibility;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-deep);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+::selection {
+  background: var(--accent-tint);
+  color: var(--accent-ink);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--ink-5) transparent;
+}
+*::-webkit-scrollbar { width: 8px; height: 8px; }
+*::-webkit-scrollbar-thumb { background: var(--ink-5); border-radius: 999px; }
+*::-webkit-scrollbar-track { background: transparent; }
+
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { display: none; }

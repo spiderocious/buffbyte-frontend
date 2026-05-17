@@ -1,0 +1,44 @@
+import { useEffect, useRef } from 'react';
+import { gsap } from 'gsap';
+
+const CREATORS = [
+  'The Create Lab', 'StudioZero', 'Waveform Media', 'CreatorOps',
+  'PodForge', 'Narrativ', 'ContentStack', 'Launchpad Co.',
+];
+
+export function LandingSocialProof() {
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = trackRef.current;
+    if (!el) return;
+    const totalWidth = el.scrollWidth / 2;
+    const tween = gsap.to(el, {
+      x: -totalWidth,
+      duration: 28,
+      ease: 'none',
+      repeat: -1,
+      modifiers: { x: (x) => `${parseFloat(x) % totalWidth}px` },
+    });
+    return () => { tween.kill(); };
+  }, []);
+
+  const doubled = [...CREATORS, ...CREATORS];
+
+  return (
+    <section style={{ background: '#0D0D0C', borderTop: '1px solid rgba(255,255,255,0.05)', borderBottom: '1px solid rgba(255,255,255,0.05)', padding: '28px 0', overflow: 'hidden' }}>
+      <p style={{ textAlign: 'center', fontSize: 11.5, fontWeight: 600, color: '#FFFFFF', letterSpacing: '0.16em', textTransform: 'uppercase', marginBottom: 20, padding: '0 20px' }}>
+        Trusted by creators worldwide
+      </p>
+      <div style={{ overflow: 'hidden', maskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)', WebkitMaskImage: 'linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%)' }}>
+        <div ref={trackRef} style={{ display: 'flex', gap: 56, whiteSpace: 'nowrap', willChange: 'transform' }}>
+          {doubled.map((name, i) => (
+            <span key={i} style={{ fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.45)', letterSpacing: '-0.01em', flexShrink: 0 }}>
+              {name}
+            </span>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
