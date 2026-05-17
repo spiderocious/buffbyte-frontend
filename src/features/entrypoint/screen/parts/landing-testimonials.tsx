@@ -22,7 +22,7 @@ export function LandingTestimonials() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: 'url(/landing/bg-texture.png)',
+          backgroundImage: 'url(/landing/bg-texture.webp)',
           backgroundSize: '400px 400px',
           opacity: 0.05,
           pointerEvents: 'none',

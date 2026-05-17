@@ -80,7 +80,7 @@ export function LandingHero() {
           left: 0,
           right: 0,
           height: "60%",
-          backgroundImage: "url(/landing/wavy.png)",
+          backgroundImage: "url(/landing/wavy.webp)",
           backgroundSize: "cover",
           backgroundPosition: "center top",
           opacity: 0.6,

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,27 +7,103 @@ import { fadeUp } from './animations';
 
 gsap.registerPlugin(ScrollTrigger);
 
+const PLACEHOLDERS: Record<string, string> = {
+  'hero-product-ui':    'data:image/webp;base64,UklGRmgAAABXRUJQVlA4IFwAAADQAwCdASoUAAsAPzmGuVOvKSWisAgB4CcJQAAMOHyIw6RRSa50SBgA/uDN9Gr96zxAUal6ZXqSwo81vIdIr9j+V02QlEBo87DiKncloUWcSW01yq6Q4S6TIKAAAA==',
+  'script-analysis-card': 'data:image/webp;base64,UklGRmwAAABXRUJQVlA4IGAAAAAQBACdASoUAAsAPzmGuVOvKSWisAgB4CcJYgDImCPuL7q13Va2GflAAAD+4M30av3rPEAVTSx/UXbC1HAjigExlN9bS5o0QF949DJgENyI7b8zhhkhcoWn1ByzSLeAAAA=',
+  'teleprompter':       'data:image/webp;base64,UklGRkQAAABXRUJQVlA4IDgAAAAwAwCdASoUAAsAPzmGuVOvKSWisAgB4CcJYwAAQx8HUevAAP7ZXRSWaZDLQA2+1KkxTBTmmAAAAA==',
+};
+
+interface BlurImageProps {
+  readonly slug: string;
+  readonly alt: string;
+  readonly accent: string;
+  readonly priority?: boolean;
+}
+
+function BlurImage({ slug, alt, accent, priority = false }: BlurImageProps) {
+  const [loaded, setLoaded] = useState(false);
+  const placeholder = PLACEHOLDERS[slug];
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: '100%',
+        aspectRatio: '16 / 9',
+        borderRadius: 16,
+        overflow: 'hidden',
+        border: '1px solid var(--hair)',
+        boxShadow: `0 24px 64px ${accent}20`,
+        background: 'var(--paper-deep)',
+      }}
+    >
+      {/* Blurred placeholder — always present, fades out when real image loads */}
+      {placeholder && (
+        <img
+          src={placeholder}
+          aria-hidden
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            filter: 'blur(24px)',
+            transform: 'scale(1.08)',
+            opacity: loaded ? 0 : 1,
+            transition: 'opacity 500ms ease',
+            pointerEvents: 'none',
+          }}
+        />
+      )}
+
+      {/* Real image — crossfades in when loaded */}
+      <picture>
+        <source srcSet={`/landing/${slug}.webp`} type="image/webp" />
+        <img
+          src={`/landing/${slug}.png`}
+          alt={alt}
+          loading={priority ? 'eager' : 'lazy'}
+          decoding={priority ? 'sync' : 'async'}
+          fetchPriority={priority ? 'high' : 'low'}
+          onLoad={() => setLoaded(true)}
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            objectFit: 'cover',
+            opacity: loaded ? 1 : 0,
+            transition: 'opacity 500ms ease',
+          }}
+        />
+      </picture>
+    </div>
+  );
+}
+
 interface FeatureRowProps {
   readonly tag: string;
   readonly title: string;
   readonly description: string;
   readonly bullets: readonly string[];
-  readonly imageSrc: string;
+  readonly imageSlug: string;
   readonly imageAlt: string;
   readonly reverse?: boolean;
   readonly accent?: string;
   readonly index: number;
+  readonly priority?: boolean;
 }
 
-function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reverse = false, accent = 'var(--accent)', index }: FeatureRowProps) {
-  const imgRef = useRef<HTMLDivElement>(null);
+function FeatureRow({ tag, title, description, bullets, imageSlug, imageAlt, reverse = false, accent = 'var(--accent)', index, priority = false }: FeatureRowProps) {
+  const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const el = imgRef.current;
+    const el = wrapRef.current;
     if (!el) return;
     const ctx = gsap.context(() => {
       gsap.fromTo(el,
-        { y: 40, opacity: 0, rotateY: reverse ? -8 : 8, scale: 0.95 },
+        { y: 40, opacity: 0, rotateY: reverse ? -6 : 6, scale: 0.97 },
         {
           y: 0, opacity: 1, rotateY: 0, scale: 1,
           duration: 1.1, ease: 'power3.out',
@@ -35,7 +111,7 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
         },
       );
       gsap.to(el, {
-        y: -12, duration: 4 + index * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: index * 0.3,
+        y: -10, duration: 4 + index * 0.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: index * 0.3,
       });
     }, el);
     return () => ctx.revert();
@@ -114,28 +190,23 @@ function FeatureRow({ tag, title, description, bullets, imageSrc, imageAlt, reve
         </ul>
       </motion.div>
 
-      <div ref={imgRef} style={{ order: reverse ? 1 : 2, position: 'relative', opacity: 0 }}>
+      {/* Image wrapper — GSAP targets this */}
+      <div ref={wrapRef} style={{ order: reverse ? 1 : 2, opacity: 0 }}>
         <div
           style={{
-            position: 'absolute',
-            inset: -40,
-            background: `radial-gradient(ellipse at center, ${accent}14 0%, transparent 70%)`,
-            pointerEvents: 'none',
-          }}
-        />
-        <img
-          src={imageSrc}
-          alt={imageAlt}
-          style={{
-            width: '100%',
-            height: 'auto',
             position: 'relative',
-            zIndex: 1,
-            borderRadius: 16,
-            filter: `drop-shadow(0 24px 48px ${accent}28)`,
-            border: '1px solid var(--hair)',
           }}
-        />
+        >
+          <div
+            style={{
+              position: 'absolute',
+              inset: -40,
+              background: `radial-gradient(ellipse at center, ${accent}12 0%, transparent 70%)`,
+              pointerEvents: 'none',
+            }}
+          />
+          <BlurImage slug={imageSlug} alt={imageAlt} accent={accent} priority={priority} />
+        </div>
       </div>
     </div>
   );
@@ -165,6 +236,7 @@ export function LandingFeatures() {
 
         <FeatureRow
           index={0}
+          priority
           tag="Content Analysis"
           title="Know exactly why your content works — or doesn't"
           description="Paste any post, caption, article, or thread. BuffByte runs it through 14 AI scoring dimensions including virality potential, brand voice, sentiment, readability, and platform fit — then delivers a clear score and actionable improvements."
@@ -175,7 +247,7 @@ export function LandingFeatures() {
             'Platform-specific optimization tips',
             'Risk & controversy flagging',
           ]}
-          imageSrc="/landing/hero-product-ui.png"
+          imageSlug="hero-product-ui"
           imageAlt="Content analysis score dashboard"
           accent="#533AFD"
         />
@@ -192,7 +264,7 @@ export function LandingFeatures() {
             'Platform-specific length recommendations',
             'One-click send to Teleprompter',
           ]}
-          imageSrc="/landing/script-analysis-card.png"
+          imageSlug="script-analysis-card"
           imageAlt="Script analysis metrics card"
           reverse
           accent="#7C3AED"
@@ -210,7 +282,7 @@ export function LandingFeatures() {
             'Keyboard shortcuts for hands-free control',
             'Seamless handoff from script analysis',
           ]}
-          imageSrc="/landing/teleprompter.png"
+          imageSlug="teleprompter"
           imageAlt="AI teleprompter setup"
           accent="#2563EB"
         />

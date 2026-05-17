@@ -40,7 +40,7 @@ export function LandingCtaBanner() {
         >
           <div style={{ position: 'absolute', top: -60, right: -60, width: 280, height: 280, background: 'rgba(255,255,255,0.1)', borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
           <div style={{ position: 'absolute', bottom: -40, left: -40, width: 200, height: 200, background: 'rgba(0,0,0,0.15)', borderRadius: '50%', filter: 'blur(60px)', pointerEvents: 'none' }} />
-          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', backgroundImage: 'url(/landing/wavy.png)', backgroundSize: 'cover', backgroundPosition: 'center top', opacity: 0.15, pointerEvents: 'none' }} />
+          <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '50%', backgroundImage: 'url(/landing/wavy.webp)', backgroundSize: 'cover', backgroundPosition: 'center top', opacity: 0.15, pointerEvents: 'none' }} />
 
           <div style={{ position: 'relative', zIndex: 1 }}>
             <motion.h2
