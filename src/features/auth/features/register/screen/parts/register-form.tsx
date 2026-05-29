@@ -51,12 +51,8 @@ export function RegisterForm() {
 
     if (!valid) return;
 
-    const parts = name.trim().split(/\s+/);
-    const firstName = parts[0] ?? '';
-    const lastName = parts.slice(1).join(' ') || firstName;
-
     mutation.mutate(
-      { firstName, lastName, email, password },
+      { name , email, password },
       {
         onSuccess: (data) => {
           login(data.user, data.token);
