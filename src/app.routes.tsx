@@ -4,7 +4,7 @@ import { RootLayout } from '@shared/providers/root-layout';
 import { AuthGuard } from '@shared/guards/auth-guard';
 import { GuestGuard } from '@shared/guards/guest-guard';
 import { AppLayout } from '@shared/widgets/app-layout/app-layout';
-import { EntrypointScreen } from '@features/entrypoint/screen/entrypoint-screen';
+import { EntrypointScreen } from '@features/entrypoint';
 import { UiKitScreen } from '@features/ui-kit/screen/ui-kit-screen';
 import {
   LoginScreen,

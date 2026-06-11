@@ -3,6 +3,10 @@
 @import '@fontsource/inter/600.css';
 @import '@fontsource/inter/700.css';
 
+/* Fraunces — display serif for landing-page accent lines (opsz + italic) */
+@import '@fontsource-variable/fraunces';
+@import '@fontsource-variable/fraunces/full-italic.css';
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
