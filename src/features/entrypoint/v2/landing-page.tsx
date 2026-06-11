@@ -12,7 +12,6 @@ import { TeleprompterScene } from './parts/teleprompter-scene';
 import { VideoScene } from './parts/video-scene';
 import { ProofBand } from './parts/proof-band';
 import { LandingTestimonial } from './parts/landing-testimonial';
-import { LandingPricing } from './parts/landing-pricing';
 import { LandingFAQ } from './parts/landing-faq';
 import { CtaClose } from './parts/cta-close';
 import { MegaFooter } from './parts/mega-footer';
@@ -64,7 +63,6 @@ export function LandingPageV2() {
       <VideoScene />
       <ProofBand />
       <LandingTestimonial />
-      <LandingPricing />
       <LandingFAQ />
       <CtaClose />
       <MegaFooter />
