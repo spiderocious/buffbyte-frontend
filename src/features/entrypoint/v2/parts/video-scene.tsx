@@ -36,7 +36,11 @@ export function VideoScene() {
         else video.pause();
       };
 
-      const smallScale = () => (window.innerWidth < 700 ? 0.62 : 0.42);
+      // Mobile gets a letterboxed 16:9 frame (see <style> below), so it
+      // can grow closer to full width without crop.
+      const isNarrow = () => window.innerWidth < 861;
+      const smallScale = () => (isNarrow() ? 0.62 : 0.42);
+      const maxScale = () => (isNarrow() ? 0.94 : 0.8);
 
       // 10 timeline units: zoom in (4.2) — hold full (1.6) — zoom out (4.2)
       const tl = gsap.timeline({
@@ -51,7 +55,7 @@ export function VideoScene() {
 
       tl.fromTo(frame,
         { scale: smallScale, borderRadius: 26 },
-        { scale: 0.8, borderRadius: 18, duration: 4.2, ease: 'power2.inOut' }, 0)
+        { scale: maxScale, borderRadius: 18, duration: 4.2, ease: 'power2.inOut' }, 0)
         .fromTo(stage,
           { backgroundColor: PAPER_HEX },
           { backgroundColor: CINEMA_HEX, duration: 4.2, ease: 'power1.inOut' }, 0)
@@ -81,7 +85,7 @@ export function VideoScene() {
 
   return (
     <section ref={sectionRef} id="vb-film" style={{ position: 'relative', overflow: 'hidden' }}>
-      <div className="vbv-stage" style={{ position: 'relative', height: '100svh', background: PAPER_HEX, display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
+      <div className="vbv-stage" style={{ position: 'relative', background: PAPER_HEX, display: 'grid', placeItems: 'center', overflow: 'hidden' }}>
         {/* chrome — fades as the lights go down */}
         <div className="vbv-chrome" style={{ position: 'absolute', top: '7svh', left: 0, right: 0, textAlign: 'center', zIndex: 2, pointerEvents: 'none' }}>
           <span style={overline}>The film</span>
@@ -94,7 +98,7 @@ export function VideoScene() {
         </div>
 
         {/* the screen */}
-        <div className="vbv-frame" style={{ position: 'relative', width: '100vw', height: '100svh', overflow: 'hidden', willChange: 'transform', boxShadow: '0 60px 140px -40px rgba(11,10,14,0.55)' }}>
+        <div className="vbv-frame" style={{ position: 'relative', overflow: 'hidden', willChange: 'transform', boxShadow: '0 60px 140px -40px rgba(11,10,14,0.55)' }}>
           <video ref={videoRef} src={VIDEO_SRC} muted={muted} loop playsInline preload="metadata"
             style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', background: '#000' }} />
           <button className="vbv-sound" onClick={() => setMuted((m) => !m)}
@@ -108,6 +112,19 @@ export function VideoScene() {
           </button>
         </div>
       </div>
+
+      <style>{`
+        /* lvh: pinned scenes sit below the fold, where the mobile URL bar
+           is collapsed — svh would leave a dead band at the bottom. */
+        #vb-film .vbv-stage{ height: 100vh; height: 100lvh; }
+        #vb-film .vbv-frame{ width: 100vw; height: 100vh; height: 100lvh; }
+        /* narrow / portrait: letterbox the frame to the video's 16:9 so the
+           full picture shows instead of a center crop */
+        @media (max-width: 860px), (orientation: portrait){
+          #vb-film .vbv-frame{ height: auto; aspect-ratio: 16 / 9; }
+          #vb-film .vbv-sound{ right: 12px !important; bottom: 12px !important; padding: 7px 13px !important; font-size: 12px !important; }
+        }
+      `}</style>
     </section>
   );
 }

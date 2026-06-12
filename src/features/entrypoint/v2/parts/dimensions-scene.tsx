@@ -2,11 +2,12 @@ import { useEffect, useRef } from 'react';
 import { gsap } from '../lib/gsap';
 import { SERIF, overline, accentItalic } from '../lib/tokens';
 import { useReducedMotionPref } from '../lib/use-reduced-motion-pref';
+import { useMediaQuery } from '../lib/use-media-query';
 
-/* Pinned slot-machine through all 14 scoring dimensions, scrubbed to
-   scroll. Generous per-dimension distance + snap-to-label so one
-   swipe settles on exactly one dimension. Static chip list under
-   reduced motion. */
+/* Desktop: pinned slot-machine through all 14 scoring dimensions,
+   scrubbed to scroll, snap-to-label so one swipe settles on exactly
+   one dimension. Mobile: no scroll hijack — an editorial numbered
+   list with row reveals. Reduced motion: static chip list. */
 
 const DIMENSIONS = [
   { name: 'Virality', blurb: 'Will it spread past your own followers, or stall at the feed?' },
@@ -27,7 +28,54 @@ const DIMENSIONS = [
 
 export function DimensionsScene() {
   const reduced = useReducedMotionPref();
-  return reduced ? <DimensionsStatic /> : <DimensionsPinned />;
+  const mobile = useMediaQuery('(max-width: 860px)');
+  if (reduced) return <DimensionsStatic />;
+  return mobile ? <DimensionsMobile /> : <DimensionsPinned />;
+}
+
+function DimensionsMobile() {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const section = sectionRef.current;
+    if (!section) return;
+    const ctx = gsap.context(() => {
+      gsap.utils.toArray<HTMLElement>('.vbd-row', section).forEach((row) => {
+        gsap.from(row, {
+          y: 26, opacity: 0, duration: 0.7, ease: 'power3.out',
+          scrollTrigger: { trigger: row, start: 'top 90%', once: true },
+        });
+      });
+    }, section);
+    return () => ctx.revert();
+  }, []);
+
+  return (
+    <section ref={sectionRef} id="vb-dims" style={{ background: 'var(--sheet)', borderTop: '1px solid var(--hair)', borderBottom: '1px solid var(--hair)', padding: '72px 0 64px' }}>
+      <div style={{ maxWidth: 720, margin: '0 auto', padding: '0 24px' }}>
+        <span style={overline}>The score</span>
+        <h2 style={{ fontSize: 'clamp(28px, 8vw, 40px)', fontWeight: 800, letterSpacing: '-0.035em', lineHeight: 1.05, margin: '10px 0 8px', color: 'var(--ink)' }}>
+          Fourteen ways a post can win or <span style={accentItalic}>lose</span>
+        </h2>
+        <p style={{ fontSize: 14.5, color: 'var(--ink-3)', lineHeight: 1.55, margin: 0 }}>
+          Graded on every post, every time.
+        </p>
+        <div style={{ marginTop: 28, borderTop: '1px solid var(--hair)' }}>
+          {DIMENSIONS.map((d, i) => (
+            <div key={d.name} className="vbd-row" style={{ display: 'grid', gridTemplateColumns: '52px 1fr', gap: 14, padding: '16px 0', borderBottom: '1px solid var(--hair)' }}>
+              <span style={{ fontFamily: SERIF, fontStyle: 'italic', fontSize: 25, color: 'var(--accent)', fontVariantNumeric: 'tabular-nums', lineHeight: 1.2 }}>
+                {String(i + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <div style={{ fontSize: 17, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--ink)' }}>{d.name}</div>
+                <p style={{ fontSize: 13.5, color: 'var(--ink-3)', lineHeight: 1.5, margin: '4px 0 0' }}>{d.blurb}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
 }
 
 function DimensionsPinned() {

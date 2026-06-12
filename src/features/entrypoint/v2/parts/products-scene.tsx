@@ -98,7 +98,7 @@ export function ProductsScene() {
               background: 'var(--sheet)', border: '1px solid var(--hair)', borderRadius: 22,
               boxShadow: '0 30px 70px -36px rgba(28,27,25,0.28)', overflow: 'hidden',
             }}>
-              <span aria-hidden style={{
+              <span aria-hidden className="vbp-ghost" style={{
                 position: 'absolute', top: -28, right: 8, fontVariantNumeric: 'tabular-nums',
                 fontSize: 'clamp(90px, 11vw, 170px)', fontWeight: 800, letterSpacing: '-0.06em',
                 color: 'transparent', WebkitTextStroke: '1px var(--hair)', lineHeight: 1, userSelect: 'none',
@@ -132,10 +132,13 @@ export function ProductsScene() {
         @media (min-width: 861px){
           #vb-products .vbp-viewport{ height: 100svh; }
         }
+        /* !important: the grid/panel geometry is set inline for the pinned
+           desktop scene, so the stacked mobile layout must out-rank it */
         @media (max-width: 860px){
-          #vb-products .vbp-track{ flex-direction: column; align-items: stretch; gap: 28px; padding: 28px 24px 64px; }
-          #vb-products .vbp-panel{ width: 100%; }
-          #vb-products .vbp-grid{ grid-template-columns: 1fr; }
+          #vb-products .vbp-track{ flex-direction: column; align-items: stretch; gap: 24px !important; padding: 24px 20px 56px !important; }
+          #vb-products .vbp-panel{ width: 100% !important; }
+          #vb-products .vbp-grid{ grid-template-columns: 1fr !important; gap: 20px !important; padding: 24px 20px 26px !important; }
+          #vb-products .vbp-ghost{ font-size: 72px !important; top: -12px !important; right: 12px !important; }
         }
       `}</style>
     </section>

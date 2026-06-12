@@ -68,7 +68,7 @@ export function TeleprompterScene() {
 
   return (
     <section ref={sectionRef} id="vb-prompter" style={{ position: 'relative', background: INK_BG, color: '#fff', overflow: 'hidden' }}>
-      <div style={{ height: reduced ? 'auto' : '100svh', minHeight: reduced ? '70vh' : undefined, position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: reduced ? '120px 0' : 0 }}>
+      <div className="vbt-stage" style={{ height: reduced ? 'auto' : undefined, minHeight: reduced ? '70vh' : undefined, position: 'relative', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: reduced ? '120px 0' : 0 }}>
         {/* camera chrome */}
         <span aria-hidden style={corner(['top', 'left'])} />
         <span aria-hidden style={corner(['top', 'right'])} />
@@ -102,7 +102,12 @@ export function TeleprompterScene() {
           </p>
         </div>
       </div>
-      <style>{`@media (max-width: 640px){ #vb-prompter .vbt-chrome{ display: none; } }`}</style>
+      <style>{`
+        /* lvh: by the time this section pins, the mobile URL bar has
+           collapsed — svh would leave a dead band at the bottom. */
+        #vb-prompter .vbt-stage{ height: 100vh; height: 100lvh; }
+        @media (max-width: 640px){ #vb-prompter .vbt-chrome{ display: none; } }
+      `}</style>
     </section>
   );
 }
